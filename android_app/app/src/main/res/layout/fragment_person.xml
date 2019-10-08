@@ -3,12 +3,76 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/cardview_light_background">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Personal Fragment"
-        android:textSize="30sp"
-        android:layout_centerInParent="true"></TextView>
+    <LinearLayout
+        style="@style/linearParent"
+        android:layout_gravity="center"
+        android:padding="20dp">
+
+        <TextView
+            style="@style/headerTextPrimary"
+            android:text="Tài khoản"
+            android:layout_marginTop="20dp"/>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textAlignment="center"
+            android:text="Nguyễn Văn A"
+            android:textSize="18dp"/>
+
+        <LinearLayout
+            style="@style/clickableTextParent">
+
+            <TextView
+                style="@style/clickableText"
+                android:text="Thanh toán"/>
+            <TextView
+                style="@style/clickableText"
+                android:text="Hóa đơn"/>
+            <TextView
+                style="@style/clickableText"
+                android:text="Lịch sử"/>
+            <TextView
+                style="@style/clickableText"
+                android:text="Ứng dụng cho chủ quán"/>
+            <TextView
+                style="@style/clickableText"
+                android:text="Ứng dụng cho shipper"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            style="@style/clickableTextParent">
+
+            <TextView
+                style="@style/clickableText"
+                android:text="Góp ý"/>
+            <TextView
+                style="@style/clickableText"
+                android:text="Chính sách - quy định"/>
+            <TextView
+                style="@style/clickableText"
+                android:text="Cài đặt ứng dụng"/>
+
+        </LinearLayout>
+        <LinearLayout
+            style="@style/clickableTextParent"
+            android:background="@drawable/border"
+            android:layout_margin="20dp"
+            android:layout_gravity="center"
+            android:orientation="vertical">
+
+            <TextView
+                style="@style/clickableText"
+                android:text="Thông tin cá nhân"/>
+            <TextView
+                style="@style/clickableText"
+                android:text="Đăng xuất"/>
+
+        </LinearLayout>
+
+    </LinearLayout>
 
 
 </RelativeLayout>
