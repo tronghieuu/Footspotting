@@ -131,8 +131,8 @@
             android:textStyle="bold"
             android:textColor="@color/primaryTextColor"
             android:text="Đã có tài khoản"
-            android:onClick="viewLoginClicked"
-            android:layout_marginTop="15dp"/>
+            android:textSize="18dp"
+            android:onClick="viewLoginClicked"/>
 
     </LinearLayout>
 </androidx.cardview.widget.CardView>

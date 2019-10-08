@@ -39,7 +39,7 @@
     </style>
 
     <style name="headerTextPrimary" parent="headerText">
-        <item name="android:layout_margin">20dp</item>
+        <item name="android:layout_margin">10dp</item>
         <item name="android:textColor">@color/primaryTextColor</item>
     </style>
 

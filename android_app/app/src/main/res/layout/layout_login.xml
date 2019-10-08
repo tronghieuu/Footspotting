@@ -95,9 +95,9 @@
             android:textAlignment="center"
             android:textStyle="bold"
             android:textColor="@color/primaryTextColor"
-            android:text="Đăng ký"
-            android:onClick="viewRegisterClicked"
-            android:layout_marginTop="20dp"/>
+            android:text="Đăng ký tài khoản"
+            android:textSize="18dp"
+            android:onClick="viewRegisterClicked"/>
 
 
     </LinearLayout>
