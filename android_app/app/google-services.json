@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "863159936668",
+    "firebase_url": "https://foodspotting-11369.firebaseio.com",
+    "project_id": "foodspotting-11369",
+    "storage_bucket": "foodspotting-11369.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:863159936668:android:280eb4d821093caedaef59",
+        "android_client_info": {
+          "package_name": "com.team4of5.foodspotting"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "863159936668-dig8amt4o2dnod1g864egjp725qdd9vq.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCxb4E3jDxVcdxb_Ja6U-fQKQLCjekNmzo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "863159936668-dig8amt4o2dnod1g864egjp725qdd9vq.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
