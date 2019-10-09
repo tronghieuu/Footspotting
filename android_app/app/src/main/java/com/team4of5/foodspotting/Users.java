@@ -1,6 +1,8 @@
 package com.team4of5.foodspotting;
 
-public class Users {
+import java.io.Serializable;
+
+public class Users implements Serializable {
 
     private String username, password, email, phone, street, district, province;
     private int type;
