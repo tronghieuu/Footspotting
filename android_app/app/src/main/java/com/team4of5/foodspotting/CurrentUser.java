@@ -4,7 +4,9 @@ public class CurrentUser {
 
     private static CurrentUser instance = null;
     private Users currentUser;
-    private CurrentUser(){}
+    private CurrentUser(){
+        currentUser = null;
+    }
     public static CurrentUser CurrentUser(){
         if(instance == null){
             instance = new CurrentUser();

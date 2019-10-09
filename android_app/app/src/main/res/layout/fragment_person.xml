@@ -14,14 +14,14 @@
             android:layout_marginTop="20dp"/>
 
         <TextView
+            android:id="@+id/tvUserName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
-            android:visibility="invisible"
             android:text="Nguyễn Văn A"
             android:textSize="18dp"/>
         <Button
-            android:id="@+id/cirLoginButton"
+            android:id="@+id/btnLogin"
             style="@style/loginButton"
             android:visibility="visible"
             android:text="Đăng nhập/Đăng ký"
@@ -34,9 +34,11 @@
                 style="@style/clickableText"
                 android:text="Lịch sử thanh toán"/>
             <TextView
+                android:id="@+id/tvOwner"
                 style="@style/clickableText"
                 android:text="Ứng dụng cho chủ quán"/>
             <TextView
+                android:id="@+id/tvShipper"
                 style="@style/clickableText"
                 android:text="Ứng dụng cho shipper"/>
 
@@ -57,9 +59,10 @@
                 android:text="Cài đặt ứng dụng"/>
 
         </LinearLayout>
+
         <LinearLayout
+            android:id="@+id/llLogin"
             style="@style/clickableTextParent"
-            android:visibility="invisible"
             android:background="@drawable/border"
             android:layout_margin="20dp"
             android:layout_gravity="center"
