@@ -17,21 +17,22 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:textAlignment="center"
+            android:visibility="invisible"
             android:text="Nguyễn Văn A"
             android:textSize="18dp"/>
-
+        <Button
+            android:id="@+id/cirLoginButton"
+            style="@style/loginButton"
+            android:visibility="visible"
+            android:text="Đăng nhập/Đăng ký"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"/>
         <LinearLayout
             style="@style/clickableTextParent">
 
             <TextView
                 style="@style/clickableText"
-                android:text="Thanh toán"/>
-            <TextView
-                style="@style/clickableText"
-                android:text="Hóa đơn"/>
-            <TextView
-                style="@style/clickableText"
-                android:text="Lịch sử"/>
+                android:text="Lịch sử thanh toán"/>
             <TextView
                 style="@style/clickableText"
                 android:text="Ứng dụng cho chủ quán"/>
@@ -58,6 +59,7 @@
         </LinearLayout>
         <LinearLayout
             style="@style/clickableTextParent"
+            android:visibility="invisible"
             android:background="@drawable/border"
             android:layout_margin="20dp"
             android:layout_gravity="center"
