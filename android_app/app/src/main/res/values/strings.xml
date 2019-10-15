@@ -1,3 +1,11 @@
 <resources>
     <string name="app_name">Foodspotting</string>
+    <string name="country_prompt">Chọn Tỉnh/Thành Phố</string>
+    <string-array name="country_arrays">
+        <item>Hà Nội</item>
+        <item>Huế</item>
+        <item>Sài Gòn</item>
+        <item>Đà Nẵng</item>
+        <item>Cần Thơ</item>
+    </string-array>
 </resources>
