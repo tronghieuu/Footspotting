@@ -53,6 +53,19 @@
         <item name="android:maxLines">1</item>
     </style>
 
+    <style name="textInBox2" >
+        <item name="android:paddingLeft">8dp</item>
+        <item name="android:paddingEnd">8dp</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_marginTop">20dp</item>
+        <item name="android:layout_marginBottom">10dp</item>
+        <item name="android:layout_marginLeft">40dp</item>
+        <item name="android:layout_marginRight">40dp</item>
+        <item name="android:background">@drawable/border</item>
+        <item name="android:maxLines">1</item>
+    </style>
+
 
     <style name="clickableTextParent" parent="parent">
         <item name="android:paddingLeft">20dp</item>
@@ -80,6 +93,14 @@
         <item name="android:layout_margin">20dp</item>
         <item name="android:background">@drawable/login_button_bk</item>
         <item name="android:textColor">@color/whiteTextColor</item>
+        <item name="android:textSize">20dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+
+    <style name="addButton" >
+        <item name="android:background">@drawable/add_button_bk</item>
+        <item name="android:textColor">@color/primaryTextColor</item>
+        <item name="android:text">+</item>
         <item name="android:textSize">20dp</item>
         <item name="android:textStyle">bold</item>
     </style>
