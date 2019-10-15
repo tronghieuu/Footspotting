@@ -109,10 +109,14 @@
                     </LinearLayout>
                 </LinearLayout>
             </FrameLayout>
-            <EditText
-                style="@style/textInBox2"
-                android:hint="Tìm kiếm nhanh"
-                android:id="@+id/edtShopSearch"
+            <SearchView
+                android:id="@+id/searchView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:queryHint="Tìm kiếm nhanh"
+                android:iconifiedByDefault="false"
+                android:layout_alignParentTop="true"
+                android:layout_marginRight="20dp"
                 />
         </LinearLayout>
     </androidx.cardview.widget.CardView>
