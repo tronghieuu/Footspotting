@@ -18,16 +18,14 @@
             android:layout_below="@+id/frame_layout"
             android:layout_margin="2dp"
             android:weightSum="10"
-            android:orientation="horizontal"
-            >
+            android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="3"
                 android:scaleType="centerCrop"
-                android:id="@+id/imageShop"
-                />
+                android:id="@+id/imageShop" />
 
             <LinearLayout
                 android:layout_width="0dp"
@@ -65,7 +63,6 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center_vertical"
                         android:progressTint="@color/colorAccent"
-                        android:rating="@{viewModel.rating}"
                         android:id="@+id/ratingShopOverall"
                         style="?android:attr/ratingBarStyleSmall"
                         />
