@@ -4,8 +4,20 @@ import java.io.Serializable;
 
 public class Users implements Serializable {
 
-    private String username, password, email, phone, street, district, province;
+    private String username, password, email, phone, street, district, province, id;
     private int type;
+
+    public Users(){
+        username = "default";
+        password = "1";
+        email = "default";
+        phone = "default";
+        street = "default";
+        district = "default";
+        province = "default";
+        id = "default";
+        type = 1;
+    }
 
     public Users(String username, String password, String email, int type){
         this.username = username;
@@ -16,6 +28,18 @@ public class Users implements Serializable {
         street = "";
         district = "";
         province = "";
+    }
+
+    public Users(String email, String password, String username, int type,
+                 String phone, String street, String district, String province) {
+        this.email = email;
+        this.password = password;
+        this.username = username;
+        this.type = type;
+        this.phone = phone;
+        this.street = street;
+        this.district = district;
+        this.province = province;
     }
 
     public void setUsername(String username){
@@ -52,9 +76,33 @@ public class Users implements Serializable {
         return type;
     }
 
+    public String getPhone() {
+        return phone;
+    }
+
+    public String getAddress() {
+        return street+" "+district+" "+province;
+    }
+
+    public String getStreet() {
+        return street;
+    }
+
+    public String getDistrict(){
+        return district;
+    }
+
+    public String getProvince(){
+        return province;
+    }
+
     public void updateAddress(String street, String district, String province){
         this.street = street;
         this.district = district;
         this.province = province;
+    }
+
+    public void updatePhone(String phone) {
+        this.phone = phone;
     }
 }
