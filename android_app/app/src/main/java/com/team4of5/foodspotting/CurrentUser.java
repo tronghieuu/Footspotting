@@ -1,5 +1,7 @@
 package com.team4of5.foodspotting;
 
+import android.provider.ContactsContract;
+
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
@@ -16,7 +18,7 @@ public class CurrentUser {
     private String a, aa;
 
     private CurrentUser(){
-        currentUser = null;
+        currentUser = new Users("","", "", "",1);
         login = false;
         a = "";
         aa = "";
@@ -45,8 +47,44 @@ public class CurrentUser {
         return a;
     }
 
+    public boolean isLogin(){
+        return login;
+    }
+
+    public void setId(String id){
+        currentUser.setId(id);
+    }
+
     public String getB(){
         return aa;
+    }
+
+    public void setEmail(String email){
+        currentUser.setEmail(email);
+    }
+
+    public void setUserName(String userName){
+        currentUser.setUsername(userName);
+    }
+
+    public void setType(int type){
+        currentUser.setType(type);
+    }
+
+    public void setProvince(String province){
+        currentUser.setProvince(province);
+    }
+
+    public void setDistrict(String district){
+        currentUser.setDistrict(district);
+    }
+
+    public void setStreet(String street){
+        currentUser.setStreet(street);
+    }
+
+    public void setPhone(String phone){
+        currentUser.setPhone(phone);
     }
 
     public boolean init(File dir) {
@@ -81,9 +119,11 @@ public class CurrentUser {
             String password = b.readLine();
             a = email;
             aa = password;
+            DatabaseHelper db = new DatabaseHelper();
+            db.getUserWhenLogin(email, password);
             return true;
         } catch (IOException e){
-            
+
             return false;
         }
     }
