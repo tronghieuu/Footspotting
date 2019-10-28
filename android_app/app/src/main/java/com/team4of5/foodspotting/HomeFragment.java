@@ -20,6 +20,7 @@ import java.util.TimerTask;
 public class HomeFragment extends Fragment {
     @Nullable
     private static ViewPager mPager;
+    private static CirclePageIndicator indicator;
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
     private ArrayList<ImageModel> imageModelArrayList;
@@ -31,6 +32,9 @@ public class HomeFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_home,container,false);
         imageModelArrayList = new ArrayList<>();
         imageModelArrayList = populateList();
+        mPager = view.findViewById(R.id.pagerAd);
+        mPager.setAdapter(new SlidingImage_Adapter(getContext(),imageModelArrayList));
+        indicator = view.findViewById(R.id.indicator);
         init();
         return view;
     }
@@ -48,10 +52,7 @@ public class HomeFragment extends Fragment {
     }
     private void init() {
 
-        mPager = getView().findViewById(R.id.pager);
-        mPager.setAdapter(new SlidingImage_Adapter(getContext(),imageModelArrayList));
 
-        CirclePageIndicator indicator = getView().findViewById(R.id.indicator);
 
         indicator.setViewPager(mPager);
 
