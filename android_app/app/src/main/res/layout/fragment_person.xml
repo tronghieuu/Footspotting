@@ -19,6 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="start"
+            android:id="@+id/navPersonal"
             app:menu="@menu/personal_menu"/>
 
 
