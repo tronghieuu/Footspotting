@@ -21,6 +21,7 @@ public class HomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_home);
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
+
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
         Intent intent = new Intent();
     }
@@ -31,7 +32,6 @@ public class HomeActivity extends AppCompatActivity {
                     FragmentManager t = getSupportFragmentManager();
                     String fragTag="";
                     Fragment selectedFragment = null;
-
                     if(t.findFragmentByTag("Home") != null){
                         //if the other fragment is visible, hide it.
                         t.beginTransaction().hide(t.findFragmentByTag("Home")).commit();
@@ -67,6 +67,7 @@ public class HomeActivity extends AppCompatActivity {
                             fragTag="Person";
                             break;
                     }
+
                     if(getSupportFragmentManager().findFragmentByTag(fragTag)!=null)
                         t.beginTransaction().show(getSupportFragmentManager().findFragmentByTag(fragTag)).commit();
                     else
