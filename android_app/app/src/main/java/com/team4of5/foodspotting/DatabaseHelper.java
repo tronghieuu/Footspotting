@@ -7,17 +7,18 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class DatabaseHelper {
 
     private FirebaseFirestore db;
-    private boolean isSuccess;
+    private boolean check;
     private Users user;
 
     public DatabaseHelper(){
         db = FirebaseFirestore.getInstance();
-        isSuccess = false;
+        check = false;
     }
 
     public boolean addUser(Users user){
@@ -26,15 +27,15 @@ public class DatabaseHelper {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        isSuccess = true;
+                        check = true;
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                isSuccess = false;
+                check = false;
             }
         });
-        return isSuccess;
+        return check;
     }
 
     public Users getUser(String email){
@@ -43,12 +44,18 @@ public class DatabaseHelper {
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                user = queryDocumentSnapshots.getDocuments().get(0).toObject(Users.class);
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-                user = null;
+                //user = queryDocumentSnapshots.toObjects(Users.class).get(0);
+                String username="", email="", password="";
+                int type = 2;
+                for(QueryDocumentSnapshot document : queryDocumentSnapshots){
+                    username = document.get("username").toString();
+                    email = document.get("email").toString();
+                    password = document.get("password").toString();
+                    type = Integer.parseInt(document.get("type").toString());
+                }
+                user = new Users(username, password, email, type);
+
+                //user = queryDocumentSnapshots.getDocuments().get(0).toObject(Users.class);
             }
         });
         return user;
@@ -61,17 +68,17 @@ public class DatabaseHelper {
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if(queryDocumentSnapshots.isEmpty()){
-                    isSuccess = true;
+                if(!queryDocumentSnapshots.isEmpty() || queryDocumentSnapshots.size() != 0){
+                    check = true;
                 }
-                else isSuccess = false;
+                else check = false;
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                isSuccess = false;
+                check = false;
             }
         });
-        return isSuccess;
+        return check;
     }
 }

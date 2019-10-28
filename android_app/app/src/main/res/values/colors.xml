@@ -12,4 +12,7 @@
     <!--colors for card-->
     <color name="whiteCardColor">#fff</color>
     <color name="color_black_transparent">#31000000</color>
+
+    <!--some new color-->
+    <color name="color_red">#F44336</color>
 </resources>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/current_job"
+        android:icon="@drawable/ic_assignment_turned_in_black_24dp"
+        android:title="Accepted Order"></item>
+    <item
+        android:id="@+id/available_job"
+        android:icon="@drawable/ic_assignment_black_24dp"
+        android:title="Available Order"></item>
+</menu>

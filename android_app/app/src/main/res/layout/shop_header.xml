@@ -73,7 +73,6 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:progressTint="@color/colorAccent"
-                            android:rating="@{viewModel.rating}"
                             android:id="@+id/ratingShopOverall"
                             style="?android:attr/ratingBarStyleSmall"
                             />
