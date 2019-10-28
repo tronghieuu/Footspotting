@@ -7,5 +7,4 @@
     android:background="@color/color_red"
     tools:context=".MainActivity">
 
-
 </RelativeLayout>

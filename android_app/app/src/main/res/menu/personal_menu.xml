@@ -3,20 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:showIn="navigation_view">
     <group android:checkableBehavior="single"
-        android:id="@+id/asd">
-        <item
-            android:id="@+id/navUserName"
-            android:title="Nguyễn Trọng Hen"/>
-    </group>
-
-    <group android:checkableBehavior="single"
-        android:id="@+id/asd2">
-        <item
-            android:id="@+id/navLogIn"
-            android:icon="@drawable/power_settings_new_24px"
-            android:title="Đăng nhập / Đăng ký"/>
-    </group>
-    <group android:checkableBehavior="single"
         android:id="@+id/asd3">
         <item
             android:id="@+id/navHistory"
