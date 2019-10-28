@@ -12,6 +12,9 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import org.w3c.dom.Document;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class DatabaseHelper {
 
     private FirebaseFirestore db;
@@ -62,7 +65,64 @@ public class DatabaseHelper {
         });
         return user;
     }
+    //theo danh gia
+    public List<Restaurant> getRestaurant(int rate){
+        final List<Restaurant> listR = new ArrayList<>();
+        db.collection("restaurants")
+                .whereEqualTo("rate", rate)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
 
+                for (QueryDocumentSnapshot document :
+                        queryDocumentSnapshots) {
+                    Restaurant temp = new Restaurant(
+                            document.getId(),
+                            document.get("name").toString(),
+                            document.get("phone").toString(),
+                            document.get("district").toString(),
+                            document.get("province").toString(),
+                            document.get("street").toString(),
+                            document.get("image").toString(),
+                            Integer.parseInt(document.get("rate").toString()),
+                            document.get("opening_time").toString(),
+                            document.get("type").toString(),
+                            document.get("user_id").toString());
+                    listR.add(temp);
+                }
+            }
+        });
+        return listR;
+    }
+    //theo name
+    public List<Restaurant> getRestaurant(String name){
+        final List<Restaurant> listR = new ArrayList<>();
+        db.collection("restaurants")
+                .whereArrayContains("name", name)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+
+                for (QueryDocumentSnapshot document :
+                        queryDocumentSnapshots) {
+                    Restaurant temp = new Restaurant(
+                            document.getId(),
+                            document.get("name").toString(),
+                            document.get("phone").toString(),
+                            document.get("district").toString(),
+                            document.get("province").toString(),
+                            document.get("street").toString(),
+                            document.get("image").toString(),
+                            Integer.parseInt(document.get("rate").toString()),
+                            document.get("opening_time").toString(),
+                            document.get("type").toString(),
+                            document.get("user_id").toString());
+                    listR.add(temp);
+                }
+            }
+        });
+        return listR;
+    }
     public boolean loginSuccess(String email, String password){
         db.collection("users")
                 .whereEqualTo("email", email)
