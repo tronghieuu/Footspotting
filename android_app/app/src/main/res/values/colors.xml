@@ -15,4 +15,6 @@
 
     <!--some new color-->
     <color name="color_red">#F44336</color>
+    <color name="color_white">#FFFFFF</color>
+    <color name="color_yellow">#FFEB3B</color>
 </resources>

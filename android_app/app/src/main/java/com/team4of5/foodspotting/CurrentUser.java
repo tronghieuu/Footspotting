@@ -9,9 +9,11 @@ public class CurrentUser {
 
     private static CurrentUser instance = null;
     private Users currentUser;
+    private boolean login;
 
     private CurrentUser(){
         currentUser = null;
+        login = false;
     }
 
     public static CurrentUser CurrentUser(){
@@ -29,7 +31,11 @@ public class CurrentUser {
         return currentUser;
     }
 
-    public boolean init(String dir) {
+    public void setLogin(boolean login){
+        this.login = login;
+    }
+
+    public boolean init(File dir) {
         try {
             File file = new File(dir, "currentAccount.txt");
             if (!file.exists()) {
@@ -53,6 +59,7 @@ public class CurrentUser {
             BufferedReader b = new BufferedReader(new FileReader(file));
             String email = b.readLine();
             String password = b.readLine();
+
             return true;
         } catch (IOException e){
             //
