@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+    <group android:checkableBehavior="single"
+        android:id="@+id/asd">
+        <item
+            android:id="@+id/navUserName"
+            android:title="Nguyễn Trọng Hen"/>
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/asd2">
+        <item
+            android:id="@+id/navLogIn"
+            android:icon="@drawable/power_settings_new_24px"
+            android:title="Đăng nhập / Đăng ký"/>
+    </group>
+    <group android:checkableBehavior="single"
+        android:id="@+id/asd3">
+        <item
+            android:id="@+id/navHistory"
+            android:icon="@drawable/history_24px"
+            android:title="Lịch sử thanh toán" />
+        <item
+            android:id="@+id/navForShipper"
+            android:icon="@drawable/motorcycle_24px"
+            android:title="Ứng dụng cho shipper" />
+        <item
+            android:id="@+id/navForShopOwner"
+            android:icon="@drawable/restaurant_menu_24px"
+            android:title="Ứng dụng cho chủ quán" />
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/asd4">
+        <item
+            android:id="@+id/navInvoice"
+            android:icon="@drawable/mail_outline_24px"
+            android:title="Góp ý" />
+        <item
+            android:id="@+id/navAppSetting"
+            android:icon="@drawable/settings_applications_24px"
+            android:title="Cài đặt ứng dụng" />
+    </group>
+    <group android:checkableBehavior="single"
+        android:id="@+id/asd5">
+        <item
+            android:id="@+id/navPolicy"
+            android:icon="@drawable/policy_24px"
+            android:title="Chính sách người dùng" />
+        <item
+            android:id="@+id/navUserSetting"
+            android:icon="@drawable/person_outline_24px"
+            android:title="Cài đặt cá nhân" />
+        <item
+            android:id="@+id/navLogOut"
+            android:icon="@drawable/power_settings_new_24px"
+            android:title="Đăng xuất" />
+    </group>
+</menu>
