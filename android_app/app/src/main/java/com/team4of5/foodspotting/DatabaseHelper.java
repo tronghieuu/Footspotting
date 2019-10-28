@@ -10,17 +10,15 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import org.w3c.dom.Document;
-
 public class DatabaseHelper {
 
     private FirebaseFirestore db;
-    private boolean isSuccess;
+    private boolean check;
     private Users user;
 
     public DatabaseHelper(){
         db = FirebaseFirestore.getInstance();
-        isSuccess = false;
+        check = false;
     }
 
     public boolean addUser(Users user){
@@ -29,15 +27,15 @@ public class DatabaseHelper {
                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        isSuccess = true;
+                        check = true;
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                isSuccess = false;
+                check = false;
             }
         });
-        return isSuccess;
+        return check;
     }
 
     public Users getUser(String email){
@@ -71,16 +69,16 @@ public class DatabaseHelper {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if(!queryDocumentSnapshots.isEmpty() || queryDocumentSnapshots.size() != 0){
-                    isSuccess = true;
+                    check = true;
                 }
-                else isSuccess = false;
+                else check = false;
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                isSuccess = false;
+                check = false;
             }
         });
-        return isSuccess;
+        return check;
     }
 }
