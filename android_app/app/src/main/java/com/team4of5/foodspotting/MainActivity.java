@@ -20,36 +20,5 @@ public class MainActivity extends AppCompatActivity {
         }
         else Toast.makeText(this, "false", Toast.LENGTH_SHORT).show();
         startActivity(new Intent(MainActivity.this, HomeActivity.class));
-        //new BackgroundAsyncTask(this).execute();
     }
-
-    /*class BackgroundAsyncTask extends AsyncTask<Void, Void, Boolean> {
-
-        Activity activity;
-
-        public BackgroundAsyncTask(Activity activity){
-            this.activity = activity;
-        }
-
-        @Override
-        protected void onPreExecute() {
-            super.onPreExecute();
-        }
-
-        @Override
-        protected Boolean doInBackground(Void... voids) {
-            return true;
-        }
-
-        @Override
-        protected void onProgressUpdate(Void... values) {
-            super.onProgressUpdate(values);
-        }
-
-        @Override
-        protected void onPostExecute(Boolean bool) {
-            super.onPostExecute(bool);
-        }
-    }*/
-
 }

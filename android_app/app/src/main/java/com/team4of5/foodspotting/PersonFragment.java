@@ -5,24 +5,37 @@ import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.core.view.GravityCompat;
 import androidx.fragment.app.Fragment;
 
 import com.google.android.material.navigation.NavigationView;
 
 public class PersonFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener{
 
+    private TextView mTvUserName;
+
     @Nullable
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_person, container, false);
+        mTvUserName = view.findViewById(R.id.tvLogin);
+        if(CurrentUser.CurrentUser().isLogin()){
+            login();
+        } else logout();
         return view;
     }
+
+    private void logout(){
+
+    }
+
+    private void login() {
+        mTvUserName.setText(CurrentUser.CurrentUser().getCurrentUser().getUsername());
+    }
+
     @Override
     public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
         Toast mToast = Toast.makeText(getContext(), "", Toast.LENGTH_SHORT);

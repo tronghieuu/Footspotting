@@ -19,7 +19,8 @@ public class Users implements Serializable {
         type = 1;
     }
 
-    public Users(String username, String password, String email, int type){
+    public Users(String id, String username, String password, String email, int type){
+        this.id = id;
         this.username = username;
         this.password = password;
         this.email = email;
@@ -31,7 +32,7 @@ public class Users implements Serializable {
     }
 
     public Users(String email, String password, String username, int type,
-                 String phone, String street, String district, String province) {
+                 String phone, String street, String district, String province, String id) {
         this.email = email;
         this.password = password;
         this.username = username;
@@ -40,6 +41,7 @@ public class Users implements Serializable {
         this.street = street;
         this.district = district;
         this.province = province;
+        this.id = id;
     }
 
     public void setUsername(String username){
@@ -62,6 +64,26 @@ public class Users implements Serializable {
         if(type == 1 || type == 2 || type == 3){
             this.type = type;
         }
+    }
+
+    public void setPhone(String phone){
+        this.phone = phone;
+    }
+
+    public void setProvince(String province){
+        this.province = province;
+    }
+
+    public void setStreet(String street){
+        this.street = street;
+    }
+
+    public void setDistrict(String district){
+
+    }
+
+    public void setId(String id){
+        this.id = id;
     }
 
     public String getUsername(){
