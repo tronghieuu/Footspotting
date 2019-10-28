@@ -52,7 +52,36 @@
                         android:textSize="30sp"
                         android:id="@+id/textShopName"
                         />
-
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    >
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:text="Giờ mở cửa:  "
+                        android:textColor="@android:color/white"
+                        android:textSize="20sp"
+                        />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="bottom"
+                        android:maxLines="1"
+                        android:text="08:00 - 22:00 "
+                        android:id="@+id/textOpeningTime"
+                        android:textColor="@android:color/primary_text_dark"
+                        android:textSize="16sp"
+                        />
+                    <Button
+                        android:layout_marginLeft="30dp"
+                        android:drawableLeft="@android:drawable/ic_menu_call"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Liên hệ"/>
+                </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -73,7 +102,6 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="center_vertical"
                             android:progressTint="@color/colorAccent"
-                            android:rating="@{viewModel.rating}"
                             android:id="@+id/ratingShopOverall"
                             style="?android:attr/ratingBarStyleSmall"
                             />

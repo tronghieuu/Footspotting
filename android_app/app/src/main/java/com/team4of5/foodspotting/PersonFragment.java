@@ -1,88 +1,78 @@
 package com.team4of5.foodspotting;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.LinearLayout;
 import android.widget.TextView;
-
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
-import static android.app.Activity.RESULT_OK;
+import com.google.android.material.navigation.NavigationView;
 
-public class PersonFragment extends Fragment implements View.OnClickListener {
+public class PersonFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener{
 
-    private Users mCurrentUser;
-    private TextView tvOwner, tvShipper, tvUserName;
-    private LinearLayout llLogin;
-    private Button btnLogin;
+    private TextView mTvUserName;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View view =  inflater.inflate(R.layout.fragment_person,container,false);
-        tvOwner = view.findViewById(R.id.tvOwner);
-        tvShipper = view.findViewById(R.id.tvShipper);
-        llLogin = view.findViewById(R.id.llLogin);
-        tvUserName = view.findViewById(R.id.tvUserName);
-        btnLogin = view.findViewById(R.id.btnLogin);
-        tvOwner.setVisibility(View.INVISIBLE);
-        tvShipper.setVisibility(View.INVISIBLE);
-        llLogin.setVisibility(View.INVISIBLE);
-        tvUserName.setVisibility(View.INVISIBLE);
-        mCurrentUser = CurrentUser.CurrentUser().getCurrentUser();
-        if(mCurrentUser != null){
-            tvUserName.setText(mCurrentUser.getUsername());
-            tvUserName.setVisibility(View.VISIBLE);
-            llLogin.setVisibility(View.VISIBLE);
-            btnLogin.setVisibility(View.INVISIBLE);
-            if(mCurrentUser.getType() == 2){
-                tvOwner.setVisibility(View.VISIBLE);
-            }
-            else if(mCurrentUser.getType() == 3){
-                tvShipper.setVisibility(View.VISIBLE);
-            }
-        }
-        else {
-            tvOwner.setVisibility(View.INVISIBLE);
-            tvShipper.setVisibility(View.INVISIBLE);
-            llLogin.setVisibility(View.INVISIBLE);
-            tvUserName.setVisibility(View.INVISIBLE);
-        }
-
-        btnLogin.setOnClickListener(this);
+        View view = inflater.inflate(R.layout.fragment_person, container, false);
+        mTvUserName = view.findViewById(R.id.tvLogin);
+        if(CurrentUser.CurrentUser().isLogin()){
+            login();
+        } else logout();
         return view;
     }
+
+    private void logout(){
+
+    }
+
+    private void login() {
+        mTvUserName.setText(CurrentUser.CurrentUser().getCurrentUser().getUsername());
+    }
+
     @Override
-    public void onClick(View view) {
-        Intent intent = new Intent(getActivity(), LoginActivity.class);
-        startActivityForResult(intent, 1);
-    }
-
-    public void onActivityResult(int requestCode, int resultCode, Intent intent){
-        super.onActivityResult(requestCode, resultCode, intent);
-        if(resultCode == RESULT_OK){
-            if(requestCode == 1){
-                Bundle bundle = intent.getBundleExtra("user_package");
-                Users user = (Users) bundle.getSerializable("user");
-                tvUserName.setText(user.getUsername());
-                tvUserName.setVisibility(View.VISIBLE);
-                llLogin.setVisibility(View.VISIBLE);
-                btnLogin.setVisibility(View.INVISIBLE);
-                if(user.getType() == 2){
-                    tvOwner.setVisibility(View.VISIBLE);
-                }
-                else if(user.getType() == 3){
-                    tvShipper.setVisibility(View.VISIBLE);
-                }
-            }
+    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
+        Toast mToast = Toast.makeText(getContext(), "", Toast.LENGTH_SHORT);
+        switch (menuItem.getItemId()) {
+            case R.id.navHistory:
+                mToast.setText("History");
+                mToast.show();
+                break;
+            case R.id.navForShipper:
+                mToast.setText("ForShipper");
+                mToast.show();
+                break;
+            case R.id.navForShopOwner:
+                mToast.setText("navForShopOwner");
+                mToast.show();
+                break;
+            case R.id.navInvoice:
+                mToast.setText("navInvoice");
+                mToast.show();
+                break;
+            case R.id.navAppSetting:
+                mToast.setText("navAppSetting");
+                mToast.show();
+                break;
+            case R.id.navPolicy:
+                mToast.setText("navPolicy");
+                mToast.show();
+                break;
+            case R.id.navUserSetting:
+                mToast.setText("navUserSetting");
+                mToast.show();
+                break;
+            case R.id.navLogOut:
+                mToast.setText("navLogOut");
+                mToast.show();
+                break;
         }
+        return true;
     }
-
-
 }
