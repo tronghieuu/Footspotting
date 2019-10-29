@@ -2,22 +2,54 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/cardview_light_background"
+    android:background="@color/color_black_transparent"
     android:clickable="true">
     <LinearLayout
+        android:id="@+id/notification_login"
+        android:background="@color/cardview_light_background"
+        android:layout_margin="10dp"
         style="@style/linearParent"
         android:layout_gravity="center"
         android:padding="20dp">
 
         <TextView
-            style="@style/headerTextPrimary"
-            android:text="Thông báo"
+            style="@style/headerTextRed"
+            android:text="Notification"
             android:layout_marginTop="20dp"/>
 
         <ListView
             style="@style/clickableTextParent"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"/>
+
+    </LinearLayout>
+    <LinearLayout
+        android:id="@+id/notification_no_login"
+        android:layout_margin="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        style="@style/linearParent"
+        android:layout_gravity="center"
+        android:background="@color/cardview_light_background"
+        android:padding="20dp">
+        <TextView
+            style="@style/headerTextRed"
+            android:text="Notification"
+            android:layout_marginTop="20dp"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Please login to continue!"
+            android:textSize="20sp"
+            android:textStyle="bold">
+
+        </TextView>
+        <ImageView
+            android:layout_margin="100dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/logo_login"></ImageView>
 
     </LinearLayout>
 
