@@ -3,24 +3,38 @@ package com.team4of5.foodspotting;
 import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
+
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Restaurent extends AppCompatActivity {
     private TextView mShopName;
@@ -32,18 +46,21 @@ public class Restaurent extends AppCompatActivity {
     private TextView mShopAddress;
     private TextView mShowAllReview;
     private SearchView mSearchFood;
-    private RecyclerView mViewFoodList;
+    private RecyclerView mRecylerView;
     private String phonenum;
-    private Restaurant res;
     private String id_restaurent;
     private FirebaseFirestore db;
+    private ImageView mImageView;
+    private List<Food> mFoods;
+    private FoodAdapter mAdapter;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurent);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         id_restaurent = getIntent().getStringExtra("id_restaurent");
-        res = new Restaurant();
         db = FirebaseFirestore.getInstance();
         mShopName = findViewById(R.id.textShopName);
         mShopType = findViewById(R.id.textShopType);
@@ -54,9 +71,22 @@ public class Restaurent extends AppCompatActivity {
         mShopAddress = findViewById(R.id.textShopAddress);
         mShowAllReview = findViewById(R.id.textShopShowAllReview);
         mSearchFood = findViewById(R.id.searchFood);
-        mViewFoodList = findViewById(R.id.recycleViewFoodList);
+        mImageView = findViewById(R.id.imageShop);
 
+        mFoods = new ArrayList<>();
+        mRecylerView = findViewById(R.id.recycleViewFoodList);
+        mRecylerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
+        mAdapter = new FoodAdapter(this, mFoods, mRecylerView);
+        mRecylerView.setAdapter(mAdapter);
         getRes();
+        queryFood();
+
+        mAdapter.setOnItemListener(new FoodAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Food item) {
+
+            }
+        });
 
 
         mShopContact.setOnClickListener(new View.OnClickListener() {
@@ -75,12 +105,31 @@ public class Restaurent extends AppCompatActivity {
                     return;
                 }
                 startActivity(i);
-
             }
         });
-
-
     }
+
+    public void queryFood(){
+        db.collection("food")
+                .whereEqualTo("res_id", id_restaurent)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(!queryDocumentSnapshots.isEmpty()){
+                    for(DocumentSnapshot doc : queryDocumentSnapshots){
+                        Food food = new Food();
+                        food.setImage(doc.getString("image"));
+                        food.setInfo(doc.getString("info"));
+                        food.setName(doc.getString("name"));
+                        food.setPrice(doc.getString("price"));
+                        mFoods.add(food);
+                        mAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        });
+    }
+
     public void getRes(){
         db.collection("restaurants")
                 .document(id_restaurent)
@@ -97,7 +146,38 @@ public class Restaurent extends AppCompatActivity {
                 String address = doc.getString("street") + " " +
                         doc.getString("district") + " " + doc.getString("province");
                 mShopAddress.setText(address);
+                new Restaurent.DownloadImageFromInternet(mImageView)
+                        .execute(doc.getString("image"));
             }
         });
+    }
+
+    private class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
+
+        ImageView imageView;
+
+        public DownloadImageFromInternet(ImageView imageView){
+            this.imageView = imageView;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            String imageURL = urls[0];
+            Bitmap bimage = null;
+            try {
+                InputStream in = new java.net.URL(imageURL).openStream();
+                bimage = BitmapFactory.decodeStream(in);
+
+            } catch (Exception e) {
+                Log.e("Error Message", e.getMessage());
+                e.printStackTrace();
+            }
+            return bimage;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            imageView.setImageBitmap(result);
+        }
     }
 }
