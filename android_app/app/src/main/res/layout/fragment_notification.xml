@@ -21,6 +21,8 @@
             android:text="Thông báo"></TextView>
     </androidx.appcompat.widget.Toolbar>
     <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:layout_below="@+id/toolbar"
         android:id="@+id/notification_login"
         android:background="@color/cardview_light_background"
