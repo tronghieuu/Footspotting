@@ -1,5 +1,7 @@
 package com.team4of5.foodspotting;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -9,20 +11,45 @@ import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.navigation.NavigationView;
 
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+
 public class PersonFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener{
 
+    private NavigationView mNavigationView;
+    private CardView mCvLogin, mCvNoLogin;
     private TextView mTvUserName;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_person, container, false);
-        mTvUserName = view.findViewById(R.id.tvLogin);
-        NavigationView mNavigationView = view.findViewById(R.id.navPersonal);
+        mNavigationView = view.findViewById(R.id.navPersonal);
+        mCvLogin = view.findViewById(R.id.cardViewLogin);
+        mCvNoLogin = view.findViewById(R.id.cardViewNoLogin);
+        mTvUserName = view.findViewById(R.id.tvUserName);
+
+        mCvLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), "Hoạt động", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        mCvNoLogin.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivityForResult(intent, 1);
+            }
+        });
 
         if (mNavigationView != null) {
             mNavigationView.setNavigationItemSelectedListener(this);
@@ -33,11 +60,30 @@ public class PersonFragment extends Fragment implements NavigationView.OnNavigat
         return view;
     }
 
-    private void logout(){
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
+        if(requestCode == 1){
+            if(resultCode == Activity.RESULT_OK){
+                String isLogin = data.getStringExtra("isLogin");
+                if(isLogin.contentEquals("ok")) {
+                    CurrentUser.CurrentUser().saveAccount(new File(getActivity().getFilesDir(), "currentAccount.txt"));
+                    reloadFragment();
+                    Toast.makeText(getActivity(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
+    private void logout(){
+        mCvLogin.setVisibility(View.INVISIBLE);
+        mCvNoLogin.setVisibility(View.VISIBLE);
     }
 
     private void login() {
+        mCvLogin.setVisibility(View.VISIBLE);
+        mCvNoLogin.setVisibility(View.INVISIBLE);
         mTvUserName.setText(CurrentUser.CurrentUser().getCurrentUser().getUsername());
     }
 
@@ -74,10 +120,28 @@ public class PersonFragment extends Fragment implements NavigationView.OnNavigat
                 mToast.show();
                 break;
             case R.id.navLogOut:
-                mToast.setText("navLogOut");
-                mToast.show();
+                Logout();
+                reloadFragment();
                 break;
         }
         return true;
+    }
+
+    private void Logout(){
+        try{
+            File file = new File(getActivity().getFilesDir(), "currentAccount.txt");
+            FileOutputStream writer = new FileOutputStream(file);
+            CurrentUser.CurrentUser().setLogin(false);
+        } catch(IOException e){}
+
+    }
+
+    private void reloadFragment(){
+        Fragment frg = null;
+        frg = getFragmentManager().findFragmentByTag("Person");
+        final FragmentTransaction ft = getFragmentManager().beginTransaction();
+        ft.detach(frg);
+        ft.attach(frg);
+        ft.commit();
     }
 }

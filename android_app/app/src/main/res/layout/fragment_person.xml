@@ -5,22 +5,106 @@
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-        <TextView
-            android:id="@+id/tvLogin"
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Đăng nhập/Đăng ký"
-            android:clickable="true"
-            android:textSize="20dp"
-            android:textStyle="bold"
-            android:background="@color/color_black_transparent"/>
+            android:layout_height="wrap_content">
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardViewLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    app:cardBackgroundColor="@color/color_black">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                                <de.hdodenhof.circleimageview.CircleImageView
+                                    android:id="@+id/profile_image"
+                                    android:layout_width="20dp"
+                                    android:layout_height="20dp"
+                                    app:civ_border_width="2dp"
+                                    android:src="@drawable/avatar"
+                                    android:layout_marginLeft="20dp"
+                                    android:layout_centerVertical="true"
+                                    app:civ_border_color="#FF000000" />
+
+                                <TextView
+                                    android:id="@+id/tvUserName"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Nguyễn Trọng Hiếu"
+                                    android:textColor="@color/color_white"
+                                    android:textStyle="bold"
+                                    android:layout_marginLeft="60dp"
+                                    android:layout_centerVertical="true" />
+
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginLeft="15dp"
+                                    android:src="@drawable/ic_navigate_next_black_24dp"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:text="Hoạt động"
+                                    android:layout_alignParentRight="true"
+                                    android:textColor="@color/color_white"
+                                    android:layout_marginRight="30dp"/>
+
+                        </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/cardViewNoLogin"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    app:cardBackgroundColor="@color/color_black">
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent">
+
+                                <ImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginLeft="15dp"
+                                    android:src="@drawable/ic_account_white"/>
+
+                                <TextView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="Đăng nhập"
+                                    android:textColor="@color/color_white"
+                                    android:textStyle="bold"
+                                    android:layout_marginLeft="60dp"
+                                    android:layout_centerVertical="true" />
+
+                                <androidx.appcompat.widget.AppCompatImageView
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_marginLeft="15dp"
+                                    android:src="@drawable/ic_navigate_next_black_24dp"/>
+
+                        </RelativeLayout>
+
+                </androidx.cardview.widget.CardView>
+
+        </RelativeLayout>
 
         <com.google.android.material.navigation.NavigationView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="start"
             android:id="@+id/navPersonal"
-            app:menu="@menu/personal_menu"/>
-
+            app:menu="@menu/personal_menu" />
 
 </LinearLayout>
