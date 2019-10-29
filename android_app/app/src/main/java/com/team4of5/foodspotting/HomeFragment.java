@@ -1,5 +1,6 @@
 package com.team4of5.foodspotting;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
@@ -58,7 +59,8 @@ public class HomeFragment extends Fragment {
         mAdapter.setOnItemListener(new NearRestaurantReccyclerViewAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Restaurant item) {
-
+                Intent intent = new Intent(getActivity(), Restaurent.class);
+                
             }
         });
 
