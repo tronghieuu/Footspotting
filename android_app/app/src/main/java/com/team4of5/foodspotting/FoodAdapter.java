@@ -9,9 +9,9 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RatingBar;
 import android.widget.TextView;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,9 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.io.InputStream;
 import java.util.List;
 
-public class NearRestaurantReccyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private List<Restaurant> mRestaurants;
+    private List<Food> mFoods;
     private Context mContext;
     private Activity mActivity;
     private OnItemClickListener mListener;
@@ -39,30 +39,30 @@ public class NearRestaurantReccyclerViewAdapter extends RecyclerView.Adapter<Rec
     private int lastVisibleItem, totalItemCount;
 
     public interface OnItemClickListener {
-        void onItemClick(Restaurant item);
+        void onItemClick(Food item);
     }
 
     public interface OnLoadMoreListener {
         void onLoadMore();
     }
 
-    public void add(int position, Restaurant item) {
-        mRestaurants.add(position, item);
+    public void add(int position, Food item) {
+        mFoods.add(position, item);
         notifyItemInserted(position);
     }
 
-    public void remove(Restaurant item) {
-        int position = mRestaurants.indexOf(item);
-        mRestaurants.remove(position);
+    public void remove(Food item) {
+        int position = mFoods.indexOf(item);
+        mFoods.remove(position);
         notifyItemRemoved(position);
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public NearRestaurantReccyclerViewAdapter(Context context, List<Restaurant> restaurants, RecyclerView recyclerView) {
+    public FoodAdapter(Context context, List<Food> foods, RecyclerView recyclerView) {
 
         mContext = context;
         mActivity = (Activity)context;
-        mRestaurants = restaurants;
+        mFoods = foods;
 
         // load more
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -86,7 +86,7 @@ public class NearRestaurantReccyclerViewAdapter extends RecyclerView.Adapter<Rec
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
-            View view = LayoutInflater.from(mActivity).inflate(R.layout.fragment_home_item, parent, false);
+            View view = LayoutInflater.from(mActivity).inflate(R.layout.shop_item, parent, false);
             return new ViewHolderRow(view);
         } else if (viewType == VIEW_TYPE_LOADING) {
             View view = LayoutInflater.from(mActivity).inflate(R.layout.item_loading, parent, false);
@@ -102,18 +102,18 @@ public class NearRestaurantReccyclerViewAdapter extends RecyclerView.Adapter<Rec
         // - replace the contents of the view with that element
 
         if (holder instanceof ViewHolderRow) {
-            Restaurant restaurant = mRestaurants.get(position);
+            Food food = mFoods.get(position);
 
             ViewHolderRow userViewHolder = (ViewHolderRow) holder;
 
-            userViewHolder.ratingBar.setRating((float)restaurant.getRate());
-            userViewHolder.tvRestName.setText(restaurant.getName());
-            userViewHolder.tvRestAddress.setText(restaurant.getAddress());
+
+            userViewHolder.tvPrice.setText(food.getPrice());
+            userViewHolder.tvFoodName.setText(food.getName());
             new DownloadImageFromInternet(userViewHolder.imageView)
-                    .execute(restaurant.getImage());
+                    .execute(food.getImage());
 
             // binding item click listner
-            userViewHolder.bind(mRestaurants.get(position), mListener);
+            userViewHolder.bind(mFoods.get(position), mListener);
         } else if (holder instanceof ViewHolderLoading) {
             ViewHolderLoading loadingViewHolder = (ViewHolderLoading) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
@@ -124,7 +124,7 @@ public class NearRestaurantReccyclerViewAdapter extends RecyclerView.Adapter<Rec
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mRestaurants == null ? 0 : mRestaurants.size();
+        return mFoods == null ? 0 : mFoods.size();
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
@@ -137,7 +137,7 @@ public class NearRestaurantReccyclerViewAdapter extends RecyclerView.Adapter<Rec
 
     @Override
     public int getItemViewType(int position) {
-        return mRestaurants.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        return mFoods.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
     public void setLoaded() {
@@ -186,19 +186,20 @@ public class NearRestaurantReccyclerViewAdapter extends RecyclerView.Adapter<Rec
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public class ViewHolderRow extends RecyclerView.ViewHolder {
-        public TextView tvRestName, tvRestAddress;
+        public TextView tvFoodName, tvPrice;
         public ImageView imageView;
-        public RatingBar ratingBar;
+        public Button btnAdd;
+
 
         public ViewHolderRow(View v) {
             super(v);
-            tvRestName = v.findViewById(R.id.tvRestaurantName);
-            tvRestAddress = v.findViewById(R.id.tvRestaurantAddress);
-            imageView = v.findViewById(R.id.imageShop);
-            ratingBar = v.findViewById(R.id.ratingShopOverall);
+            tvFoodName = v.findViewById(R.id.textFoodName);
+            imageView = v.findViewById(R.id.imageFood);
+            tvPrice = v.findViewById(R.id.textFoodPrice);
+            btnAdd = v.findViewById(R.id.button_add);
         }
 
-        public void bind(final Restaurant item, final OnItemClickListener listener) {
+        public void bind(final Food item, final OnItemClickListener listener) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -209,4 +210,3 @@ public class NearRestaurantReccyclerViewAdapter extends RecyclerView.Adapter<Rec
     }
 
 }
-

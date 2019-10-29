@@ -4,13 +4,13 @@ import java.io.Serializable;
 
 public class Food implements Serializable {
     private String id, image, info, name, res_id;
-    private int price;
-    public Food(String id, String image, String info, String name, int price, String res_id){
+    private String price;
+    public Food(String id, String image, String info, String name, String price, String res_id){
         this.id = id;
         this.image = image;
         this.info = info;
         this.name = name;
-        this.price = 0;
+        this.price = price;
         this.res_id = res_id;
     }
     public Food(){
@@ -18,7 +18,7 @@ public class Food implements Serializable {
         this.image = "";
         this.info = "";
         this.name = "";
-        this.price = 0;
+        this.price = "";
         this.res_id = "";
     }
     public void setId(String id){
@@ -36,7 +36,7 @@ public class Food implements Serializable {
     public void setRes_id(String res_id){
         this.res_id = res_id;
     }
-    public void setPrice(int price){
+    public void setPrice(String price){
         this.price = price;
     }
 
@@ -55,7 +55,7 @@ public class Food implements Serializable {
     public String getRes_id(){
         return res_id;
     }
-    public int getPrice(){
+    public String getPrice(){
         return price;
     }
 }

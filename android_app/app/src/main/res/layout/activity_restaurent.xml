@@ -3,31 +3,29 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    >
+    android:background="@color/color_black_transparent">
+
     <ImageView
         android:src="@mipmap/ic_launcher"
         android:layout_width="match_parent"
         android:layout_height="200dp"
         android:adjustViewBounds="true"
         android:scaleType="centerCrop"
-        android:id="@+id/imageShop"
-        />
+        android:id="@+id/imageShop" />
+
     <FrameLayout
         android:id="@+id/frame_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
-        android:orientation="vertical"
-        >
-
+        android:orientation="vertical">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="bottom"
             android:background="@color/color_black_transparent"
-            android:orientation="vertical"
-            >
+            android:orientation="vertical">
 
             <TextView
                 android:layout_width="match_parent"
@@ -37,23 +35,26 @@
                 android:text="Tên quán"
                 android:textColor="@color/colorAccent"
                 android:textSize="30sp"
-                android:id="@+id/textShopName"
-                />
+                android:id="@+id/textShopName" />
+
             <LinearLayout
+
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
+
                 <LinearLayout
+
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    >
+                    android:orientation="vertical">
+
                     <LinearLayout
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        >
+                        android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -63,22 +64,24 @@
                             android:text="Quán vỉa hè"
                             android:id="@+id/textShopType"
                             android:textColor="@android:color/primary_text_dark"
-                            android:textSize="16sp"
-                            />
+                            android:textSize="16sp" />
+
                     </LinearLayout>
+
                     <LinearLayout
+
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:orientation="horizontal"
-                        >
+                        android:orientation="horizontal">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
                             android:text="Giờ mở cửa:  "
                             android:textColor="@android:color/white"
-                            android:textSize="20sp"
-                            />
+                            android:textSize="20sp" />
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -87,10 +90,12 @@
                             android:text="08:00 - 22:00 "
                             android:id="@+id/textOpeningTime"
                             android:textColor="@android:color/primary_text_dark"
-                            android:textSize="16sp"
-                            />
+                            android:textSize="16sp" />
+
                     </LinearLayout>
+
                 </LinearLayout>
+
                 <Button
                     android:layout_marginLeft="30dp"
                     android:drawableLeft="@android:drawable/ic_menu_call"
@@ -98,12 +103,13 @@
                     android:layout_height="wrap_content"
                     android:text="Liên hệ"
                     android:id="@+id/buttonShopContact"/>
+
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -111,8 +117,7 @@
                     android:layout_gravity="bottom"
                     android:text="Rating: "
                     android:textColor="@android:color/white"
-                    android:textSize="20sp"
-                    />
+                    android:textSize="20sp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -121,8 +126,7 @@
                     android:text="3.5"
                     android:id="@+id/textRatingShopOverall"
                     android:textColor="@android:color/white"
-                    android:textSize="18sp"
-                    />
+                    android:textSize="18sp" />
 
                 <RatingBar
                     android:layout_marginLeft="10dp"
@@ -131,8 +135,8 @@
                     android:layout_gravity="center_vertical"
                     android:progressTint="@color/colorAccent"
                     android:id="@+id/ratingShopOverallStar"
-                    style="?android:attr/ratingBarStyleSmall"
-                    />
+                    style="?android:attr/ratingBarStyleSmall" />
+
                 <TextView
                     android:id="@+id/textShopShowAllReview"
                     android:layout_width="wrap_content"
@@ -145,12 +149,13 @@
                     android:text="Xem tất cả đánh giá"
                     android:textSize="18sp"
                     android:textColor="@color/colorAccent" />
+
             </LinearLayout>
+
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                >
+                android:orientation="horizontal">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -158,8 +163,7 @@
                     android:layout_gravity="bottom"
                     android:text="Đ/c: "
                     android:textColor="@android:color/white"
-                    android:textSize="20dp"
-                    />
+                    android:textSize="20dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -169,12 +173,14 @@
                     android:text="address"
                     android:id="@+id/textShopAddress"
                     android:textColor="@android:color/primary_text_dark"
-                    android:textSize="20sp"
-                    />
+                    android:textSize="20sp" />
 
             </LinearLayout>
+
         </LinearLayout>
+
     </FrameLayout>
+
     <SearchView
         android:id="@+id/searchFood"
         android:layout_width="match_parent"
@@ -182,10 +188,14 @@
         android:queryHint="Tìm kiếm nhanh"
         android:iconifiedByDefault="false"
         android:layout_alignParentTop="true"
-        android:layout_marginRight="20dp"
-        />
+        android:layout_margin="10dp"
+        android:background="@color/color_white"/>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recycleViewFoodList"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        android:background="@color/color_white"
+        android:layout_marginBottom="10dp"/>
+
 </LinearLayout>
