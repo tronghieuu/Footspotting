@@ -119,6 +119,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     android:text="3.5"
+                    android:id="@+id/textRatingShopOverall"
                     android:textColor="@android:color/white"
                     android:textSize="18sp"
                     />
@@ -129,7 +130,7 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:progressTint="@color/colorAccent"
-                    android:id="@+id/ratingShopOverall"
+                    android:id="@+id/ratingShopOverallStar"
                     style="?android:attr/ratingBarStyleSmall"
                     />
                 <TextView
@@ -184,7 +185,7 @@
         android:layout_marginRight="20dp"
         />
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recycleViewHome"
+        android:id="@+id/recycleViewFoodList"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 </LinearLayout>
