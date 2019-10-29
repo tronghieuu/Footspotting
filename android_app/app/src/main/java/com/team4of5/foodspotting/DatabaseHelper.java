@@ -13,7 +13,7 @@ public class DatabaseHelper {
         db = FirebaseFirestore.getInstance();
     }
 
-    public void getUserWhenLogin(String email, String password){
+    public void getUserWhenLogin(String email, final String password){
         db.collection("users")
                 .whereEqualTo("email", email)
                 .whereEqualTo("password", password)
@@ -31,9 +31,11 @@ public class DatabaseHelper {
                     CurrentUser.CurrentUser().setProvince(query.getString("province"));
                     CurrentUser.CurrentUser().setPhone(query.getString("phone"));
                     CurrentUser.CurrentUser().setStreet(query.getString("street"));
+                    CurrentUser.CurrentUser().setPassword(query.getString("password"));
                     CurrentUser.CurrentUser().setId(query.getId());
                     CurrentUser.CurrentUser().setLogin(true);
                 }
             }
-        });}
+        });
+    }
 }

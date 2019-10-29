@@ -48,12 +48,13 @@ public class Users implements Serializable {
         this.username = username;
     }
 
-    public boolean setPassword(String currentPassword, String newPassword){
-        if(currentPassword == this.password){
-            this.password = newPassword;
-            return true;
-        }
+    public boolean setPassword(String password){
+        this.password = password;
         return false;
+    }
+
+    public String getPassword(){
+        return password;
     }
 
     public void setEmail(String email){
