@@ -14,6 +14,7 @@ import java.util.List;
 public class Restaurant implements Serializable {
     private String id,name, phone, district, province, street, image, opening_time, type, user_id;
     private float rate;
+    private List<Rating> ratingList;
     private List<Food> foods;
     public Restaurant(String id,String name,String phone,String district,String province,String street,String image,float rate,String opening_time,String type,String user_id){
         this.id = id;
@@ -40,6 +41,7 @@ public class Restaurant implements Serializable {
         this.opening_time = "";
         this.type = "";
         this.user_id = "";
+        this.ratingList = new ArrayList<>();
         foods = new ArrayList<>();
     }
     public void setId(String id){
@@ -75,6 +77,7 @@ public class Restaurant implements Serializable {
     public void setUser_id(String user_id){
         this.user_id = user_id;
     }
+    public void setRatingList(List<Rating> ratingList){this.ratingList=ratingList;}
 
     public String getId(){
         return id;
@@ -112,6 +115,7 @@ public class Restaurant implements Serializable {
     public float getRate(){
         return rate;
     }
+    public List<Rating> getRatingList(){return ratingList;}
 
     public void updateResInfo(String idd){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
