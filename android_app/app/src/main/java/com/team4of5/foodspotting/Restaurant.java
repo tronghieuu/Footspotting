@@ -1,11 +1,13 @@
 package com.team4of5.foodspotting;
 
 import java.io.Serializable;
+import java.util.List;
 
 public class Restaurant implements Serializable {
     private String id,name, phone, district, province, street, image, opening_time, type, user_id;
     private float rate;
-    public Restaurant(String id,String name,String phone,String district,String province,String street,String image,float rate,String opening_time,String type,String user_id){
+    private List<Rating> ratingList;
+    public Restaurant(String id,String name,String phone,String district,String province,String street,String image,float rate,String opening_time,String type,String user_id,List<Rating> ratingList){
         this.id = id;
         this.name = name;
         this.phone = phone;
@@ -17,6 +19,7 @@ public class Restaurant implements Serializable {
         this.opening_time = opening_time;
         this.type = type;
         this.user_id = user_id;
+        this.ratingList = ratingList;
     }
     public Restaurant(){
         this.id = "";
@@ -30,6 +33,7 @@ public class Restaurant implements Serializable {
         this.opening_time = "";
         this.type = "";
         this.user_id = "";
+        this.ratingList = null;
     }
     public void setId(String id){
         this.id = id;
@@ -64,6 +68,7 @@ public class Restaurant implements Serializable {
     public void setUser_id(String user_id){
         this.user_id = user_id;
     }
+    public void setRatingList(List<Rating> ratingList){this.ratingList=ratingList;}
 
     public String getId(){
         return id;
@@ -101,5 +106,6 @@ public class Restaurant implements Serializable {
     public float getRate(){
         return rate;
     }
+    public List<Rating> getRatingList(){return ratingList;}
 
 }
