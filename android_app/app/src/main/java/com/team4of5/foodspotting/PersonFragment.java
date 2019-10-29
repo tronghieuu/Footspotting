@@ -116,8 +116,6 @@ public class PersonFragment extends Fragment implements NavigationView.OnNavigat
                 mToast.show();
                 break;
             case R.id.navUserSetting:
-                mToast.setText("navUserSetting");
-                mToast.show();
                 break;
             case R.id.navLogOut:
                 Logout();

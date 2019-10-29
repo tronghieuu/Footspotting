@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class Restaurant implements Serializable {
     private String id,name, phone, district, province, street, image, opening_time, type, user_id;
-    private int rate;
-    public Restaurant(String id,String name,String phone,String district,String province,String street,String image,int rate,String opening_time,String type,String user_id){
+    private float rate;
+    public Restaurant(String id,String name,String phone,String district,String province,String street,String image,float rate,String opening_time,String type,String user_id){
         this.id = id;
         this.name = name;
         this.phone = phone;
@@ -58,7 +58,7 @@ public class Restaurant implements Serializable {
     public void setType(String type){
         this.type = type;
     }
-    public void setRate(int rate){
+    public void setRate(float rate){
         this.rate = rate;
     }
     public void setUser_id(String user_id){
@@ -95,7 +95,10 @@ public class Restaurant implements Serializable {
     public String getUser_id(){
         return user_id;
     }
-    public int getRate(){
+    public String getAddress(){
+        return street + " " + district + " " + province;
+    }
+    public float getRate(){
         return rate;
     }
 

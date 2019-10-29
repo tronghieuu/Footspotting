@@ -5,15 +5,18 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
+import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -24,6 +27,9 @@ public class HomeFragment extends Fragment {
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
     private ArrayList<ImageModel> imageModelArrayList;
+    private RecyclerView mRecylerView;
+    private NearRestaurantReccyclerViewAdapter mAdapter;
+    private List<Restaurant> mRestaurents;
 
     private int[] myImageList = new int[]{R.drawable.slide1, R.drawable.slide2,
             R.drawable.slide3};
@@ -36,6 +42,53 @@ public class HomeFragment extends Fragment {
         mPager.setAdapter(new SlidingImage_Adapter(getContext(),imageModelArrayList));
         indicator = view.findViewById(R.id.indicator);
         init();
+
+        //RECYLERVIEW
+        DatabaseHelper db = new DatabaseHelper();
+        db.getAllRestaurant();
+
+        mRestaurents = CurrentUser.CurrentUser().getRestaurants();
+        mRecylerView = view.findViewById(R.id.recycleViewHome);
+        mRecylerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+        mAdapter = new NearRestaurantReccyclerViewAdapter(getActivity() , mRestaurents, mRecylerView);
+        mRecylerView.setAdapter(mAdapter);
+
+        // set RecyclerView on item click listner
+        mAdapter.setOnItemListener(new NearRestaurantReccyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Restaurant item) {
+
+            }
+        });
+
+        //set load more listener for the RecyclerView adapter
+        mAdapter.setOnLoadMoreListener(new NearRestaurantReccyclerViewAdapter.OnLoadMoreListener() {
+            @Override
+            public void onLoadMore() {
+                if (mRestaurents.size() <= 100) {
+                    mRestaurents.add((null));
+                    mAdapter.notifyItemInserted(mRestaurents.size() - 1);
+                    new Handler().postDelayed(new Runnable() {
+                        @Override
+                        public void run() {
+                            mRestaurents.remove(mRestaurents.size() - 1);
+                            mAdapter.notifyItemRemoved(mRestaurents.size());
+
+                            //Generating more data
+
+                            int index = mRestaurents.size();
+                            mAdapter.notifyDataSetChanged();
+                            mAdapter.setLoaded();
+                        }
+                    }, 2000);
+                } else {
+                    Toast.makeText(getActivity(), "Loading data completed", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        //
+
         return view;
     }
     private ArrayList<ImageModel> populateList(){

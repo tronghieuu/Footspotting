@@ -10,16 +10,28 @@ import java.io.FileOutputStream;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.OutputStreamWriter;
+import java.util.ArrayList;
+import java.util.List;
 
 public class CurrentUser {
 
     private static CurrentUser instance = null;
     private Users currentUser;
     private boolean login;
+    private List<Restaurant> restaurants;
 
     private CurrentUser(){
         currentUser = new Users("","", "", "",1);
         login = false;
+        restaurants = new ArrayList<>();
+    }
+
+    public void addAllRestaurents(List<Restaurant> ress){
+        restaurants.addAll(ress);
+    }
+
+    public void removeRestaurent(int index){
+        restaurants.remove(index);
     }
 
     public static CurrentUser CurrentUser(){
@@ -49,6 +61,13 @@ public class CurrentUser {
         currentUser.setId(id);
     }
 
+    public void addRestaurant(Restaurant res){
+        restaurants.add(res);
+    }
+
+    public List<Restaurant> getRestaurants(){
+        return restaurants;
+    }
 
     public void setEmail(String email){
         currentUser.setEmail(email);

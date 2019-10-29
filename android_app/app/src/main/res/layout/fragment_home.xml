@@ -1,20 +1,31 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:background="@color/cardview_light_background">
+    android:background="@color/color_black_transparent"
+    android:clickable="true">
+
     <LinearLayout
-        style="@style/linearParent"
-        android:layout_gravity="center">
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
             android:orientation="horizontal"
-            android:weightSum="10">
+            android:weightSum="10"
+            android:background="@color/color_red">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:background="@color/color_white"
+                android:layout_margin="10dp">
+
                 <SearchView
                     android:id="@+id/searchHome"
                     android:layout_width="0dp"
@@ -22,8 +33,8 @@
                     android:queryHint="Tìm kiếm"
                     android:iconifiedByDefault="false"
                     android:layout_alignParentTop="true"
-                    android:layout_weight="7"
-                    />
+                    android:layout_weight="7" />
+
                 <Spinner
                     android:id="@+id/sp_city"
                     android:layout_width="0dp"
@@ -31,10 +42,15 @@
                     android:layout_weight="3"
                     android:entries="@array/country_arrays"
                     android:prompt="@string/country_prompt" />
+
+            </LinearLayout>
+
         </LinearLayout>
+
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="200dp" >
+            android:layout_height="200dp"
+            android:background="@color/color_white">
 
             <androidx.viewpager.widget.ViewPager
                 android:id="@+id/pagerAd"
@@ -55,9 +71,32 @@
                 app:pageColor="#fff"
                 app:snap="false" />
         </RelativeLayout>
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recycleViewHome"
+
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/color_white"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="10dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Gần đây"
+                android:layout_gravity="center_horizontal"
+                android:textStyle="bold"
+                android:textSize="20dp"
+                android:layout_marginTop="10dp" />
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginTop="10dp"
+                android:id="@+id/recycleViewHome"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent" />
+
+        </LinearLayout>
+
     </LinearLayout>
-</RelativeLayout>
+
+</LinearLayout>
