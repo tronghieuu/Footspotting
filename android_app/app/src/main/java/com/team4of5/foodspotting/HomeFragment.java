@@ -60,7 +60,8 @@ public class HomeFragment extends Fragment {
             @Override
             public void onItemClick(Restaurant item) {
                 Intent intent = new Intent(getActivity(), Restaurent.class);
-                
+                intent.putExtra("id_restaurent", item.getId());
+                startActivity(intent);
             }
         });
 
