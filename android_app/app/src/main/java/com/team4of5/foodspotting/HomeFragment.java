@@ -43,6 +43,7 @@ public class HomeFragment extends Fragment {
         indicator = view.findViewById(R.id.indicator);
         init();
 
+
         //RECYLERVIEW
         DatabaseHelper db = new DatabaseHelper();
         db.getAllRestaurant();
