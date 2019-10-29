@@ -44,6 +44,33 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     >
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+                        <LinearLayout
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            >
+                            <TextView
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="20dp"
+                                android:layout_gravity="bottom"
+                                android:maxLines="1"
+                                android:text="Quán vỉa hè"
+                                android:id="@+id/textShopType"
+                                android:textColor="@android:color/primary_text_dark"
+                                android:textSize="16sp"
+                                />
+                        </LinearLayout>
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="horizontal"
+                        >
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -62,12 +89,15 @@
                         android:textColor="@android:color/primary_text_dark"
                         android:textSize="16sp"
                         />
+                    </LinearLayout>
+                    </LinearLayout>
                     <Button
                         android:layout_marginLeft="30dp"
                         android:drawableLeft="@android:drawable/ic_menu_call"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="Liên hệ"/>
+                        android:text="Liên hệ"
+                        android:id="@+id/buttonShopContact"/>
                 </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
@@ -102,6 +132,18 @@
                             android:id="@+id/ratingShopOverall"
                             style="?android:attr/ratingBarStyleSmall"
                             />
+                        <TextView
+                            android:id="@+id/textShopShowAllReview"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginLeft="20dp"
+                            android:layout_marginTop="5dp"
+                            android:onClick="onShowAllReview"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:text="Xem tất cả đánh giá"
+                            android:textSize="18sp"
+                            android:textColor="@color/colorAccent" />
                     </LinearLayout>
                     <LinearLayout
                         android:layout_width="match_parent"
