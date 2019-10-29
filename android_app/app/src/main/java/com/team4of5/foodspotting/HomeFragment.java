@@ -15,6 +15,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager.widget.ViewPager;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.ArrayList;
@@ -32,6 +36,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView mRecylerView;
     private NearRestaurantReccyclerViewAdapter mAdapter;
     private List<Restaurant> mRestaurents;
+    private FirebaseFirestore db;
 
     private int[] myImageList = new int[]{R.drawable.slide1, R.drawable.slide2,
             R.drawable.slide3};
@@ -48,14 +53,13 @@ public class HomeFragment extends Fragment {
 
 
         //RECYLERVIEW
-        DatabaseHelper db = new DatabaseHelper();
-        db.getAllRestaurant();
-
-        mRestaurents = CurrentUser.CurrentUser().getRestaurants();
+        db = FirebaseFirestore.getInstance();
+        mRestaurents = new ArrayList<>();
         mRecylerView = view.findViewById(R.id.recycleViewHome);
         mRecylerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mAdapter = new NearRestaurantReccyclerViewAdapter(getActivity() , mRestaurents, mRecylerView);
         mRecylerView.setAdapter(mAdapter);
+        queryRestaurant();
 
         // set RecyclerView on item click listner
         mAdapter.setOnItemListener(new NearRestaurantReccyclerViewAdapter.OnItemClickListener() {
@@ -68,7 +72,7 @@ public class HomeFragment extends Fragment {
         });
 
         //set load more listener for the RecyclerView adapter
-        mAdapter.setOnLoadMoreListener(new NearRestaurantReccyclerViewAdapter.OnLoadMoreListener() {
+        /*mAdapter.setOnLoadMoreListener(new NearRestaurantReccyclerViewAdapter.OnLoadMoreListener() {
             @Override
             public void onLoadMore() {
                 if (mRestaurents.size() <= 100) {
@@ -91,10 +95,7 @@ public class HomeFragment extends Fragment {
                     Toast.makeText(getActivity(), "Loading data completed", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
-
-        //
-
+        });*/
         return view;
     }
     private ArrayList<ImageModel> populateList(){
@@ -160,6 +161,34 @@ public class HomeFragment extends Fragment {
             }
         });
 
+    }
+
+    public void queryRestaurant(){
+        db.collection("restaurants")
+                .limit(6)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(!queryDocumentSnapshots.isEmpty()){
+                    for(DocumentSnapshot doc : queryDocumentSnapshots){
+                        Restaurant res = new Restaurant();
+                        res.setId(doc.getId());
+                        res.setDistrict(doc.getString("district"));
+                        res.setImage(doc.getString("image"));
+                        res.setName(doc.getString("name"));
+                        res.setOpening_time(doc.getString("opening_time"));
+                        res.setPhone(doc.getString("phone"));
+                        res.setProvince(doc.getString("province"));
+                        res.setRate(Float.parseFloat(doc.getString("rate")));
+                        res.setStreet(doc.getString("street"));
+                        res.setType(doc.getString("type"));
+                        res.setUser_id(doc.getString("user_id"));
+                        mRestaurents.add(res);
+                        mAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        });
     }
 
 }

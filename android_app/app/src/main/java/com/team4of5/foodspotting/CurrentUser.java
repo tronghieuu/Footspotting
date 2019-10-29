@@ -18,20 +18,10 @@ public class CurrentUser {
     private static CurrentUser instance = null;
     private Users currentUser;
     private boolean login;
-    private List<Restaurant> restaurants;
 
     private CurrentUser(){
         currentUser = new Users("","", "", "",1);
         login = false;
-        restaurants = new ArrayList<>();
-    }
-
-    public void addAllRestaurents(List<Restaurant> ress){
-        restaurants.addAll(ress);
-    }
-
-    public void removeRestaurent(int index){
-        restaurants.remove(index);
     }
 
     public static CurrentUser CurrentUser(){
@@ -59,14 +49,6 @@ public class CurrentUser {
 
     public void setId(String id){
         currentUser.setId(id);
-    }
-
-    public void addRestaurant(Restaurant res){
-        restaurants.add(res);
-    }
-
-    public List<Restaurant> getRestaurants(){
-        return restaurants;
     }
 
     public void setEmail(String email){
@@ -109,33 +91,17 @@ public class CurrentUser {
             }
             else {
                 if(file.length() == 0) {
-                    /*FileOutputStream stream = new FileOutputStream(file);
-                    BufferedWriter bw = new BufferedWriter(new OutputStreamWriter(stream));
-                    bw.write("tester");
-                    bw.newLine();
-                    bw.write("1");
-                    bw.close();*/
                     return false;
                 }
                 else {
-                    return login(file);
+                    BufferedReader b = new BufferedReader(new FileReader(file));
+                    currentUser.setEmail(b.readLine());
+                    currentUser.setPassword(b.readLine());
+                    return true;
                 }
+
             }
         } catch (IOException e) {
-            return false;
-        }
-    }
-
-    public boolean login(File file) {
-        try{
-            BufferedReader b = new BufferedReader(new FileReader(file));
-            String email = b.readLine();
-            String password = b.readLine();
-            DatabaseHelper db = new DatabaseHelper();
-            db.getUserWhenLogin(email, password);
-            return true;
-        } catch (IOException e){
-
             return false;
         }
     }
@@ -148,7 +114,6 @@ public class CurrentUser {
             bw.newLine();
             bw.write(currentUser.getPassword());
             bw.close();
-            CurrentUser.CurrentUser().login(file);
         } catch(IOException e){}
     }
 }

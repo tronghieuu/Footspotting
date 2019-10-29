@@ -1,5 +1,6 @@
 package com.team4of5.foodspotting;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
@@ -16,6 +17,11 @@ import android.widget.RatingBar;
 import android.widget.SearchView;
 import android.widget.TextView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 public class Restaurent extends AppCompatActivity {
     private TextView mShopName;
     private TextView mShopType;
@@ -28,15 +34,17 @@ public class Restaurent extends AppCompatActivity {
     private SearchView mSearchFood;
     private RecyclerView mViewFoodList;
     private String phonenum;
+    private Restaurant res;
+    private String id_restaurent;
+    private FirebaseFirestore db;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurent);
-        String id_restaurent = getIntent().getStringExtra("id_restaurent");
-        Restaurant res = new Restaurant();
-        res.updateResInfo(id_restaurent);
-
+        id_restaurent = getIntent().getStringExtra("id_restaurent");
+        res = new Restaurant();
+        db = FirebaseFirestore.getInstance();
         mShopName = findViewById(R.id.textShopName);
         mShopType = findViewById(R.id.textShopType);
         mOpeningTime = findViewById(R.id.textOpeningTime);
@@ -48,10 +56,9 @@ public class Restaurent extends AppCompatActivity {
         mSearchFood = findViewById(R.id.searchFood);
         mViewFoodList = findViewById(R.id.recycleViewFoodList);
 
-        mShopName.setText(res.getName());
-        mShopType.setText(res.getType());
-        mOpeningTime.setText(res.getOpening_time());
-        phonenum = res.getPhone();
+        getRes();
+
+
         mShopContact.setOnClickListener(new View.OnClickListener() {
 
             @RequiresApi(api = Build.VERSION_CODES.M)
@@ -71,9 +78,26 @@ public class Restaurent extends AppCompatActivity {
 
             }
         });
-        mRatingShopOverall.setText(Float.toString(res.getRate()));
-        mRatingShopOverallStar.setRating(res.getRate());
-        mShopAddress.setText(res.getAddress());
 
+
+    }
+    public void getRes(){
+        db.collection("restaurants")
+                .document(id_restaurent)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                DocumentSnapshot doc = task.getResult();
+                mShopName.setText(doc.getString("name"));
+                mShopType.setText(doc.getString("type"));
+                mOpeningTime.setText(doc.getString("opening_time"));
+                phonenum = doc.getString("phone");
+                mRatingShopOverall.setText(doc.getString("rate"));
+                mRatingShopOverallStar.setRating(Float.parseFloat(doc.getString("rate")));
+                String address = doc.getString("street") + " " +
+                        doc.getString("district") + " " + doc.getString("province");
+                mShopAddress.setText(address);
+            }
+        });
     }
 }
