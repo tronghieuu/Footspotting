@@ -12,10 +12,11 @@
         android:layout_below="@+id/lis_top_navigation"></FrameLayout>
     <com.google.android.material.bottomnavigation.BottomNavigationView
         android:id="@+id/lis_top_navigation"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:background="?android:attr/windowBackground"
+        android:layout_centerInParent="true"
         app:menu="@menu/list_top_navigation"></com.google.android.material.bottomnavigation.BottomNavigationView>
 
 

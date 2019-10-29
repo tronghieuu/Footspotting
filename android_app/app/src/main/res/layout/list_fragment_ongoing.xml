@@ -37,8 +37,8 @@
             android:layout_alignParentTop="true"
             android:layout_centerInParent="true"
             android:textStyle="bold"
-            android:textSize="30sp"
-            android:text="You're not login!"></TextView>
+            android:textSize="20sp"
+            android:text="Please login to continue!"></TextView>
     </RelativeLayout>
 
 </RelativeLayout>
