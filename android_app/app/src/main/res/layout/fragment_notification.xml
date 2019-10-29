@@ -2,21 +2,32 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/color_black_transparent"
     android:clickable="true">
+    <androidx.appcompat.widget.Toolbar
+        android:background="@color/color_red"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar"
+        android:minHeight="?android:attr/actionBarSize"
+        android:layout_centerHorizontal="true">
+        <TextView
+            android:gravity="center"
+            android:textSize="30sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/headerText"
+            android:text="Thông báo"></TextView>
+    </androidx.appcompat.widget.Toolbar>
     <LinearLayout
+        android:layout_below="@+id/toolbar"
         android:id="@+id/notification_login"
         android:background="@color/cardview_light_background"
         android:layout_margin="10dp"
         style="@style/linearParent"
         android:layout_gravity="center"
         android:padding="20dp">
-
-        <TextView
-            style="@style/headerTextRed"
-            android:text="Notification"
-            android:layout_marginTop="20dp"/>
-
         <ListView
             style="@style/clickableTextParent"
             android:layout_width="match_parent"
@@ -24,6 +35,7 @@
 
     </LinearLayout>
     <LinearLayout
+        android:layout_below="@+id/toolbar"
         android:id="@+id/notification_no_login"
         android:layout_margin="10dp"
         android:layout_width="wrap_content"
@@ -32,10 +44,6 @@
         android:layout_gravity="center"
         android:background="@color/cardview_light_background"
         android:padding="20dp">
-        <TextView
-            style="@style/headerTextRed"
-            android:text="Notification"
-            android:layout_marginTop="20dp"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -52,6 +60,5 @@
             android:src="@drawable/logo_login"></ImageView>
 
     </LinearLayout>
-
 
 </RelativeLayout>

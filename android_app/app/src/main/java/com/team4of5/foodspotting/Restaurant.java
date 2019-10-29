@@ -1,13 +1,22 @@
 package com.team4of5.foodspotting;
 
+import androidx.annotation.NonNull;
+
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 
 public class Restaurant implements Serializable {
     private String id,name, phone, district, province, street, image, opening_time, type, user_id;
     private float rate;
     private List<Rating> ratingList;
-    public Restaurant(String id,String name,String phone,String district,String province,String street,String image,float rate,String opening_time,String type,String user_id,List<Rating> ratingList){
+    private List<Food> foods;
+    public Restaurant(String id,String name,String phone,String district,String province,String street,String image,float rate,String opening_time,String type,String user_id){
         this.id = id;
         this.name = name;
         this.phone = phone;
@@ -19,7 +28,6 @@ public class Restaurant implements Serializable {
         this.opening_time = opening_time;
         this.type = type;
         this.user_id = user_id;
-        this.ratingList = ratingList;
     }
     public Restaurant(){
         this.id = "";
@@ -33,7 +41,8 @@ public class Restaurant implements Serializable {
         this.opening_time = "";
         this.type = "";
         this.user_id = "";
-        this.ratingList = null;
+        this.ratingList = new ArrayList<>();
+        foods = new ArrayList<>();
     }
     public void setId(String id){
         this.id = id;
@@ -107,5 +116,29 @@ public class Restaurant implements Serializable {
         return rate;
     }
     public List<Rating> getRatingList(){return ratingList;}
+
+    public void updateResInfo(String idd){
+        FirebaseFirestore db = FirebaseFirestore.getInstance();
+        db.collection("restaurants").document(idd)
+                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if(task.isSuccessful()){
+                    DocumentSnapshot doc = task.getResult();
+                    id = doc.getId();
+                    name = doc.getString("name");
+                    district = doc.getString("district");
+                    image = doc.getString("image");
+                    opening_time = doc.getString("opening_time");
+                    phone = doc.getString("phone");
+                    province = doc.getString("province");
+                    rate = Float.parseFloat(doc.getString("rate"));
+                    street = doc.getString("street");
+                    type = doc.getString("type");
+                    user_id = doc.getString("user_id");
+                }
+            }
+        });
+    }
 
 }
