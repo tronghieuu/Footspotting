@@ -60,6 +60,7 @@ public class Restaurent extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_restaurent);
+        getSupportActionBar().hide();
 
         id_restaurent = getIntent().getStringExtra("id_restaurent");
         db = FirebaseFirestore.getInstance();
