@@ -13,6 +13,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -197,6 +198,12 @@ public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             imageView = v.findViewById(R.id.imageFood);
             tvPrice = v.findViewById(R.id.textFoodPrice);
             btnAdd = v.findViewById(R.id.button_add);
+            btnAdd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(mContext, "Added to cart", Toast.LENGTH_SHORT).show();
+                }
+            });
         }
 
         public void bind(final Food item, final OnItemClickListener listener) {

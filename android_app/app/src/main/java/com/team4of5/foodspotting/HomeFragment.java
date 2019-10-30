@@ -1,5 +1,7 @@
 package com.team4of5.foodspotting;
 
+import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
@@ -7,6 +9,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
+import android.widget.EditText;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -36,6 +40,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView mRecylerView;
     private NearRestaurantReccyclerViewAdapter mAdapter;
     private List<Restaurant> mRestaurents;
+    private EditText mEdtSearch;
     private FirebaseFirestore db;
 
     private int[] myImageList = new int[]{R.drawable.slide1, R.drawable.slide2,
@@ -44,14 +49,13 @@ public class HomeFragment extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_home,container,false);
 
-        getActivity().getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        mEdtSearch = view.findViewById(R.id.searchHome);
         imageModelArrayList = new ArrayList<>();
         imageModelArrayList = populateList();
         mPager = view.findViewById(R.id.pagerAd);
         mPager.setAdapter(new SlidingImage_Adapter(getContext(),imageModelArrayList));
         indicator = view.findViewById(R.id.indicator);
         init();
-
 
         //RECYLERVIEW
         db = FirebaseFirestore.getInstance();
@@ -166,7 +170,6 @@ public class HomeFragment extends Fragment {
 
     public void queryRestaurant(){
         db.collection("restaurants")
-                .limit(6)
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {

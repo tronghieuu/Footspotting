@@ -84,7 +84,7 @@ public class Restaurent extends AppCompatActivity {
         mAdapter.setOnItemListener(new FoodAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Food item) {
-
+                Toast.makeText(getApplicationContext(), "Food detail", Toast.LENGTH_SHORT).show();
             }
         });
 
@@ -122,6 +122,8 @@ public class Restaurent extends AppCompatActivity {
                         food.setInfo(doc.getString("info"));
                         food.setName(doc.getString("name"));
                         food.setPrice(doc.getString("price"));
+                        food.setId(doc.getId());
+                        food.setRes_id(doc.getString("res_id"));
                         mFoods.add(food);
                         mAdapter.notifyDataSetChanged();
                     }
