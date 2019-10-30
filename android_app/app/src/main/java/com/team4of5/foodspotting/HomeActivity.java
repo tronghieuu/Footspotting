@@ -24,7 +24,8 @@ public class HomeActivity extends AppCompatActivity {
         BottomNavigationView bottomNav = findViewById(R.id.bottom_navigation);
         bottomNav.setOnNavigationItemSelectedListener(navListener);
         getSupportActionBar().hide();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
+        bottomNav.setSelectedItemId(R.id.nav_home);
+        //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
         Intent intent = new Intent();
     }
 
@@ -73,11 +74,13 @@ public class HomeActivity extends AppCompatActivity {
 
                     if(getSupportFragmentManager().findFragmentByTag(fragTag)!=null) {
                         t.beginTransaction().show(getSupportFragmentManager().findFragmentByTag(fragTag)).commit();
-                        Fragment frg = getSupportFragmentManager().findFragmentByTag(fragTag);
-                        FragmentTransaction ft = t.beginTransaction();
-                        ft.detach(frg);
-                        ft.attach(frg);
-                        ft.commit();
+                        if(!fragTag.contentEquals("Home")){
+                            Fragment frg = getSupportFragmentManager().findFragmentByTag(fragTag);
+                            FragmentTransaction ft = t.beginTransaction();
+                            ft.detach(frg);
+                            ft.attach(frg);
+                            ft.commit();
+                        }
                     }
                     else
                        t.beginTransaction().add(R.id.fragment_container, selectedFragment,fragTag).addToBackStack(null).commit();

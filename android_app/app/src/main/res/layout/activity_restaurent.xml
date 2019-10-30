@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/color_black_transparent">
+
     <SearchView
         android:id="@+id/searchFood"
         android:layout_width="match_parent"
@@ -12,6 +13,7 @@
         android:iconifiedByDefault="false"
         android:layout_alignParentTop="true"
         android:layout_margin="10dp"
+        android:focusable="false"
         android:background="@color/color_white"/>
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
