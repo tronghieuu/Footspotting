@@ -48,9 +48,11 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:text="food name"
+                        android:maxLines="2"
+                        android:ellipsize="end"
                         android:id="@+id/textFoodName"
                         android:textColor="@color/colorAccent"
-                        android:textSize="18sp"
+                        android:textSize="15sp"
                         />
 
                 </LinearLayout>

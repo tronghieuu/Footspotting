@@ -12,8 +12,10 @@
         android:orientation="horizontal">
 
         <ImageView
-            android:layout_width="100dp"
+            android:layout_width="110dp"
             android:layout_height="match_parent"
+            android:layout_marginRight="5dp"
+            android:scaleType="fitXY"
             android:id="@+id/imageShop" />
 
         <LinearLayout
@@ -25,9 +27,10 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="1"
+                android:ellipsize="end"
                 android:text="Tên quán"
                 android:textColor="@color/colorAccent"
-                android:textSize="25sp"
+                android:textSize="22sp"
                 android:id="@+id/tvRestaurantName" />
 
             <LinearLayout
@@ -57,6 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxLines="2"
+                android:ellipsize="end"
                 android:text="124123 Nguyễn Lương Bằng, Hòa Khánh Bắc, Liên Chiểu, Đà Nẵng"
                 android:id="@+id/tvRestaurantAddress"
                 android:textColor="@android:color/black"

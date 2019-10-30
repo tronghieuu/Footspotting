@@ -33,23 +33,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
+                android:background="@color/color_black_transparent"
                 android:orientation="vertical">
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
-                    android:background="@color/color_black_transparent"
+                    android:layout_marginLeft="5dp"
+
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:layout_gravity="bottom"
+                        android:ellipsize="end"
                         android:maxLines="1"
                         android:text="Tên quán"
                         android:textColor="@color/colorAccent"
-                        android:textSize="30sp"
+                        android:textSize="23sp"
                         android:id="@+id/textShopName" />
 
                     <LinearLayout
@@ -79,7 +82,7 @@
                                     android:text="Quán vỉa hè"
                                     android:id="@+id/textShopType"
                                     android:textColor="@android:color/primary_text_dark"
-                                    android:textSize="16sp" />
+                                    android:textSize="15sp" />
 
                             </LinearLayout>
 
@@ -185,10 +188,11 @@
                             android:layout_height="wrap_content"
                             android:layout_gravity="bottom"
                             android:maxLines="1"
+                            android:ellipsize="end"
                             android:text="address"
                             android:id="@+id/textShopAddress"
                             android:textColor="@android:color/primary_text_dark"
-                            android:textSize="20sp" />
+                            android:textSize="15sp" />
 
                     </LinearLayout>
 
