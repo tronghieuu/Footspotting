@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
+import android.widget.SearchView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -40,7 +41,7 @@ public class HomeFragment extends Fragment {
     private RecyclerView mRecylerView;
     private NearRestaurantReccyclerViewAdapter mAdapter;
     private List<Restaurant> mRestaurents;
-    private EditText mEdtSearch;
+    private SearchView mEdtSearch;
     private FirebaseFirestore db;
 
     private int[] myImageList = new int[]{R.drawable.slide1, R.drawable.slide2,
