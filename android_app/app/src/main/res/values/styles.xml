@@ -105,7 +105,7 @@
         <item name="android:background">@drawable/add_button_bk</item>
         <item name="android:textColor">@color/primaryTextColor</item>
         <item name="android:text">+</item>
-        <item name="android:textSize">20dp</item>
+        <item name="android:textSize">30dp</item>
         <item name="android:textStyle">bold</item>
     </style>
 

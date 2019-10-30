@@ -110,7 +110,7 @@ public class Restaurant implements Serializable {
         return user_id;
     }
     public String getAddress(){
-        return street + " " + district + " " + province;
+        return street + ", " + district + ", " + province;
     }
     public float getRate(){
         return rate;
