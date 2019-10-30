@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
@@ -70,8 +71,14 @@ public class HomeActivity extends AppCompatActivity {
                             break;
                     }
 
-                    if(getSupportFragmentManager().findFragmentByTag(fragTag)!=null)
+                    if(getSupportFragmentManager().findFragmentByTag(fragTag)!=null) {
                         t.beginTransaction().show(getSupportFragmentManager().findFragmentByTag(fragTag)).commit();
+                        Fragment frg = getSupportFragmentManager().findFragmentByTag(fragTag);
+                        FragmentTransaction ft = t.beginTransaction();
+                        ft.detach(frg);
+                        ft.attach(frg);
+                        ft.commit();
+                    }
                     else
                        t.beginTransaction().add(R.id.fragment_container, selectedFragment,fragTag).addToBackStack(null).commit();
                     return true;
