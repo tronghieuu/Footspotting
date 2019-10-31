@@ -102,7 +102,7 @@ router.post('/boardSave', function(req,res,next){
     
     var postData = req.body;
     if (!postData.users) {  // new
-        postData.brddate = Date.now();
+        postData.phone = Date.now();
         var doc = db.collection("board").doc();
         postData.brdno = doc.id;
         postData.brdwriter = user.email;
