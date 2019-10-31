@@ -42,6 +42,7 @@ public class Restaurent extends AppCompatActivity {
     private TextView mShopType;
     private TextView mOpeningTime;
     private Button mShopContact;
+    private TextView mTextShopShowAllReview;
     private TextView mRatingShopOverall;
     private RatingBar mRatingShopOverallStar;
     private TextView mShopAddress;
@@ -68,6 +69,7 @@ public class Restaurent extends AppCompatActivity {
         mShopType = findViewById(R.id.textShopType);
         mOpeningTime = findViewById(R.id.textOpeningTime);
         mShopContact = findViewById(R.id.buttonShopContact);
+        mTextShopShowAllReview = findViewById(R.id.textShopShowAllReview);
         mRatingShopOverall = findViewById(R.id.textRatingShopOverall);
         mRatingShopOverallStar = findViewById(R.id.ratingShopOverallStar);
         mShopAddress = findViewById(R.id.textShopAddress);
@@ -92,21 +94,20 @@ public class Restaurent extends AppCompatActivity {
 
 
         mShopContact.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(Intent.ACTION_DIAL);
+                intent.setData(Uri.parse("tel:" +phonenum));
+                startActivity(intent);
+            }
+        });
 
-            @RequiresApi(api = Build.VERSION_CODES.M)
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_CALL, Uri.parse(phonenum));
-                if (checkSelfPermission(Manifest.permission.CALL_PHONE) != PackageManager.PERMISSION_GRANTED) {
-                    // TODO: Consider calling
-                    //    Activity#requestPermissions
-                    // here to request the missing permissions, and then overriding
-                    //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
-                    //                                          int[] grantResults)
-                    // to handle the case where the user grants the permission. See the documentation
-                    // for Activity#requestPermissions for more details.
-                    return;
-                }
-                startActivity(i);
+        mTextShopShowAllReview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), Rate.class);
+                intent.putExtra("id_restaurent", id_restaurent);
+                startActivity(intent);
             }
         });
     }
