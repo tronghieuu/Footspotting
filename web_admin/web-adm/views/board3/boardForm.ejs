@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<title>Foodspotting</title>
+</head>
+<body>
+	<form name="form1" action="boardSave" method="post">
+		<table border="1" style="width:600px">
+			<caption>Foodspotting</caption>
+			<colgroup>
+				<col width='15%' />
+				<col width='*%' />
+			</colgroup>
+			<tbody>
+				<tr>
+					<td>Title</td> 
+					<td><input type="text" name="phone" size="70" maxlength="250" value="<%=row.phone%>"></td> 
+				</tr>
+				<tr>
+					<td>Memo</td> 
+					<td><textarea name="provice" rows="5" cols="60"><%=row.provice%></textarea></td> 
+				</tr>
+			</tbody> 
+		</table>
+		<a href="#" onclick="form1.submit()">Save</a>
+		<input type="hidden" name="username" value="<%=row.username%>"> 
+	</form>	
+</body>
+</html>

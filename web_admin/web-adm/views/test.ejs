@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+  <head>
+  <meta charset="UTF-8">
+  <script src="https://www.gstatic.com/firebasejs/5.0.4/firebase.js"></script>
+  </head>
+  <body>
+    <h1>Firebase Test</h1>
+    <p>Firebase console</p>
+  </body>
+</html>
+
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: " AIzaSyA6PG2O-YPFDQwBgVhXijnIIAs9SO3vtY4 ",
+    authDomain: "foodspotting-11369.firebaseapp.com",
+    databaseURL: "https://foodspotting-11369.firebaseio.com",
+    projectId: "foodspotting-11369",
+    storageBucket: "foodspotting-11369.appspot.com",
+    messagingSenderId: "863159936668"
+  };
+  firebase.initializeApp(config);
+  
+  var postData = {
+	brdwriter: "홍길동",
+ 	brdtitle: "게시판 테스트", 
+ 	brdmemo: "게시물 내용", 
+ 	brddate: Date.now()
+  };
+
+  var newPostKey = firebase.database().ref().child('posts').push().key;
+
+  var updates = {};
+  updates['/board/' + newPostKey] = postData;
+
+  firebase.database().ref().update(updates);
+		  
+</script>
