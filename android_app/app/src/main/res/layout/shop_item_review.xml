@@ -1,11 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_margin="10dp"
-    android:orientation="vertical">
+    android:layout_margin="10dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +28,7 @@
                     android:layout_marginLeft="10dp"
                     android:layout_marginRight="10dp"
                     android:textStyle="bold"
-                    tools:text="Nguyen A" />
+                    android:text="User Name" />
 
                 <androidx.appcompat.widget.AppCompatRatingBar
                     android:layout_marginLeft="10dp"
@@ -50,14 +48,14 @@
                 android:layout_marginLeft="10dp"
                 android:textSize="10sp"
                 android:textStyle="bold"
-                tools:text="12:23:34"/>
+                android:text="00:00:00"/>
 
             <TextView
                 android:id="@+id/textReviewComment"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="10dp"
-                tools:text="Món này ăn cũng được" />
+                android:text="User Comment" />
 
             <View
                 android:layout_width="match_parent"
@@ -69,4 +67,4 @@
         </LinearLayout>
     </LinearLayout>
 
-</LinearLayout>
+</androidx.cardview.widget.CardView>

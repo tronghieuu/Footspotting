@@ -163,9 +163,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginLeft="20dp"
                             android:layout_marginTop="5dp"
-                            android:onClick="onShowAllReview"
                             android:clickable="true"
-                            android:focusable="true"
                             android:text="Xem đánh giá"
                             android:textSize="18sp"
                             android:textColor="@color/colorAccent" />
