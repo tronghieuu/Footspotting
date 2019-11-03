@@ -1,12 +1,10 @@
 package com.team4of5.foodspotting;
 
-import android.app.ActionBar;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -22,7 +20,7 @@ public class NotificationFragment extends Fragment {
         linearLayoutLogin = view.findViewById(R.id.notification_login);
         relativeLayoutLogout = view.findViewById(R.id.notification_no_login);
 
-        if(CurrentUser.CurrentUser().isLogin()){
+        if(User.getCurrentUser().getAccountType() != 3){
             login();
         } else logout();
 

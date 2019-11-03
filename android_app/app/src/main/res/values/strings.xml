@@ -8,4 +8,6 @@
         <item>Đà Nẵng</item>
         <item>Cần Thơ</item>
     </string-array>
+    <string name="term"><u> terms</u></string>
+    <string name="privacy"><u> privacy policy</u></string>
 </resources>

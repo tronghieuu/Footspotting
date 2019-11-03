@@ -1,23 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
     android:background="@color/cardview_light_background"
     android:clickable="true">
-    <FrameLayout
-        android:id="@+id/list_fragment_container"
+
+    <androidx.appcompat.widget.Toolbar
+        android:background="@color/color_red"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/lis_top_navigation"></FrameLayout>
-    <com.google.android.material.bottomnavigation.BottomNavigationView
-        android:id="@+id/lis_top_navigation"
-        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:background="?android:attr/windowBackground"
-        android:layout_centerInParent="true"
-        app:menu="@menu/list_top_navigation"></com.google.android.material.bottomnavigation.BottomNavigationView>
+        android:id="@+id/toolbar"
+        android:minHeight="?android:attr/actionBarSize"
+        android:layout_centerHorizontal="true">
+
+        <TextView
+            android:gravity="center"
+            android:textSize="30sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/headerText"
+            android:text="ORDER" />
+
+    </androidx.appcompat.widget.Toolbar>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/list_fragment_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/lis_top_navigation" />
+
+        <com.google.android.material.bottomnavigation.BottomNavigationView
+            android:id="@+id/lis_top_navigation"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:background="?android:attr/windowBackground"
+            android:layout_centerInParent="true"
+            app:menu="@menu/list_top_navigation" />
+
+    </RelativeLayout>
 
 
-</RelativeLayout>
+</LinearLayout>

@@ -11,11 +11,14 @@
 
     <!--colors for card-->
     <color name="whiteCardColor">#fff</color>
-    <color name="color_black_transparent">#31000000</color>
+    <color name="color_black_transparent">#316B6666</color>
 
     <!--some new color-->
     <color name="color_red">#F44336</color>
     <color name="color_white">#FFFFFF</color>
     <color name="color_yellow">#FFEB3B</color>
     <color name="color_black">#000000</color>
+    <color name="colorTextGoogle">#7C7878</color>
+    <color name="colorLink">#00BCD4</color>
+    <color name="colorDarkYellow">#B8A21D</color>
 </resources>

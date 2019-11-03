@@ -23,7 +23,7 @@ public class ListFragmentHistory extends Fragment {
         linearLayoutLogin = view.findViewById(R.id.history_login);
         relativeLayoutLogout = view.findViewById(R.id.history_no_login);
 
-        if(CurrentUser.CurrentUser().isLogin()){
+        if(User.getCurrentUser().getAccountType() != 3){
             login();
         } else logout();
 
