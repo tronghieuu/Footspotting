@@ -1,6 +1,7 @@
 package com.team4of5.foodspotting;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
@@ -28,6 +29,7 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
     private EditText mEdtEmail, mEdtPassword;
     private ProgressBar mProgressBar;
     private FirebaseAuth mAuth;
+    private static int RQ_SIGN_UP = 111;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +58,18 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                 signIn();
                 break;
             case R.id.btnSignUp:
+                startActivityForResult(new Intent(EmailLoginActivity.this, SignUpActivity.class), RQ_SIGN_UP);
+        }
+    }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == RQ_SIGN_UP){
+            if(User.getCurrentUser().getAccountType() != 3){
+                setResult(Activity.RESULT_CANCELED, new Intent());
+                finish();
+            }
         }
     }
 

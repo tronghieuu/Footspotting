@@ -97,22 +97,22 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 Toast.makeText(getActivity(), "Lịch sử mua hàng", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnShipperApp:
-                Toast.makeText(getActivity(), "Ứng dụng cho shipper", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Ứng dụng cho Shipper", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnOwnerApp:
-                Toast.makeText(getActivity(), User.getCurrentUser().getProvince(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Ứng dụng cho chủ quán", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnUserPolicy:
-                Toast.makeText(getActivity(), User.getCurrentUser().getDistrict(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Chính sách người dùng", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnAdvice:
-                Toast.makeText(getActivity(), User.getCurrentUser().getStreet(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Góp ý", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnAppSetting:
-                Toast.makeText(getActivity(), User.getCurrentUser().getPhone(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Cài đặt ứng dụng", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnPersonalSetting:
-                Toast.makeText(getActivity(), User.getCurrentUser().getId(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Cài đặt cá nhân", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnLogout:
                 logout();

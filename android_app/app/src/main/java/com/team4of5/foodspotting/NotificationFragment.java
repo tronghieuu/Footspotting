@@ -20,7 +20,7 @@ public class NotificationFragment extends Fragment {
         linearLayoutLogin = view.findViewById(R.id.notification_login);
         relativeLayoutLogout = view.findViewById(R.id.notification_no_login);
 
-        if(User.getCurrentUser().getAccountType() == 1 || User.getCurrentUser().getAccountType() == 2){
+        if(User.getCurrentUser().getAccountType() != 3){
             login();
         } else logout();
 
