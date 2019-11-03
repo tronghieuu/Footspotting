@@ -5,6 +5,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/color_black_transparent"
     android:clickable="true">
+
     <androidx.appcompat.widget.Toolbar
         android:background="@color/color_red"
         android:layout_width="match_parent"
@@ -12,14 +13,17 @@
         android:id="@+id/toolbar"
         android:minHeight="?android:attr/actionBarSize"
         android:layout_centerHorizontal="true">
+
         <TextView
             android:gravity="center"
             android:textSize="30sp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/headerText"
-            android:text="Thông báo"></TextView>
+            android:text="Thông báo" />
+
     </androidx.appcompat.widget.Toolbar>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -2,69 +2,119 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="vertical"
-    style="@style/loginParent"
-    tools:context=".LoginActivity">
-    <ScrollView
-        style="@style/parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/choice_login_wallapaper"
+    tools:context=".MainActivity">
 
-        <RelativeLayout
-            style="@style/parent">
+    <androidx.appcompat.widget.Toolbar
+        android:background="@color/color_red"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/toolbar"
+        android:minHeight="?android:attr/actionBarSize"
+        android:layout_centerHorizontal="true">
 
+        <TextView
+            android:gravity="center"
+            android:textSize="30sp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            style="@style/headerText"
+            android:text="LOGIN" />
 
-            <LinearLayout
+    </androidx.appcompat.widget.Toolbar>
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_centerInParent="true">
+
+        <ImageView
+            android:layout_width="200dp"
+            android:layout_height="200dp"
+            android:src="@drawable/food_logo"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="20dp"/>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp">
+
+            <Button
+                android:id="@+id/btnEmailLogin"
+                android:paddingHorizontal="10dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:weightSum="12">
+                android:layout_height="42dp"
+                android:layout_margin="4dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/round_background"
+                android:textColor="@color/colorTextGoogle"
+                android:textStyle="bold"
+                android:text="   SIGN IN WITH EMAIL"
+                android:drawableStart="@drawable/ic_email" />
 
-                <LinearLayout
-                    style="@style/parent"
-                    android:background="@drawable/login_shape_bk"
-                    android:orientation="vertical"
-                    android:layout_weight="3">
 
-                    <ImageView
-                        style="@style/parent"
-                        android:background="@drawable/ic_login_bk"
-                        android:contentDescription="login background" />
-
-                </LinearLayout>
-
-            </LinearLayout>
-
-            <LinearLayout
+            <Button
+                android:id="@+id/btnGoogleLogin"
+                android:paddingHorizontal="8dp"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:orientation="vertical"
-                android:layout_marginTop="40dp"
-                android:layout_marginRight="30dp"
-                android:layout_marginLeft="30dp">
+                android:layout_height="42dp"
+                android:layout_margin="4dp"
+                android:layout_gravity="center_horizontal"
+                android:background="@drawable/round_background"
+                android:textColor="@color/colorTextGoogle"
+                android:textStyle="bold"
+                android:text="   SIGN IN/UP WITH GOOGLE"
+                android:drawableStart="@drawable/ic_google_logo"/>
 
+        </LinearLayout>
 
-                <TextView
-                    style="@style/headerText"
-                    android:layout_gravity="center"
-                    android:text="FoodSpoting"
-                    android:textSize="30dp"
-                    android:layout_marginTop="40dp"/>
-                <include
-                    layout="@layout/layout_login"/>
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="30dp">
 
-            </LinearLayout>
-            <ImageView
-                android:id="@+id/btnBack"
-                android:clickable="true"
+            <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
-                android:layout_alignParentTop="true"
-                android:layout_marginTop="30dp"
-                android:layout_marginLeft="10dp"
-                android:src="@android:drawable/ic_menu_close_clear_cancel" />
-        </RelativeLayout>
+                android:textColor="@color/color_white"
+                android:text="by continuing you adhere to our" />
 
-    </ScrollView>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/term"
+                android:linksClickable="true"
+                android:textColor="@color/colorLink" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/color_white"
+                android:text=" and" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/privacy"
+                android:linksClickable="true"
+                android:textColor="@color/colorLink" />
+
+        </LinearLayout>
+
+    </LinearLayout>
+
+    <ProgressBar
+        android:id="@+id/progressBarGoogle"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_centerInParent="true"
+        android:visibility="gone" />
 
 </RelativeLayout>

@@ -4,7 +4,6 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LinearInterpolator;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 
@@ -24,7 +23,7 @@ public class ListFragmentDraft extends Fragment {
         linearLayoutLogin = view.findViewById(R.id.draft_login);
         relativeLayoutLogout = view.findViewById(R.id.draft_no_login);
 
-        if(CurrentUser.CurrentUser().isLogin()){
+        if(User.getCurrentUser().getAccountType() == 1 || User.getCurrentUser().getAccountType() == 2){
             login();
         } else logout();
 

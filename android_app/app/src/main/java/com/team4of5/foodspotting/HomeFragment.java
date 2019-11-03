@@ -1,18 +1,12 @@
 package com.team4of5.foodspotting;
 
-import android.app.Activity;
-import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.WindowManager;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.EditText;
 import android.widget.SearchView;
-import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -77,56 +71,24 @@ public class HomeFragment extends Fragment {
             }
         });
 
-        //set load more listener for the RecyclerView adapter
-        /*mAdapter.setOnLoadMoreListener(new NearRestaurantReccyclerViewAdapter.OnLoadMoreListener() {
-            @Override
-            public void onLoadMore() {
-                if (mRestaurents.size() <= 100) {
-                    mRestaurents.add((null));
-                    mAdapter.notifyItemInserted(mRestaurents.size() - 1);
-                    new Handler().postDelayed(new Runnable() {
-                        @Override
-                        public void run() {
-                            mRestaurents.remove(mRestaurents.size() - 1);
-                            mAdapter.notifyItemRemoved(mRestaurents.size());
-
-                            //Generating more data
-
-                            int index = mRestaurents.size();
-                            mAdapter.notifyDataSetChanged();
-                            mAdapter.setLoaded();
-                        }
-                    }, 2000);
-                } else {
-                    Toast.makeText(getActivity(), "Loading data completed", Toast.LENGTH_SHORT).show();
-                }
-            }
-        });*/
         return view;
     }
+
     private ArrayList<ImageModel> populateList(){
-
         ArrayList<ImageModel> list = new ArrayList<>();
-
         for(int i = 0; i < 3; i++){
             ImageModel imageModel = new ImageModel();
             imageModel.setImage_drawable(myImageList[i]);
             list.add(imageModel);
         }
-
         return list;
     }
     private void init() {
-
-
-
         indicator.setViewPager(mPager);
-
         final float density = getResources().getDisplayMetrics().density;
 
-//Set circle indicator radius
+        //Set circle indicator radius
         indicator.setRadius(5 * density);
-
         NUM_PAGES =imageModelArrayList.size();
 
         // Auto start of viewpager
@@ -153,20 +115,14 @@ public class HomeFragment extends Fragment {
             @Override
             public void onPageSelected(int position) {
                 currentPage = position;
-
             }
-
             @Override
             public void onPageScrolled(int pos, float arg1, int arg2) {
-
             }
-
             @Override
             public void onPageScrollStateChanged(int pos) {
-
             }
         });
-
     }
 
     public void queryRestaurant(){

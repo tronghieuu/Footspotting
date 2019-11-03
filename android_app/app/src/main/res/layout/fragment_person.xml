@@ -4,6 +4,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@color/color_black_transparent"
     android:clickable="true">
 
         <androidx.appcompat.widget.Toolbar
@@ -13,14 +14,17 @@
             android:id="@+id/toolbar"
             android:minHeight="?android:attr/actionBarSize"
             android:layout_centerHorizontal="true">
+
                 <TextView
                     android:gravity="center"
                     android:textSize="30sp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     style="@style/headerText"
-                    android:text="Account"></TextView>
+                    android:text="Account" />
+
         </androidx.appcompat.widget.Toolbar>
+
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
@@ -116,11 +120,126 @@
 
         </RelativeLayout>
 
-        <com.google.android.material.navigation.NavigationView
+        <Button
+            android:id="@+id/btnPayHistory"
+            android:layout_marginTop="10dp"
+            android:layout_marginBottom="2dp"
+            android:paddingStart="20dp"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_gravity="start"
-            android:id="@+id/navPersonal"
-            app:menu="@menu/personal_menu" />
+            android:layout_height="42dp"
+            android:background="@drawable/round_background"
+            android:textColor="@color/colorTextGoogle"
+            android:textStyle="bold"
+            android:text="     Lịch sử thanh toán"
+            android:textAlignment="viewStart"
+            android:drawableStart="@drawable/history_24px"
+            android:drawableEnd="@drawable/ic_navigate_next_grey" />
+
+        <Button
+            android:id="@+id/btnShipperApp"
+            android:paddingStart="20dp"
+            android:layout_marginBottom="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:background="@drawable/round_background"
+            android:textColor="@color/colorTextGoogle"
+            android:textStyle="bold"
+            android:text="     Ứng dụng cho shipper"
+            android:textAlignment="viewStart"
+            android:drawableStart="@drawable/motorcycle_24px"
+            android:drawableEnd="@drawable/ic_navigate_next_grey" />
+
+        <Button
+            android:id="@+id/btnOwnerApp"
+            android:paddingStart="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:background="@drawable/round_background"
+            android:textColor="@color/colorTextGoogle"
+            android:textStyle="bold"
+            android:text="     Ứng dụng cho chủ quán"
+            android:textAlignment="viewStart"
+            android:drawableStart="@drawable/restaurant_menu_24px"
+            android:drawableEnd="@drawable/ic_navigate_next_grey" />
+
+        <Button
+            android:id="@+id/btnAdvice"
+            android:paddingStart="20dp"
+            android:layout_marginBottom="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:background="@drawable/round_background"
+            android:textColor="@color/colorTextGoogle"
+            android:textStyle="bold"
+            android:text="     Góp ý"
+            android:textAlignment="viewStart"
+            android:drawableStart="@drawable/mail_outline_24px"
+            android:drawableEnd="@drawable/ic_navigate_next_grey" />
+
+        <Button
+            android:id="@+id/btnAppSetting"
+            android:paddingStart="20dp"
+            android:layout_marginBottom="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:background="@drawable/round_background"
+            android:textColor="@color/colorTextGoogle"
+            android:textStyle="bold"
+            android:text="     Cài đặt ứng dụng"
+            android:textAlignment="viewStart"
+            android:drawableStart="@drawable/settings_applications_24px"
+            android:drawableEnd="@drawable/ic_navigate_next_grey" />
+
+        <Button
+            android:id="@+id/btnUserPolicy"
+            android:paddingStart="20dp"
+            android:layout_marginBottom="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:background="@drawable/round_background"
+            android:textColor="@color/colorTextGoogle"
+            android:textStyle="bold"
+            android:text="     Chính sách người dùng"
+            android:textAlignment="viewStart"
+            android:drawableStart="@drawable/policy_24px"
+            android:drawableEnd="@drawable/ic_navigate_next_grey" />
+
+        <Button
+            android:id="@+id/btnPersonalSetting"
+            android:paddingStart="20dp"
+            android:layout_marginBottom="2dp"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:background="@drawable/round_background"
+            android:textColor="@color/colorTextGoogle"
+            android:textStyle="bold"
+            android:text="     Cài đặt cá nhân"
+            android:textAlignment="viewStart"
+            android:drawableStart="@drawable/person_outline_24px"
+            android:drawableEnd="@drawable/ic_navigate_next_grey" />
+
+        <Button
+            android:id="@+id/btnLogout"
+            android:paddingStart="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="42dp"
+            android:background="@drawable/round_background"
+            android:textColor="@color/colorTextGoogle"
+            android:textStyle="bold"
+            android:text="     Đăng xuất"
+            android:textAlignment="viewStart"
+            android:drawableStart="@drawable/power_settings_new_24px"
+            android:drawableEnd="@drawable/ic_navigate_next_grey" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:text="Version 1.2.4"
+            android:textColor="@color/color_black"
+            android:textStyle="bold"
+            android:layout_marginTop="20dp"
+            android:textSize="15dp"/>
 
 </LinearLayout>

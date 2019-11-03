@@ -4,9 +4,9 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -15,123 +15,152 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.material.navigation.NavigationView;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.firestore.FirebaseFirestore;
 
-import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
+public class PersonFragment extends Fragment implements View.OnClickListener {
 
-public class PersonFragment extends Fragment implements NavigationView.OnNavigationItemSelectedListener{
-
-    private NavigationView mNavigationView;
     private CardView mCvLogin, mCvNoLogin;
     private TextView mTvUserName;
+    private FirebaseAuth mAuth;
+    private GoogleSignInClient mGoogleSignInClient;
+    private GoogleSignInAccount mGoogleSignInAccount;
+    private static int RQ_LOGIN = 10;
+    private FirebaseFirestore mDb;
 
     @Nullable
     @Override
     public View onCreateView(@NonNull final LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_person, container, false);
-        mNavigationView = view.findViewById(R.id.navPersonal);
+
+        // firestore
+        mDb = FirebaseFirestore.getInstance();
+
+        // email
+        mAuth = FirebaseAuth.getInstance();
+
+        // google
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
+
         mCvLogin = view.findViewById(R.id.cardViewLogin);
         mCvNoLogin = view.findViewById(R.id.cardViewNoLogin);
         mTvUserName = view.findViewById(R.id.tvUserName);
 
-        mCvLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Toast.makeText(getActivity(), "Hoạt động", Toast.LENGTH_SHORT).show();
-            }
-        });
+        mCvLogin.setOnClickListener(this);
+        mCvNoLogin.setOnClickListener(this);
 
-        mCvNoLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
-                startActivityForResult(intent, 1);
-            }
-        });
+        if(User.getCurrentUser().getAccountType() == 1 || User.getCurrentUser().getAccountType() == 2){
+            loginState();
+        } else logoutState();
 
-        if (mNavigationView != null) {
-            mNavigationView.setNavigationItemSelectedListener(this);
-        }
-        if(CurrentUser.CurrentUser().isLogin()){
-            login();
-        } else logout();
+        // button
+        Button btnPayHistory = view.findViewById(R.id.btnPayHistory);
+        btnPayHistory.setOnClickListener(this);
+        Button btnShipperApp = view.findViewById(R.id.btnShipperApp);
+        btnShipperApp.setOnClickListener(this);
+        Button btnOwnerApp = view.findViewById(R.id.btnOwnerApp);
+        btnOwnerApp.setOnClickListener(this);
+        Button btnAdvice = view.findViewById(R.id.btnAdvice);
+        btnAdvice.setOnClickListener(this);
+        Button btnAppSetting = view.findViewById(R.id.btnAppSetting);
+        btnAppSetting.setOnClickListener(this);
+        Button btnUserPolicy = view.findViewById(R.id.btnUserPolicy);
+        btnUserPolicy.setOnClickListener(this);
+        Button btnPersonalSetting = view.findViewById(R.id.btnPersonalSetting);
+        btnPersonalSetting.setOnClickListener(this);
+        Button btnLogout = view.findViewById(R.id.btnLogout);
+        btnLogout.setOnClickListener(this);
+
         return view;
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.cardViewLogin:
+                Toast.makeText(getActivity(), "Hoạt động", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.cardViewNoLogin:
+                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                startActivityForResult(intent, RQ_LOGIN);
+                break;
+            case R.id.btnPayHistory:
+                Toast.makeText(getActivity(), "Lịch sử mua hàng", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btnShipperApp:
+                Toast.makeText(getActivity(), "Ứng dụng cho shipper", Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btnOwnerApp:
+                Toast.makeText(getActivity(), User.getCurrentUser().getProvince(), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btnUserPolicy:
+                Toast.makeText(getActivity(), User.getCurrentUser().getDistrict(), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btnAdvice:
+                Toast.makeText(getActivity(), User.getCurrentUser().getStreet(), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btnAppSetting:
+                Toast.makeText(getActivity(), User.getCurrentUser().getPhone(), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btnPersonalSetting:
+                Toast.makeText(getActivity(), User.getCurrentUser().getId(), Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.btnLogout:
+                logout();
+        }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if(requestCode == 1){
-            if(resultCode == Activity.RESULT_OK){
-                String isLogin = data.getStringExtra("isLogin");
-                if(isLogin.contentEquals("ok")) {
-                    CurrentUser.CurrentUser().saveAccount(new File(getActivity().getFilesDir(), "currentAccount.txt"));
-                    reloadFragment();
+        if(requestCode == RQ_LOGIN){
+            if(resultCode == Activity.RESULT_CANCELED){
+                if(User.getCurrentUser().getAccountType() != 3){
                     Toast.makeText(getActivity(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
+                    reloadFragment();
                 }
             }
         }
     }
 
-    private void logout(){
+    private void logoutState(){
         mCvLogin.setVisibility(View.INVISIBLE);
         mCvNoLogin.setVisibility(View.VISIBLE);
     }
 
-    private void login() {
+    private void loginState() {
         mCvLogin.setVisibility(View.VISIBLE);
         mCvNoLogin.setVisibility(View.INVISIBLE);
-        mTvUserName.setText(CurrentUser.CurrentUser().getCurrentUser().getUsername());
+        mTvUserName.setText(User.getCurrentUser().getName());
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        Toast mToast = Toast.makeText(getContext(), "", Toast.LENGTH_SHORT);
-        switch (menuItem.getItemId()) {
-            case R.id.navHistory:
-                mToast.setText("History");
-                mToast.show();
-                break;
-            case R.id.navForShipper:
-                mToast.setText("ForShipper");
-                mToast.show();
-                break;
-            case R.id.navForShopOwner:
-                mToast.setText("navForShopOwner");
-                mToast.show();
-                break;
-            case R.id.navInvoice:
-                mToast.setText("navInvoice");
-                mToast.show();
-                break;
-            case R.id.navAppSetting:
-                mToast.setText("navAppSetting");
-                mToast.show();
-                break;
-            case R.id.navPolicy:
-                mToast.setText("navPolicy");
-                mToast.show();
-                break;
-            case R.id.navUserSetting:
-                break;
-            case R.id.navLogOut:
-                Logout();
-                reloadFragment();
-                break;
+
+    private void logout(){
+        int accountType = User.getCurrentUser().getAccountType();
+        if(accountType == 1){
+            mGoogleSignInClient.signOut()
+                    .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
+                        @Override
+                        public void onComplete(@NonNull Task<Void> task) {
+                            Toast.makeText(getActivity(), "Đăng xuất thành công", Toast.LENGTH_SHORT).show();
+                            User.getCurrentUser().setAccountType(3);
+                            reloadFragment();
+                        }
+                    });
+        } else if(accountType == 2){
+            mAuth.signOut();
+            User.getCurrentUser().setAccountType(3);
+            reloadFragment();
         }
-        return true;
-    }
-
-    private void Logout(){
-        try{
-            File file = new File(getActivity().getFilesDir(), "currentAccount.txt");
-            FileOutputStream writer = new FileOutputStream(file);
-            CurrentUser.CurrentUser().setLogin(false);
-        } catch(IOException e){}
-
     }
 
     private void reloadFragment(){

@@ -21,7 +21,7 @@ public class ListFragmentOngoing extends Fragment {
         linearLayoutLogin = view.findViewById(R.id.ongoing_login);
         relativeLayoutLogout = view.findViewById(R.id.ongoing_no_login);
 
-        if(CurrentUser.CurrentUser().isLogin()){
+        if(User.getCurrentUser().getAccountType() == 1 || User.getCurrentUser().getAccountType() == 2){
             login();
         } else logout();
 
