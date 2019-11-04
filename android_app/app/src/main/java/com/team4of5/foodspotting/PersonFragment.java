@@ -87,10 +87,10 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.cardViewLogin:
-                Toast.makeText(getActivity(), "Hoạt động", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getActivity(), "Thông tin", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.cardViewNoLogin:
-                Intent intent = new Intent(getActivity(), LoginActivity.class);
+                Intent intent = new Intent(getActivity(), EmailLoginActivity.class);
                 startActivityForResult(intent, RQ_LOGIN);
                 break;
             case R.id.btnPayHistory:

@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/food_login_wallpaper"
-    tools:context=".LoginActivity">
+    android:background="@drawable/food_login_wallpaper">
 
     <Button
         android:id="@+id/btnBack"
@@ -81,6 +80,26 @@
             android:text="SIGN UP"
             android:background="@color/colorTextGoogle"
             android:textColor="@color/color_white"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginHorizontal="60dp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginTop="20dp"
+            android:layout_marginBottom="10dp"
+            android:text="Or sign in with your google account"
+            android:textColor="@color/color_white" />
+
+        <Button
+            android:id="@+id/btnGoogleLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="   SIGN IN/UP WITH GOOGLE"
+            android:drawableStart="@drawable/ic_google_logo"
+            android:background="@color/color_white"
+            android:textColor="@color/colorTextGoogle"
             android:layout_gravity="center_horizontal"
             android:layout_marginHorizontal="60dp"/>
 
