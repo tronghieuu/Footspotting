@@ -30,8 +30,8 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private TextView mTvUserName;
     private FirebaseAuth mAuth;
     private GoogleSignInClient mGoogleSignInClient;
-    private GoogleSignInAccount mGoogleSignInAccount;
     private static int RQ_LOGIN = 10;
+    private static int RQ_INFO = 324;
     private FirebaseFirestore mDb;
 
     @Nullable
@@ -87,7 +87,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     public void onClick(View view) {
         switch (view.getId()){
             case R.id.cardViewLogin:
-                Toast.makeText(getActivity(), "Thông tin", Toast.LENGTH_SHORT).show();
+                startActivityForResult(new Intent(getActivity(), UserInformationActivity.class), RQ_INFO);
                 break;
             case R.id.cardViewNoLogin:
                 Intent intent = new Intent(getActivity(), EmailLoginActivity.class);
@@ -128,6 +128,10 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                     Toast.makeText(getActivity(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                     reloadFragment();
                 }
+            }
+        } else if(requestCode == RQ_INFO){
+            if(resultCode == Activity.RESULT_CANCELED){
+                reloadFragment();
             }
         }
     }

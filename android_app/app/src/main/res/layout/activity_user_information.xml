@@ -1,122 +1,319 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    style="@style/loginCard"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".UserInformationActivity">
-    <LinearLayout
-        style="@style/linearParent"
+    android:orientation="vertical"
+    android:background="@color/color_black_transparent">
+
+    <RelativeLayout
+        android:id="@+id/above"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_gravity="center">
-        <TextView
-            style="@style/headerTextPrimary"
-            android:text="Thông tin cá nhân"
-            android:layout_marginTop="20dp"/>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:orientation="horizontal"
-            android:weightSum="10">
+        android:background="@color/color_white">
 
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Họ Tên"
-                android:textSize="18dp"
-                android:layout_weight="3.2"/>
-
-            <EditText
-                style="@style/textInBox"
-                android:layout_weight="6.8"
-                android:hint="Nguyễn A"
-                android:id="@+id/reg_name"
-                android:inputType="textPersonName" />
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Phone"
-                android:textSize="18dp"
-                android:layout_weight="3.2"/>
-
-            <EditText
-                style="@style/textInBox"
-                android:layout_weight="6.8"
-                android:hint="0123456789"
-                android:id="@+id/phone"
-                android:inputType="number"/>
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Email"
-                android:textSize="18dp"
-                android:layout_weight="3.2"/>
-
-            <EditText
-                style="@style/textInBox"
-                android:layout_weight="6.8"
-                android:hint="asd@asd.asd"
-                android:id="@+id/login_acc"
-                android:inputType="textEmailAddress"/>
-
-        </LinearLayout>
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
-            android:layout_marginLeft="20dp"
-            android:layout_marginRight="20dp"
-            android:orientation="horizontal"
-            android:weightSum="10">
-
-            <TextView
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:text="Address"
-                android:textSize="18dp"
-                android:layout_weight="3.2"/>
-
-            <EditText
-                style="@style/textInBox"
-                android:layout_weight="6.8"
-                android:hint="92 Nguyễn Lương Bằng"
-                android:id="@+id/address"
-                android:inputType="text"/>
-
-        </LinearLayout>
         <Button
-            style="@style/loginButton"
-            android:layout_gravity="center"
-            android:layout_marginTop="20dp"
-            android:text="Cập nhật" />
-    </LinearLayout>
+            android:id="@+id/btnBackProfile"
+            android:layout_centerVertical="true"
+            android:paddingStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_navigate_before_yellow"
+            android:background="?android:attr/selectableItemBackground"/>
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="PROFILE"
+            android:textColor="@color/color_black"
+            android:textSize="40dp"
+            android:textStyle="italic"
+            android:layout_centerHorizontal="true" />
 
-</androidx.cardview.widget.CardView>
+    </RelativeLayout>
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_below="@+id/above"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="200dp">
+
+                <ImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/color_red" />
+
+                <ImageView
+                    android:id="@+id/imageViewAvatar"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/avatar" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/imageViewAvatar"
+                    android:text="Chỉnh sửa"
+                    android:layout_centerHorizontal="true"
+                    android:textStyle="bold"
+                    android:textColor="@color/color_white"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="Email"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true" />
+
+                <TextView
+                    android:id="@+id/tvEmailIfo"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="20dp"
+                    android:text="something@email.com"
+                    android:textSize="20dp"
+                    android:textColor="@color/color_greyy"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="Username"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true" />
+
+                <TextView
+                    android:id="@+id/tvChangeUsername"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="40dp"
+                    android:text="trong hieu"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_navigate_next_grey"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_centerVertical="true"/>
+
+                <Button
+                    android:id="@+id/btnChangeUsername"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/selectableItemBackground" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="Phone"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true" />
+
+                <TextView
+                    android:id="@+id/tvChangePhone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="40dp"
+                    android:text="234234234"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_navigate_next_grey"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_centerVertical="true"/>
+
+                <Button
+                    android:id="@+id/btnChangePhone"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/selectableItemBackground" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="Address"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true" />
+
+                <TextView
+                    android:id="@+id/tvChangeAddress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="40dp"
+                    android:text="Đà Nẵng"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_navigate_next_grey"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_centerVertical="true"/>
+
+                <Button
+                    android:id="@+id/btnChangeAddress"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/selectableItemBackground" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="Change password"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="40dp"
+                    android:text="********"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_navigate_next_grey"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_centerVertical="true"/>
+
+                <Button
+                    android:id="@+id/btnChangePassword"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/selectableItemBackground" />
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="40dp"
+                android:layout_marginTop="10dp"
+                android:background="@color/color_white">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentStart="true"
+                    android:layout_marginLeft="10dp"
+                    android:text="Payment"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="40dp"
+                    android:text="*************"
+                    android:textSize="20dp"
+                    android:textStyle="bold"
+                    android:layout_centerVertical="true" />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/ic_navigate_next_grey"
+                    android:layout_alignParentEnd="true"
+                    android:layout_marginRight="10dp"
+                    android:layout_centerVertical="true"/>
+
+                <Button
+                    android:id="@+id/btnPayment"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="?android:attr/selectableItemBackground" />
+
+            </RelativeLayout>
+
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
+
+</RelativeLayout>

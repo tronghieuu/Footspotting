@@ -202,6 +202,7 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                         user.setProvince(doc.getString("province"));
                         user.setType(Integer.parseInt(doc.getString("type")));
                         user.setId(doc.getId());
+                        user.setName(account.getDisplayName());
                         setResult(Activity.RESULT_CANCELED, new Intent());
                         finish();
                     }
