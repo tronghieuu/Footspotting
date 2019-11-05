@@ -19,7 +19,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             style="@style/headerText"
-            android:text="NOTIFICATION" />
+            android:text="Notìication" />
 
     </androidx.appcompat.widget.Toolbar>
 

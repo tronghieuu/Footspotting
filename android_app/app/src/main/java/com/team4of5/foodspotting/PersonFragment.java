@@ -16,7 +16,6 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -100,7 +99,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 Toast.makeText(getActivity(), "Ứng dụng cho Shipper", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnOwnerApp:
-                Toast.makeText(getActivity(), "Ứng dụng cho chủ quán", Toast.LENGTH_SHORT).show();
+                ownerApp();
                 break;
             case R.id.btnUserPolicy:
                 Toast.makeText(getActivity(), "Chính sách người dùng", Toast.LENGTH_SHORT).show();
@@ -174,5 +173,17 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         ft.detach(frg);
         ft.attach(frg);
         ft.commit();
+    }
+
+    public void ownerApp(){
+        if(User.getCurrentUser().getAccountType() == 3){
+            Toast.makeText(getActivity(), "Hãy đăng nhập trước!", Toast.LENGTH_SHORT).show();
+        } else {
+            if(User.getCurrentUser().getType() != 3) {
+                startActivity(new Intent(getActivity(), RegisterOwnerActivity.class));
+            } else{
+                startActivity(new Intent(getActivity(), OwnerAppActivity.class));
+            }
+        }
     }
 }

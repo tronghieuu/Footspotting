@@ -6,6 +6,7 @@ public class User {
     private int accountType; // 1 google or 2 email password or 3 guest
     private int type; // 1 normal or 2 shipper or 3 owner
     private String street, district, province, name, phone, id, image;
+    private boolean ownerUpdate;
 
     private User(){
         id = "";
@@ -17,6 +18,7 @@ public class User {
         name = "";
         phone = "";
         image = "";
+        ownerUpdate = false;
     }
 
     public static User getCurrentUser(){
@@ -112,5 +114,13 @@ public class User {
         name = "";
         phone = "";
         image = "";
+    }
+
+    public boolean getOwnerUpdate(){
+        return ownerUpdate;
+    }
+
+    public void setOwnerUpdate(boolean ownerUpdate){
+        this.ownerUpdate = ownerUpdate;
     }
 }
