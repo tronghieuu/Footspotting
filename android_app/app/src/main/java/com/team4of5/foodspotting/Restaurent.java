@@ -7,16 +7,20 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -55,7 +59,7 @@ public class Restaurent extends AppCompatActivity {
     private ImageView mImageView;
     private List<Food> mFoods;
     private FoodAdapter mAdapter;
-
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,6 +80,17 @@ public class Restaurent extends AppCompatActivity {
         mShowAllReview = findViewById(R.id.textShopShowAllReview);
         mSearchFood = findViewById(R.id.searchFood);
         mImageView = findViewById(R.id.imageShop);
+
+        dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.item_loading);
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+
+            }
+        });
 
         mFoods = new ArrayList<>();
         mRecylerView = findViewById(R.id.recycleViewFoodList);
@@ -136,6 +151,7 @@ public class Restaurent extends AppCompatActivity {
     }
 
     public void getRes(){
+        dialog.show();
         db.collection("restaurants")
                 .document(id_restaurent)
                 .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
@@ -183,6 +199,7 @@ public class Restaurent extends AppCompatActivity {
         @Override
         protected void onPostExecute(Bitmap result) {
             imageView.setImageBitmap(result);
+            dialog.dismiss();
         }
     }
 }

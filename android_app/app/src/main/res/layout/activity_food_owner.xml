@@ -55,7 +55,7 @@
                     android:textSize="30dp"
                     android:background="@color/color_newWhite"
                     android:paddingHorizontal="10dp"
-                    android:maxLines="2"/>
+                    android:maxLines="1"/>
 
                 <EditText
                     android:id="@+id/edtFoodInfoAdd"

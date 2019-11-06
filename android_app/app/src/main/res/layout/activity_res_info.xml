@@ -68,7 +68,7 @@ android:background="@color/color_owner">
             android:textSize="30dp"
             android:hint="current name"
             android:paddingHorizontal="5dp"
-            android:maxLines="2" />
+            android:maxLines="1" />
 
         <TextView
             android:layout_marginTop="20dp"
@@ -168,7 +168,8 @@ android:background="@color/color_owner">
             android:textSize="30dp"
             android:hint="092342342"
             android:paddingHorizontal="5dp"
-            android:inputType="numberDecimal" />
+            android:inputType="numberDecimal"
+            android:maxLines="1" />
 
         <TextView
             android:layout_marginTop="20dp"
@@ -187,7 +188,8 @@ android:background="@color/color_owner">
             android:background="@color/color_newWhite"
             android:textSize="30dp"
             android:hint="13:00 - 18:30"
-            android:paddingHorizontal="5dp" />
+            android:paddingHorizontal="5dp"
+            android:maxLines="1" />
 
         <TextView
             android:layout_marginTop="20dp"

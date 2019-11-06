@@ -49,9 +49,6 @@ public class MainActivity extends AppCompatActivity {
             } else if(mGoogleSignInAccount != null){
                 User.getCurrentUser().setAccountType(1);
                 User.getCurrentUser().setName(mGoogleSignInAccount.getDisplayName());
-                try{
-                    User.getCurrentUser().setImage(mGoogleSignInAccount.getPhotoUrl().toString());
-                } catch(Exception e){}
                 getGoogleAccount();
             } else {
                 User.getCurrentUser().setAccountType(3);
@@ -77,6 +74,7 @@ public class MainActivity extends AppCompatActivity {
                     User.getCurrentUser().setDistrict(doc.getString("district"));
                     User.getCurrentUser().setProvince(doc.getString("province"));
                     User.getCurrentUser().setPhone(doc.getString("phone"));
+                    User.getCurrentUser().setImage(doc.getString("image"));
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                     finish();
                 }
