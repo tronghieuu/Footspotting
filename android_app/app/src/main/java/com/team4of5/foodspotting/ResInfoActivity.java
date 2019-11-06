@@ -46,7 +46,6 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
             mEdtDistrict, mEdtAddress, mEdtPhone;
     private Button mBtnBack, mBtnUpdate, mBtnPickPhoto;
     private String id_res;
-    private ProgressBar progressBar;
     private ImageView mImageView;
     private Uri filePath;
     private static int PICK_IMAGE_REQUEST = 2341;
@@ -71,7 +70,6 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
         mBtnBack = findViewById(R.id.btnBackOwnerRes);
         mBtnUpdate = findViewById(R.id.btnUpdateOwnerRes);
         mBtnPickPhoto = findViewById(R.id.btnChonAnh);
-        progressBar = findViewById(R.id.progressBarOwnerResUpdate);
         mImageView = findViewById(R.id.imageViewPreview);
         mBtnBack.setOnClickListener(this);
         mBtnUpdate.setOnClickListener(this);

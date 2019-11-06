@@ -31,7 +31,8 @@ public class OwnerAppActivity extends AppCompatActivity implements View.OnClickL
             mBtnDanhGiaCuaKhachHang;
     private Button mBtnBack;
     private ImageView mImageView;
-    private static int RQ_UPDATE = 234, REQUEST_PERMISSION = 293;
+    private static int RQ_UPDATE = 234;
+    private String id_res;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,6 +67,9 @@ public class OwnerAppActivity extends AppCompatActivity implements View.OnClickL
                 startActivityForResult(new Intent(OwnerAppActivity.this, ResInfoActivity.class), RQ_UPDATE);
                 break;
             case R.id.btnThucDon:
+                Intent intent = new Intent(OwnerAppActivity.this, FoodOwnerActivity.class);
+                intent.putExtra("res_id", id_res);
+                startActivity(intent);
                 break;
             case R.id.btnDanhSachOrder:
                 break;
@@ -88,6 +92,7 @@ public class OwnerAppActivity extends AppCompatActivity implements View.OnClickL
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if(!queryDocumentSnapshots.isEmpty()){
                     DocumentSnapshot doc = queryDocumentSnapshots.getDocuments().get(0);
+                    id_res = doc.getId();
                     new DownloadImageFromInternet(mImageView)
                             .execute(doc.getString("image"));
                 }

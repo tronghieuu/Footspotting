@@ -178,12 +178,15 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     public void ownerApp(){
         if(User.getCurrentUser().getAccountType() == 3){
             Toast.makeText(getActivity(), "Hãy đăng nhập trước!", Toast.LENGTH_SHORT).show();
-        } else {
-            if(User.getCurrentUser().getType() != 3) {
-                startActivity(new Intent(getActivity(), RegisterOwnerActivity.class));
-            } else{
-                startActivity(new Intent(getActivity(), OwnerAppActivity.class));
-            }
+        }
+        else if(User.getCurrentUser().getType() == 2){
+            Toast.makeText(getActivity(), "Shipper không thể sử dụng chức năng này", Toast.LENGTH_SHORT).show();
+        }
+        else if(User.getCurrentUser().getType() == 1) {
+            startActivity(new Intent(getActivity(), RegisterOwnerActivity.class));
+        }
+        else if(User.getCurrentUser().getType() == 3) {
+            startActivity(new Intent(getActivity(), OwnerAppActivity.class));
         }
     }
 }
