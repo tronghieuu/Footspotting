@@ -47,7 +47,7 @@ public class FoodOwnerActivity extends AppCompatActivity implements View.OnClick
     private RecyclerView recyclerView;
     private List<Food> mFoods;
     private FoodAdapterPreview mAdapter;
-    private Dialog dialog;
+    private Dialog dialog, loadingDialog;
     private static int PICK_IMAGE_REQUEST = 983, PICK_CHANGE_IMAGE_REQUEST = 888;
     private Uri filePath, subFilePath;
 
@@ -88,12 +88,18 @@ public class FoodOwnerActivity extends AppCompatActivity implements View.OnClick
             }
         });
 
+        loadingDialog = new Dialog(this);
+        loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        loadingDialog.setContentView(R.layout.item_loading);
+
         mFoods = new ArrayList<>();
         recyclerView = findViewById(R.id.rcvFoodAdd);
         recyclerView.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mAdapter = new FoodAdapterPreview(this, mFoods, recyclerView, new FoodAdapterPreview.FoodButtonListener() {
             @Override
             public void onDeleteButtonClick(View v, final int position) {
+                loadingDialog.show();
                 FirebaseFirestore.getInstance().collection("food")
                         .document(mFoods.get(position).getId())
                         .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -101,6 +107,7 @@ public class FoodOwnerActivity extends AppCompatActivity implements View.OnClick
                     public void onSuccess(Void aVoid) {
                         mFoods.remove(position);
                         mAdapter.notifyDataSetChanged();
+                        loadingDialog.dismiss();
                     }
                 });
             }
@@ -185,6 +192,7 @@ public class FoodOwnerActivity extends AppCompatActivity implements View.OnClick
                 return;
             }
 
+            loadingDialog.show();
             Map<String, Object> map = new HashMap<>();
             map.put("image", "");
             map.put("info", info);
@@ -218,6 +226,7 @@ public class FoodOwnerActivity extends AppCompatActivity implements View.OnClick
                                                             final Food f = new Food(id,imageLink,info,name,price,id_res);
                                                             mFoods.add(f);
                                                             mAdapter.notifyDataSetChanged();
+                                                            loadingDialog.dismiss();
                                                         }
                                                     });
                                         }
@@ -271,6 +280,7 @@ public class FoodOwnerActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onClick(View view) {
                 if (subFilePath != null) {
+                    loadingDialog.show();
                     StorageReference storageReference = FirebaseStorage.getInstance().getReference();
                     final StorageReference ref = storageReference.child("foodImage/" + mFoods.get(position).getId());
                     ref.putFile(subFilePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -299,6 +309,7 @@ public class FoodOwnerActivity extends AppCompatActivity implements View.OnClick
                                         public void onSuccess(Void aVoid) {
                                             mAdapter.notifyDataSetChanged();
                                             dialog.dismiss();
+                                            loadingDialog.dismiss();
                                         }
                                     });
                                 }
@@ -307,6 +318,7 @@ public class FoodOwnerActivity extends AppCompatActivity implements View.OnClick
                     });
                 }
                 else {
+                    loadingDialog.show();
                     Map<String, Object> data = new HashMap<>();
                     if (mEdtModifyName.getText().toString().length() != 0) {
                         data.put("name", mEdtModifyName.getText().toString());
@@ -322,6 +334,7 @@ public class FoodOwnerActivity extends AppCompatActivity implements View.OnClick
                         public void onSuccess(Void aVoid) {
                             mAdapter.notifyDataSetChanged();
                             dialog.dismiss();
+                            loadingDialog.dismiss();
                         }
                     });
                 }

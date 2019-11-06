@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="50dp"
+    android:padding="10dp"
+    android:background="@color/color_white">
+
+    <EditText
+        android:id="@+id/edtChangeProvince"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:hint="tỉnh/thành phố"
+        android:paddingHorizontal="10dp"
+        android:maxLines="1" />
+
+    <EditText
+        android:id="@+id/edtChangeDistrict"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:hint="quận/huyện"
+        android:paddingHorizontal="10dp"
+        android:maxLines="1" />
+
+    <EditText
+        android:id="@+id/edtChangeStreet"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:hint="địa chỉ"
+        android:paddingHorizontal="10dp"
+        android:maxLines="1" />
+
+    <Button
+        android:id="@+id/btnUpdateAddress"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="cập nhật"
+        android:textSize="30dp" />
+
+</LinearLayout>

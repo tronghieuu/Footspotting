@@ -5,10 +5,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ProgressBar;
@@ -40,6 +44,7 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
     private EditText mEdtEmail, mEdtPassword;
     private FirebaseAuth mAuth;
     private static int RQ_SIGN_UP = 111;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,6 +62,11 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
         mbtnGoogleLogin = findViewById(R.id.btnGoogleLogin);
         mbtnGoogleLogin.setOnClickListener(this);
+
+        dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.item_loading);
 
         mBtnSignUp = findViewById(R.id.btnSignUp);
         mEdtEmail = findViewById(R.id.edtEmail);
@@ -93,6 +103,7 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                 finish();
             }
         } else if(requestCode == GG_SIGN_IN){
+            dialog.show();
             Task<GoogleSignInAccount> task = GoogleSignIn.getSignedInAccountFromIntent(data);
             handleSignInResult(task);
         }
@@ -112,6 +123,8 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
             return;
         }
 
+        dialog.show();
+
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(EmailLoginActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -119,6 +132,7 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                         if(task.isSuccessful()) {
                             if(password.length() < 6) {
                                 Toast.makeText(EmailLoginActivity.this, "Password ngan qua", Toast.LENGTH_SHORT).show();
+                                dialog.dismiss();
                             } else {
                                 FirebaseFirestore db = FirebaseFirestore.getInstance();
                                 db.collection("user")
@@ -139,14 +153,14 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                                             user.setProvince(doc.getString("province"));
                                             user.setPhone(doc.getString("phone"));
                                         }
-
+                                        dialog.dismiss();
                                         setResult(Activity.RESULT_CANCELED, new Intent());
                                         finish();
                                     }
                                 });
                             }
                         } else {
-
+                            dialog.dismiss();
                             Toast.makeText(EmailLoginActivity.this, "Email hoặc mật khẩu không chính xác", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -182,11 +196,15 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                         data.put("province", "");
                         data.put("type", "1");
                         data.put("phone", "");
+                        if(account.getPhotoUrl().toString() != null){
+                            data.put("image", account.getPhotoUrl().toString());
+                        } else data.put("image", "");
                         db.collection("user")
                                 .add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                             @Override
                             public void onSuccess(DocumentReference documentReference) {
                                 user.setId(documentReference.getId());
+                                dialog.dismiss();
                                 setResult(Activity.RESULT_CANCELED, new Intent());
                                 finish();
                             }
@@ -200,6 +218,7 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                         user.setType(Integer.parseInt(doc.getString("type")));
                         user.setId(doc.getId());
                         user.setName(account.getDisplayName());
+                        dialog.dismiss();
                         setResult(Activity.RESULT_CANCELED, new Intent());
                         finish();
                     }

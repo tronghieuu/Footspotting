@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="50dp"
+    android:padding="10dp"
+    android:background="@color/color_white">
+
+    <EditText
+        android:id="@+id/edtChangePhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:hint="số điện thoại"
+        android:paddingHorizontal="10dp"
+        android:maxLines="1" />
+
+    <Button
+        android:id="@+id/btnUpdatePhone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="cập nhật"
+        android:textSize="30dp" />
+
+</LinearLayout>

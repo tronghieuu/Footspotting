@@ -3,11 +3,15 @@ package com.team4of5.foodspotting;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.View;
+import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -30,6 +34,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private EditText mEdtUsername, mEdtEmail, mEdtPassword, mEdtConfirmPassword;
     private ImageButton mImageBtnTrue1, mImageBtnTrue2, mImageBtnTrue3, mImageBtnTrue4,
             mImageBtnFalse1, mImageBtnFalse2, mImageBtnFalse3, mImageBtnFalse4;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,6 +64,17 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         mImageBtnFalse2.setVisibility(View.INVISIBLE);
         mImageBtnFalse3.setVisibility(View.INVISIBLE);
         mImageBtnFalse4.setVisibility(View.INVISIBLE);
+
+        dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.item_loading);
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+
+            }
+        });
 
         mBtnSignUp.setOnClickListener(this);
         mBtnSignIn.setOnClickListener(this);
@@ -224,6 +240,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             mImageBtnFalse4.setVisibility(View.VISIBLE);
             return;
         }
+        dialog.show();
 
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.createUserWithEmailAndPassword(email, password)
@@ -239,6 +256,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         data.put("district", "");
                         data.put("province", "");
                         data.put("phone","");
+                        data.put("image", "");
                         db.collection("user")
                                 .add(data)
                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -248,7 +266,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                         User.getCurrentUser().setAccountType(2);
                                         User.getCurrentUser().setType(1);
                                         User.getCurrentUser().setName(username);
-
+                                        dialog.dismiss();
                                         setResult(Activity.RESULT_CANCELED, new Intent());
                                         finish();
                                     }

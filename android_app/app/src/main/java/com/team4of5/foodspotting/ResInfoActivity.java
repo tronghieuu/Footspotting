@@ -6,9 +6,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -49,6 +52,7 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
     private ImageView mImageView;
     private Uri filePath;
     private static int PICK_IMAGE_REQUEST = 2341;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,6 +78,16 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
         mBtnBack.setOnClickListener(this);
         mBtnUpdate.setOnClickListener(this);
         mBtnPickPhoto.setOnClickListener(this);
+        dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.item_loading);
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+
+            }
+        });
         loadCurrentData();
     }
 
@@ -121,17 +135,20 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
                 Intent intent = new Intent();
                 intent.putExtra("check", "ok");
                 setResult(Activity.RESULT_OK, intent);
+                dialog.dismiss();
                 finish();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                dialog.dismiss();
                 Toast.makeText(getApplicationContext(), "Failed to update!", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     public void loadCurrentData() {
+        dialog.show();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         db.collection("restaurants")
                 .whereEqualTo("user_id", User.getCurrentUser().getId())
@@ -205,11 +222,13 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
 
         @Override
         protected void onPostExecute(Bitmap result) {
+            dialog.dismiss();
             imageView.setImageBitmap(result);
         }
     }
 
     public void uploadImage(){
+        dialog.show();
         if(filePath != null) {
             StorageReference storageReference = FirebaseStorage.getInstance().getReference();
             final StorageReference ref = storageReference.child("restaurantImage/"+ id_res);

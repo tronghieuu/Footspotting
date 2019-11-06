@@ -2,11 +2,16 @@ package com.team4of5.foodspotting;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import androidx.annotation.NonNull;
@@ -23,6 +28,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.io.InputStream;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class PersonFragment extends Fragment implements View.OnClickListener {
 
     private CardView mCvLogin, mCvNoLogin;
@@ -32,6 +41,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private static int RQ_LOGIN = 10;
     private static int RQ_INFO = 324;
     private FirebaseFirestore mDb;
+    private ImageView profileImage;
 
     @Nullable
     @Override
@@ -53,11 +63,11 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         mCvLogin = view.findViewById(R.id.cardViewLogin);
         mCvNoLogin = view.findViewById(R.id.cardViewNoLogin);
         mTvUserName = view.findViewById(R.id.tvUserName);
-
+        profileImage = view.findViewById(R.id.profile_image);
         mCvLogin.setOnClickListener(this);
         mCvNoLogin.setOnClickListener(this);
 
-        if(User.getCurrentUser().getAccountType() == 1 || User.getCurrentUser().getAccountType() == 2){
+        if(User.getCurrentUser().getAccountType() != 3){
             loginState();
         } else logoutState();
 
@@ -144,6 +154,10 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         mCvLogin.setVisibility(View.VISIBLE);
         mCvNoLogin.setVisibility(View.INVISIBLE);
         mTvUserName.setText(User.getCurrentUser().getName());
+        if(User.getCurrentUser().getImage() != null) {
+            new DownloadImageFromInternet(profileImage)
+                    .execute(User.getCurrentUser().getImage());
+        }
     }
 
 
@@ -187,6 +201,35 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         }
         else if(User.getCurrentUser().getType() == 3) {
             startActivity(new Intent(getActivity(), OwnerAppActivity.class));
+        }
+    }
+
+    private class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
+
+        ImageView imageView;
+
+        public DownloadImageFromInternet(ImageView imageView){
+            this.imageView = imageView;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            String imageURL = urls[0];
+            Bitmap bimage = null;
+            try {
+                InputStream in = new java.net.URL(imageURL).openStream();
+                bimage = BitmapFactory.decodeStream(in);
+
+            } catch (Exception e) {
+                Log.e("Error Message", e.getMessage());
+                e.printStackTrace();
+            }
+            return bimage;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            imageView.setImageBitmap(result);
         }
     }
 }

@@ -5,8 +5,11 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.app.Activity;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -38,6 +41,7 @@ public class RegisterOwnerActivity extends AppCompatActivity implements View.OnC
     private ImageView mImageView;
     private Uri filePath;
     private static int PICK_IMAGE_REQUEST = 341;
+    private Dialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +67,16 @@ public class RegisterOwnerActivity extends AppCompatActivity implements View.OnC
         mBtnBack.setOnClickListener(this);
         mBtnCreate.setOnClickListener(this);
         mBtnPickPhoto.setOnClickListener(this);
+        dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.item_loading);
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+
+            }
+        });
     }
 
     @Override
@@ -149,6 +163,7 @@ public class RegisterOwnerActivity extends AppCompatActivity implements View.OnC
             toast.show();
             return;
         }
+        dialog.show();
         Map<String, Object> data = new HashMap<>();
         data.put("name", name);
         data.put("province", province);
@@ -190,6 +205,7 @@ public class RegisterOwnerActivity extends AppCompatActivity implements View.OnC
                                                                 Toast.makeText(getApplicationContext(), "Đăng ký thành công!", Toast.LENGTH_SHORT).show();
                                                                 User.getCurrentUser().setOwnerUpdate(true);
                                                                 Intent intent = new Intent(getApplicationContext(), OwnerAppActivity.class);
+                                                                dialog.dismiss();
                                                                 startActivity(intent);
                                                                 finish();
                                                             }

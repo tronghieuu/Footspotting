@@ -36,12 +36,14 @@ android:background="@drawable/food_login_wallpaper">
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Email"
+        android:maxLines="1"
         android:textColor="@color/color_white"
         android:textColorHint="@color/color_white"
         android:layout_gravity="center_horizontal"
         android:layout_marginHorizontal="60dp"/>
 
     <EditText
+        android:maxLines="1"
         android:inputType="textPassword"
         android:id="@+id/edtPassword"
         android:layout_width="match_parent"
