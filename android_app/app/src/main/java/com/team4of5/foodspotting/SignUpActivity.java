@@ -30,7 +30,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
     private EditText mEdtUsername, mEdtEmail, mEdtPassword, mEdtConfirmPassword;
     private ImageButton mImageBtnTrue1, mImageBtnTrue2, mImageBtnTrue3, mImageBtnTrue4,
             mImageBtnFalse1, mImageBtnFalse2, mImageBtnFalse3, mImageBtnFalse4;
-    private ProgressBar mProgressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,7 +51,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
         mImageBtnFalse2 = findViewById(R.id.imageBtnFalse2);
         mImageBtnFalse3 = findViewById(R.id.imageBtnFalse3);
         mImageBtnFalse4 = findViewById(R.id.imageBtnFalse4);
-        mProgressBar = findViewById(R.id.progressBarSignUp);
         mImageBtnTrue1.setVisibility(View.INVISIBLE);
         mImageBtnTrue2.setVisibility(View.INVISIBLE);
         mImageBtnTrue3.setVisibility(View.INVISIBLE);
@@ -226,7 +224,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
             mImageBtnFalse4.setVisibility(View.VISIBLE);
             return;
         }
-        mProgressBar.setVisibility(View.VISIBLE);
+
         FirebaseAuth auth = FirebaseAuth.getInstance();
         auth.createUserWithEmailAndPassword(email, password)
                 .addOnSuccessListener(new OnSuccessListener<AuthResult>() {
@@ -250,7 +248,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                         User.getCurrentUser().setAccountType(2);
                                         User.getCurrentUser().setType(1);
                                         User.getCurrentUser().setName(username);
-                                        mProgressBar.setVisibility(View.GONE);
+
                                         setResult(Activity.RESULT_CANCELED, new Intent());
                                         finish();
                                     }

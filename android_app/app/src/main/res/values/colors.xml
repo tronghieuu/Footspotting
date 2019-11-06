@@ -22,4 +22,7 @@
     <color name="colorLink">#00BCD4</color>
     <color name="colorDarkYellow">#B8A21D</color>
     <color name="color_greyy">#AA9E9E</color>
+    <color name="color_green">#4CAF50</color>
+    <color name="color_newWhite">#D5CFCF</color>
+    <color name="color_owner">#0E5183</color>
 </resources>

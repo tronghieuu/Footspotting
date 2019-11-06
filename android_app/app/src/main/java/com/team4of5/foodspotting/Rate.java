@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.Manifest;
 import android.app.Dialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
@@ -59,7 +60,7 @@ public class Rate extends AppCompatActivity {
     private FirebaseFirestore db;
     private List<Rating> mRates;
     private RatingAdapter mAdapter;
-
+    private Dialog dialog;
     private EditText etReview;
     private RatingBar rate;
     private Button btnSend;
@@ -82,6 +83,18 @@ public class Rate extends AppCompatActivity {
         mLl_percentage_1 = findViewById(R.id.ll_percentage_1);
         mBtnOpenPostReview = findViewById(R.id.btnOpenPostReview);
 
+        dialog = new Dialog(this);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        dialog.setContentView(R.layout.shop_post_review);
+        dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                etReview.setText("");
+                rate.setRating(0);
+            }
+        });
+
         mRates = new ArrayList<>();
         mRv_review = findViewById(R.id.rvReviewList);
         mRv_review.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
@@ -103,10 +116,6 @@ public class Rate extends AppCompatActivity {
         });
     }
     private void openDialogReview() {
-        final Dialog dialog = new Dialog(this);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
-        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
-        dialog.setContentView(R.layout.shop_post_review);
 
         etReview = dialog.findViewById(R.id.et_review);
         rate = dialog.findViewById(R.id.rate_star);

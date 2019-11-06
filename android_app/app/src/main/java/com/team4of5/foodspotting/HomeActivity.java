@@ -80,6 +80,13 @@ public class HomeActivity extends AppCompatActivity {
                             ft.detach(frg);
                             ft.attach(frg);
                             ft.commit();
+                        } else if(fragTag.contentEquals("Home") && User.getCurrentUser().getOwnerUpdate()){
+                            User.getCurrentUser().setOwnerUpdate(false);
+                            Fragment frg = getSupportFragmentManager().findFragmentByTag(fragTag);
+                            FragmentTransaction ft = t.beginTransaction();
+                            ft.detach(frg);
+                            ft.attach(frg);
+                            ft.commit();
                         }
                     }
                     else

@@ -1,8 +1,14 @@
 package com.team4of5.foodspotting;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.os.Build;
 import android.os.Bundle;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -17,34 +23,43 @@ public class MainActivity extends AppCompatActivity {
 
     private GoogleSignInAccount mGoogleSignInAccount;
     private FirebaseAuth mAuth;
+    private static int REQUEST_PERMISSION = 2314;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
-
-        // email or password
-        mAuth = FirebaseAuth.getInstance();
-
-        // google
-        mGoogleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
-
-        // check email or google or guest
-        if(mAuth.getCurrentUser() != null){
-            User.getCurrentUser().setAccountType(2);
-            getEmailAccount();
-        } else if(mGoogleSignInAccount != null){
-            User.getCurrentUser().setAccountType(1);
-            User.getCurrentUser().setName(mGoogleSignInAccount.getDisplayName());
-            try{
-                User.getCurrentUser().setImage(mGoogleSignInAccount.getPhotoUrl().toString());
-            } catch(Exception e){}
-            getGoogleAccount();
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+                && ContextCompat.checkSelfPermission(this, Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_EXTERNAL_STORAGE},
+                    REQUEST_PERMISSION);
+            return;
         } else {
-            User.getCurrentUser().setAccountType(3);
-            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+            // email or password
+            mAuth = FirebaseAuth.getInstance();
+
+            // google
+            mGoogleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
+
+            // check email or google or guest
+            if(mAuth.getCurrentUser() != null){
+                User.getCurrentUser().setAccountType(2);
+                getEmailAccount();
+            } else if(mGoogleSignInAccount != null){
+                User.getCurrentUser().setAccountType(1);
+                User.getCurrentUser().setName(mGoogleSignInAccount.getDisplayName());
+                try{
+                    User.getCurrentUser().setImage(mGoogleSignInAccount.getPhotoUrl().toString());
+                } catch(Exception e){}
+                getGoogleAccount();
+            } else {
+                User.getCurrentUser().setAccountType(3);
+                startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                finish();
+            }
         }
+
     }
 
     public void getGoogleAccount(){
@@ -63,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
                     User.getCurrentUser().setProvince(doc.getString("province"));
                     User.getCurrentUser().setPhone(doc.getString("phone"));
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    finish();
                 }
             }
         });
@@ -86,8 +102,41 @@ public class MainActivity extends AppCompatActivity {
                     User.getCurrentUser().setProvince(doc.getString("province"));
                     User.getCurrentUser().setPhone(doc.getString("phone"));
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    finish();
                 }
             }
         });
+    }
+    @Override
+    public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_PERMISSION) {
+            if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                // email or password
+                mAuth = FirebaseAuth.getInstance();
+
+                // google
+                mGoogleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
+
+                // check email or google or guest
+                if(mAuth.getCurrentUser() != null){
+                    User.getCurrentUser().setAccountType(2);
+                    getEmailAccount();
+                } else if(mGoogleSignInAccount != null){
+                    User.getCurrentUser().setAccountType(1);
+                    User.getCurrentUser().setName(mGoogleSignInAccount.getDisplayName());
+                    try{
+                        User.getCurrentUser().setImage(mGoogleSignInAccount.getPhotoUrl().toString());
+                    } catch(Exception e){}
+                    getGoogleAccount();
+                } else {
+                    User.getCurrentUser().setAccountType(3);
+                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    finish();
+                }
+            } else {
+                finish();
+            }
+        }
     }
 }

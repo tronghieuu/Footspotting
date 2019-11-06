@@ -211,11 +211,4 @@
 
     </LinearLayout>
 
-    <ProgressBar
-        android:id="@+id/progressBarSignUp"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
-
 </RelativeLayout>

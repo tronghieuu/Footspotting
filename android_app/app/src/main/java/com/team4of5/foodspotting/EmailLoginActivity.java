@@ -38,7 +38,6 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
     private static int GG_SIGN_IN = 0;
     private Button mBtnBack, mBtnSignIn, mBtnSignUp, mbtnGoogleLogin;
     private EditText mEdtEmail, mEdtPassword;
-    private ProgressBar mProgressBar;
     private FirebaseAuth mAuth;
     private static int RQ_SIGN_UP = 111;
 
@@ -62,7 +61,6 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
         mBtnSignUp = findViewById(R.id.btnSignUp);
         mEdtEmail = findViewById(R.id.edtEmail);
         mEdtPassword = findViewById(R.id.edtPassword);
-        mProgressBar = findViewById(R.id.progressBarEmail);
         mBtnBack.setOnClickListener(this);
         mBtnSignIn.setOnClickListener(this);
         mBtnSignUp.setOnClickListener(this);
@@ -114,7 +112,6 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
             return;
         }
 
-        mProgressBar.setVisibility(View.VISIBLE);
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(EmailLoginActivity.this, new OnCompleteListener<AuthResult>() {
                     @Override
@@ -142,14 +139,14 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                                             user.setProvince(doc.getString("province"));
                                             user.setPhone(doc.getString("phone"));
                                         }
-                                        mProgressBar.setVisibility(View.GONE);
+
                                         setResult(Activity.RESULT_CANCELED, new Intent());
                                         finish();
                                     }
                                 });
                             }
                         } else {
-                            mProgressBar.setVisibility(View.GONE);
+
                             Toast.makeText(EmailLoginActivity.this, "Email hoặc mật khẩu không chính xác", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -160,7 +157,7 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
             final GoogleSignInAccount account = task.getResult(ApiException.class);
 
             // Signed in  successfully, show authenticated UI.
-            mProgressBar.setVisibility(View.VISIBLE);
+
             final User user = User.getCurrentUser();
             user.reset();
 
@@ -206,14 +203,14 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                         setResult(Activity.RESULT_CANCELED, new Intent());
                         finish();
                     }
-                    mProgressBar.setVisibility(View.INVISIBLE);
+
                 }
             });
 
             //setResult(Activity.RESULT_CANCELED, new Intent());
             //finish();
         } catch(ApiException e) {
-            mProgressBar.setVisibility(View.INVISIBLE);
+
             Toast.makeText(this, "not ok", Toast.LENGTH_SHORT).show();
         }
 
