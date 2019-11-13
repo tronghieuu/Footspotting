@@ -154,6 +154,7 @@ public class Rate extends AppCompatActivity {
                                 }
                             });
                 }
+                else  Toast.makeText(getApplicationContext(), "Login to review!!", Toast.LENGTH_SHORT).show();
             }
         });
     }
