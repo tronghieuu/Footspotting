@@ -73,6 +73,7 @@
                 <LinearLayout
                     android:layout_marginTop="5dp"
                     android:layout_marginBottom="5dp"
+                    android:layout_marginRight="5dp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_weight="1">
@@ -90,6 +91,7 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginRight="8dp"
                                 android:orientation="horizontal">
                                 <ImageView
                                     android:layout_width="25dp"
@@ -104,16 +106,22 @@
                                     android:textSize="13sp"
                                     android:text="5" />
                             </LinearLayout>
+
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/constrain_layout_5"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginTop="5dp"
+                                android:layout_marginBottom="5dp">
+
                                 <LinearLayout
                                     android:id="@+id/ll_percentage_5"
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
                                     android:background="#57bb8a"
-                                    android:layout_marginLeft="8dp"
-                                    android:layout_marginRight="8dp"
-                                    android:layout_marginTop="5dp"
-                                    android:layout_marginBottom="5dp"
-                                    android:orientation="horizontal"/>
+                                    android:orientation="horizontal"
+                                    />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
 
                         </LinearLayout>
 
@@ -125,6 +133,7 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginRight="8dp"
                                 android:orientation="horizontal">
                                 <ImageView
                                     android:layout_width="25dp"
@@ -140,17 +149,21 @@
                                     android:text="4" />
                             </LinearLayout>
 
-
-                            <LinearLayout
-                                android:id="@+id/ll_percentage_4"
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/constrain_layout_4"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:background="#9ace6a"
-                                android:layout_marginLeft="8dp"
-                                android:layout_marginRight="8dp"
                                 android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:orientation="horizontal"/>
+                                android:layout_marginBottom="5dp">
+
+                                <LinearLayout
+                                    android:id="@+id/ll_percentage_4"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="#9ace6a"
+                                    android:orientation="horizontal"
+                                    />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
 
                         </LinearLayout>
 
@@ -162,6 +175,7 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginRight="8dp"
                                 android:orientation="horizontal">
                                 <ImageView
                                     android:layout_width="25dp"
@@ -177,17 +191,21 @@
                                     android:text="3" />
                             </LinearLayout>
 
-
-                            <LinearLayout
-                                android:id="@+id/ll_percentage_3"
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/constrain_layout_3"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:background="#ffcf02"
-                                android:layout_marginLeft="8dp"
-                                android:layout_marginRight="8dp"
                                 android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:orientation="horizontal"/>
+                                android:layout_marginBottom="5dp">
+
+                                <LinearLayout
+                                    android:id="@+id/ll_percentage_3"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="#ffcf02"
+                                    android:orientation="horizontal"
+                                    />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
 
                         </LinearLayout>
 
@@ -200,6 +218,7 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginRight="8dp"
                                 android:orientation="horizontal">
                                 <ImageView
                                     android:layout_width="25dp"
@@ -215,17 +234,21 @@
                                     android:text="2" />
                             </LinearLayout>
 
-
-                            <LinearLayout
-                                android:id="@+id/ll_percentage_2"
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/constrain_layout_2"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:background="#ff9f02"
-                                android:layout_marginLeft="8dp"
-                                android:layout_marginRight="8dp"
                                 android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:orientation="horizontal"/>
+                                android:layout_marginBottom="5dp">
+
+                                <LinearLayout
+                                    android:id="@+id/ll_percentage_2"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="#ff9f02"
+                                    android:orientation="horizontal"
+                                    />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
 
                         </LinearLayout>
                         <LinearLayout
@@ -236,6 +259,7 @@
                             <LinearLayout
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginRight="8dp"
                                 android:orientation="horizontal">
                                 <ImageView
                                     android:layout_width="25dp"
@@ -250,18 +274,22 @@
                                     android:textSize="13sp"
                                     android:text="1" />
                             </LinearLayout>
-
-
-                            <LinearLayout
-                                android:id="@+id/ll_percentage_1"
+                            <androidx.constraintlayout.widget.ConstraintLayout
+                                android:id="@+id/constrain_layout_1"
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:background="#ff6f31"
-                                android:layout_marginLeft="8dp"
-                                android:layout_marginRight="8dp"
                                 android:layout_marginTop="5dp"
-                                android:layout_marginBottom="5dp"
-                                android:orientation="horizontal"/>
+                                android:layout_marginBottom="5dp">
+
+                                <LinearLayout
+                                    android:id="@+id/ll_percentage_1"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:background="#ff6f31"
+                                    android:orientation="horizontal"
+                                    />
+                            </androidx.constraintlayout.widget.ConstraintLayout>
+
 
                         </LinearLayout>
 

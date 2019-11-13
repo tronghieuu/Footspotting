@@ -109,7 +109,7 @@ public class RatingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
             ViewHolderRow userViewHolder = (ViewHolderRow) holder;
 
 
-            userViewHolder.tvUserName.setText(rating.getUser_id());
+            userViewHolder.tvUserName.setText(rating.getUser_name());
             userViewHolder.tvComment.setText(rating.getComment());
             userViewHolder.tvTime.setText(rating.getTime());
             userViewHolder.rateRating.setRating((float)rating.getRate());
@@ -155,34 +155,6 @@ public class RatingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
-    private class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
-
-        ImageView imageView;
-
-        public DownloadImageFromInternet(ImageView imageView){
-            this.imageView = imageView;
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... urls) {
-            String imageURL = urls[0];
-            Bitmap bimage = null;
-            try {
-                InputStream in = new java.net.URL(imageURL).openStream();
-                bimage = BitmapFactory.decodeStream(in);
-
-            } catch (Exception e) {
-                Log.e("Error Message", e.getMessage());
-                e.printStackTrace();
-            }
-            return bimage;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            imageView.setImageBitmap(result);
-        }
-    }
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
