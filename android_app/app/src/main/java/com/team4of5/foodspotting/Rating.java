@@ -4,8 +4,8 @@ import java.io.Serializable;
 
 public class Rating implements Serializable {
     private String id, comment, time, res_id, user_id, user_name;
-    private int rate;
-    public Rating(String id, String comment, int rate,String time,String res_id,String user_id){
+    private float rate;
+    public Rating(String id, String comment, float rate,String time,String res_id,String user_id){
         this.id = id;
         this.comment = comment;
         this.rate = rate;
@@ -28,7 +28,7 @@ public class Rating implements Serializable {
     public void setComment(String comment){
         this.comment = comment;
     }
-    public void setRate(int rate){
+    public void setRate(float rate){
         this.rate = rate;
     }
     public void setTime(String time){
@@ -46,7 +46,7 @@ public class Rating implements Serializable {
     public String getComment(){
         return comment;
     }
-    public int getRate(){
+    public float getRate(){
         return rate;
     }
     public String getTime(){
