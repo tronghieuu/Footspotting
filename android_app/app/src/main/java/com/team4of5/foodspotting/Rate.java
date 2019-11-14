@@ -219,7 +219,7 @@ public class Rate extends AppCompatActivity {
     private void setOverallReview(){
         mTextRatingNumber.setText(String.valueOf(mRates.size()));
         int r1=0, r2=0, r3=0, r4=0, r5=0, total=0;
-        float average;
+        float average=0;
         for (Rating rating:mRates)
         {
             total=total+rating.getRate();
