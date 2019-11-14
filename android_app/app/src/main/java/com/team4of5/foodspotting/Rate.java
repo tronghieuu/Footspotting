@@ -230,11 +230,12 @@ public class Rate extends AppCompatActivity {
             else if (rating.getRate()==5) r5++;
         }
         average = (float)total/mRates.size();
+        average=Math.round(average*10)/10;
         mTextTotalRating.setText(String.valueOf(average));
         mRatingShopOverall.setRating(average);
         db.collection("restaurants")
                 .document(id_restaurent)
-                .update("rate", String.format("%.1f", average));
+                .update("rate", Float.toString(average));
 
         widthView = constrainLayout1.getWidth();
 
