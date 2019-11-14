@@ -196,7 +196,7 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                         data.put("province", "");
                         data.put("type", "1");
                         data.put("phone", "");
-                        if(account.getPhotoUrl().toString() != null){
+                        if(account.getPhotoUrl() != null){
                             data.put("image", account.getPhotoUrl().toString());
                         } else data.put("image", "");
                         db.collection("user")
