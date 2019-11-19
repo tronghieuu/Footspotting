@@ -5,7 +5,9 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 import android.app.Activity;
+import android.app.DatePickerDialog;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -17,9 +19,11 @@ import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,18 +34,20 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
 
 public class RegisterOwnerActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText mEdtName, mEdtType, mEdtOpeningTime, mEdtProvince,
+    private EditText mEdtName, mEdtType, mEdtProvince,
             mEdtDistrict, mEdtAddress, mEdtPhone;
-    private Button mBtnBack, mBtnCreate, mBtnPickPhoto;
+    private Button mBtnBack, mBtnCreate, mBtnPickPhoto, mBtnResOpenDangKy, mBtnResCloseDangKy;
     private ImageView mImageView;
     private Uri filePath;
     private static int PICK_IMAGE_REQUEST = 341;
     private Dialog dialog;
+    private int mHour, mMinute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,11 +61,12 @@ public class RegisterOwnerActivity extends AppCompatActivity implements View.OnC
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.color_owner));
         mEdtName = findViewById(R.id.edtOwnerResNameDangKy);
         mEdtType = findViewById(R.id.edtOwnerResTypeDangKy);
-        mEdtOpeningTime = findViewById(R.id.edtOwnerResOpenTimeDangKy);
         mEdtProvince = findViewById(R.id.edtOwnerResProvinceDangKy);
         mEdtDistrict = findViewById(R.id.edtOwnerResDistrictDangKy);
         mEdtAddress = findViewById(R.id.edtOwnerResAddressDangKy);
         mEdtPhone = findViewById(R.id.edtOwnerResPhoneDangKy);
+        mBtnResOpenDangKy = findViewById(R.id.btn_ResOpenDangky);
+        mBtnResCloseDangKy = findViewById(R.id.btn_ResCloseDangky);
         mBtnBack = findViewById(R.id.btnBackOwnerResDangKy);
         mBtnCreate = findViewById(R.id.btnUpdateOwnerResDangKy);
         mBtnPickPhoto = findViewById(R.id.btnChonAnhDangKy);
@@ -157,8 +164,14 @@ public class RegisterOwnerActivity extends AppCompatActivity implements View.OnC
             toast.show();
             return;
         }
-        final String opneing_time = mEdtOpeningTime.getText().toString();
-        if(opneing_time.length() == 0){
+        final String opening_time = mBtnResOpenDangKy.getText().toString();
+        if (opening_time == null){
+            toast.setText("Chưa nhập đủ thông tin!");
+            toast.show();
+            return;
+        }
+        final String closing_time = mBtnResCloseDangKy.getText().toString();
+        if (opening_time == null){
             toast.setText("Chưa nhập đủ thông tin!");
             toast.show();
             return;
@@ -171,7 +184,8 @@ public class RegisterOwnerActivity extends AppCompatActivity implements View.OnC
         data.put("street", street);
         data.put("type", type);
         data.put("phone", phone);
-        data.put("opening_time", opneing_time);
+        data.put("opening_time", opening_time);
+        data.put("closing_time",closing_time);
         data.put("user_id", User.getCurrentUser().getId());
         data.put("rate", "0.0");
         FirebaseFirestore.getInstance().collection("restaurants")
@@ -218,5 +232,33 @@ public class RegisterOwnerActivity extends AppCompatActivity implements View.OnC
                         });
             }
         });
+    }
+
+    public void onClickTimePickerButtonOpen(View view) {
+        final Calendar c = Calendar.getInstance();
+        mHour = c.get(Calendar.HOUR_OF_DAY);
+        mMinute = c.get(Calendar.MINUTE);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                        mBtnResOpenDangKy.setText(hourOfDay+":"+minute);
+                    }
+                },mHour,mMinute,false);
+        timePickerDialog.show();
+    }
+
+    public void onClickTimePickerButtonClose(View view) {
+        final Calendar c = Calendar.getInstance();
+        mHour = c.get(Calendar.HOUR_OF_DAY);
+        mMinute = c.get(Calendar.MINUTE);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                        mBtnResCloseDangKy.setText(hourOfDay+":"+minute);
+                    }
+                },mHour,mMinute,false);
+        timePickerDialog.show();
     }
 }
