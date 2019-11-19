@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -101,7 +99,7 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == RQ_SIGN_UP){
-            if(User.getCurrentUser().getAccountType() != 3){
+            if(FirebaseAuth.getInstance().getCurrentUser() != null){
                 setResult(Activity.RESULT_CANCELED, new Intent());
                 finish();
             }
@@ -146,7 +144,6 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                                         User user = User.getCurrentUser();
                                         if(!queryDocumentSnapshots.isEmpty()){
                                             DocumentSnapshot doc = queryDocumentSnapshots.getDocuments().get(0);
-                                            user.setAccountType(2);
                                             user.setId(doc.getId());
                                             user.setName(doc.getString("name"));
                                             user.setImage(doc.getString("image"));
@@ -181,7 +178,6 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                     user.reset();
 
                     // basic info
-                    user.setAccountType(1);
                     user.setName(account.getDisplayName());
                     try{
                         user.setImage(account.getPhotoUrl().toString());
@@ -189,13 +185,14 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
 
                     final FirebaseFirestore db = FirebaseFirestore.getInstance();
                     db.collection("user")
-                            .whereEqualTo("gmail", account.getEmail())
+                            .whereEqualTo("email", account.getEmail())
                             .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                         @Override
                         public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                             if(queryDocumentSnapshots.size() == 0){
                                 Map<String, Object> data = new HashMap<>();
-                                data.put("gmail", account.getEmail());
+                                data.put("email", account.getEmail());
+                                data.put("name", account.getDisplayName());
                                 data.put("street", "");
                                 data.put("district", "");
                                 data.put("province", "");
@@ -216,6 +213,7 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                                 });
                             } else {
                                 DocumentSnapshot doc = queryDocumentSnapshots.getDocuments().get(0);
+                                user.setName(doc.getString("name"));
                                 user.setPhone(doc.getString("phone"));
                                 user.setStreet(doc.getString("street"));
                                 user.setDistrict(doc.getString("district"));

@@ -11,6 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class ListFragmentOngoing extends Fragment {
     private LinearLayout linearLayoutLogin;
     private RelativeLayout relativeLayoutLogout;
@@ -21,7 +23,7 @@ public class ListFragmentOngoing extends Fragment {
         linearLayoutLogin = view.findViewById(R.id.ongoing_login);
         relativeLayoutLogout = view.findViewById(R.id.ongoing_no_login);
 
-        if(User.getCurrentUser().getAccountType() != 3){
+        if(FirebaseAuth.getInstance().getCurrentUser() != null){
             login();
         } else logout();
 

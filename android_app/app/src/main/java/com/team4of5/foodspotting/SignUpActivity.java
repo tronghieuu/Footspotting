@@ -263,7 +263,6 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                     @Override
                                     public void onSuccess(DocumentReference documentReference) {
                                         User.getCurrentUser().setId(documentReference.getId());
-                                        User.getCurrentUser().setAccountType(2);
                                         User.getCurrentUser().setType(1);
                                         User.getCurrentUser().setName(username);
                                         dialog.dismiss();
