@@ -162,7 +162,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     }
 
     public void ownerApp(){
-        if(FirebaseAuth.getInstance().getCurrentUser() != null){
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
             Toast.makeText(getActivity(), "Hãy đăng nhập trước!", Toast.LENGTH_SHORT).show();
         }
         else if(User.getCurrentUser().getType() == 2){
