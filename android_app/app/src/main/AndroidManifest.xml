@@ -15,6 +15,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".RegisterShipperActivity"></activity>
+        <activity android:name=".Shipper"></activity>
         <activity android:name=".FoodOwnerActivity" />
         <activity android:name=".ResInfoActivity" />
         <activity android:name=".OwnerAppActivity" />
