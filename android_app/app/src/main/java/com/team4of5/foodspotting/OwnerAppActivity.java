@@ -62,18 +62,23 @@ public class OwnerAppActivity extends AppCompatActivity implements View.OnClickL
 
     @Override
     public void onClick(View view) {
+        Intent intent;
         switch (view.getId()) {
             case R.id.btnThongTinQuan:
                 startActivityForResult(new Intent(OwnerAppActivity.this, ResInfoActivity.class), RQ_UPDATE);
                 break;
             case R.id.btnThucDon:
-                Intent intent = new Intent(OwnerAppActivity.this, FoodOwnerActivity.class);
+                intent = new Intent(OwnerAppActivity.this, FoodOwnerActivity.class);
                 intent.putExtra("res_id", id_res);
                 startActivity(intent);
                 break;
             case R.id.btnDanhSachOrder:
                 break;
             case R.id.btnDanhGiaCuaKhanhHang:
+                intent = new Intent(OwnerAppActivity.this, Rate.class);
+                intent.putExtra("id_restaurent", id_res);
+                intent.putExtra("button_show", false);
+                startActivity(intent);
                 break;
             case R.id.btnDongQuan:
                 Toast.makeText(this, "Pathetic!", Toast.LENGTH_SHORT).show();
