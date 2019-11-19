@@ -108,7 +108,7 @@ public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             ViewHolderRow userViewHolder = (ViewHolderRow) holder;
 
 
-            userViewHolder.tvPrice.setText(food.getPrice());
+            userViewHolder.tvPrice.setText("đ"+food.getPrice());
             userViewHolder.tvFoodName.setText(food.getName());
             new DownloadImageFromInternet(userViewHolder.imageView)
                     .execute(food.getImage());
@@ -189,7 +189,6 @@ public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     public class ViewHolderRow extends RecyclerView.ViewHolder {
         public TextView tvFoodName, tvPrice;
         public ImageView imageView;
-        public Button btnAdd;
 
 
         public ViewHolderRow(View v) {
@@ -197,13 +196,6 @@ public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
             tvFoodName = v.findViewById(R.id.textFoodName);
             imageView = v.findViewById(R.id.imageFood);
             tvPrice = v.findViewById(R.id.textFoodPrice);
-            btnAdd = v.findViewById(R.id.button_add);
-            btnAdd.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Toast.makeText(mContext, "Added to cart", Toast.LENGTH_SHORT).show();
-                }
-            });
         }
 
         public void bind(final Food item, final OnItemClickListener listener) {

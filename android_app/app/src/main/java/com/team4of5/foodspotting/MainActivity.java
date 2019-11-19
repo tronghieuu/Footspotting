@@ -65,8 +65,18 @@ public class MainActivity extends AppCompatActivity {
                     User.getCurrentUser().setDistrict(doc.getString("district"));
                     User.getCurrentUser().setProvince(doc.getString("province"));
                     User.getCurrentUser().setPhone(doc.getString("phone"));
-                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                    finish();
+                    FirebaseFirestore.getInstance().collection("user").document(doc.getId())
+                            .collection("restaurant_id_order")
+                            .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            for(DocumentSnapshot doc:queryDocumentSnapshots){
+                                User.getCurrentUser().getResIdList().add(doc.getString("restaurant_id"));
+                            }
+                            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                            finish();
+                        }
+                    });
                 }
             }
         });

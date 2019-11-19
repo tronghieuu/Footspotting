@@ -13,28 +13,25 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.io.InputStream;
 import java.util.List;
 
-public class FoodAdapterPreview extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private List<Food> mFoods;
+    private List<OrderOngoing> mOrderOngoings;
     private Context mContext;
     private Activity mActivity;
-    private FoodButtonListener mBtnFoodListener;
-
+    private OnItemClickListener mListener;
+    private BtnOngoingListener btnOngoingListener;
 
     // for load more
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
+    private OnLoadMoreListener onLoadMoreListener;
 
     // The minimum amount of items to have below your current scroll position
     // before loading more.
@@ -42,34 +39,36 @@ public class FoodAdapterPreview extends RecyclerView.Adapter<RecyclerView.ViewHo
     private int visibleThreshold = 6;
     private int lastVisibleItem, totalItemCount;
 
-    public interface FoodButtonListener {
-        void onDeleteButtonClick(View v, int position);
-        void onModifyButtonClick(View v, int position);
+    public interface BtnOngoingListener{
+        void onDetailButtonClick(View v, int position);
+    }
+
+    public interface OnItemClickListener {
+        void onItemClick(OrderOngoing item);
     }
 
     public interface OnLoadMoreListener {
         void onLoadMore();
     }
 
-    public void add(int position, Food item) {
-        mFoods.add(position, item);
+    public void add(int position, OrderOngoing item) {
+        mOrderOngoings.add(position, item);
         notifyItemInserted(position);
     }
 
-    public void remove(Food item) {
-        int position = mFoods.indexOf(item);
-        mFoods.remove(position);
+    public void remove(OrderOngoing item) {
+        int position = mOrderOngoings.indexOf(item);
+        mOrderOngoings.remove(position);
         notifyItemRemoved(position);
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public FoodAdapterPreview(Context context, List<Food> foods, RecyclerView recyclerView,
-                              FoodButtonListener btnFoodListener) {
-
+    public OngoingAdapter(Context context, List<OrderOngoing> orderOngoings, RecyclerView recyclerView,
+                          BtnOngoingListener btnOngoingListener) {
+        this.btnOngoingListener = btnOngoingListener;
         mContext = context;
         mActivity = (Activity)context;
-        mFoods = foods;
-        mBtnFoodListener = btnFoodListener;
+        mOrderOngoings = orderOngoings;
 
         // load more
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -79,6 +78,12 @@ public class FoodAdapterPreview extends RecyclerView.Adapter<RecyclerView.ViewHo
                 super.onScrolled(recyclerView, dx, dy);
                 totalItemCount = linearLayoutManager.getItemCount();
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                    if (onLoadMoreListener != null) {
+                        onLoadMoreListener.onLoadMore();
+                    }
+                    isLoading = true;
+                }
             }
         });
     }
@@ -87,7 +92,7 @@ public class FoodAdapterPreview extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
-            View view = LayoutInflater.from(mActivity).inflate(R.layout.item_food_preview, parent, false);
+            View view = LayoutInflater.from(mActivity).inflate(R.layout.ongoing_item, parent, false);
             return new ViewHolderRow(view);
         } else if (viewType == VIEW_TYPE_LOADING) {
             View view = LayoutInflater.from(mActivity).inflate(R.layout.item_loading, parent, false);
@@ -103,33 +108,37 @@ public class FoodAdapterPreview extends RecyclerView.Adapter<RecyclerView.ViewHo
         // - replace the contents of the view with that element
 
         if (holder instanceof ViewHolderRow) {
-            final Food food = mFoods.get(position);
+            OrderOngoing orderOngoing = mOrderOngoings.get(position);
 
             ViewHolderRow userViewHolder = (ViewHolderRow) holder;
 
-            userViewHolder.tvPrice.setText("đ"+food.getPrice());
-            userViewHolder.tvFoodName.setText(food.getName());
-            new DownloadImageFromInternet(userViewHolder.imageView)
-                    .execute(food.getImage());
+
+            userViewHolder.tvResName.setText(orderOngoing.getResName());
+            userViewHolder.tvResAddress.setText(orderOngoing.getResAddress());
+            userViewHolder.tvFoodName.setText(orderOngoing.getFoodName());
+            userViewHolder.tvFoodPrice.setText(orderOngoing.getFoodPrice());
+            userViewHolder.tvOrderAmount.setText(orderOngoing.getFoodAmount());
+            userViewHolder.tvTotalPrice.setText(orderOngoing.getTotalPrice());
+            userViewHolder.btnDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    btnOngoingListener.onDetailButtonClick(view, position);
+                }
+            });
+            if(orderOngoing.getStatus() == 1){
+                userViewHolder.tvStatus.setText("Chờ xác nhận");
+            } else if(orderOngoing.getStatus() == 2){
+                userViewHolder.tvStatus.setText("Đang giao");
+            }
+
+            new DownloadImageFromInternet(userViewHolder.imageViewFood)
+                    .execute(orderOngoing.getFoodImage());
+
+            new DownloadImageFromInternet(userViewHolder.imageViewRes)
+                    .execute(orderOngoing.getResImage());
 
             // binding item click listner
-
-
-
-            userViewHolder.btnModify.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mBtnFoodListener.onModifyButtonClick(view, position);
-                }
-            });
-
-            userViewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mBtnFoodListener.onDeleteButtonClick(view, position);
-                }
-            });
-
+            userViewHolder.bind(mOrderOngoings.get(position), mListener);
         } else if (holder instanceof ViewHolderLoading) {
             ViewHolderLoading loadingViewHolder = (ViewHolderLoading) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
@@ -140,13 +149,24 @@ public class FoodAdapterPreview extends RecyclerView.Adapter<RecyclerView.ViewHo
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mFoods == null ? 0 : mFoods.size();
+        return mOrderOngoings == null ? 0 : mOrderOngoings.size();
     }
 
+    public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
+        this.onLoadMoreListener = mOnLoadMoreListener;
+    }
+
+    public void setOnItemListener(OnItemClickListener listener) {
+        this.mListener = listener;
+    }
 
     @Override
     public int getItemViewType(int position) {
-        return mFoods.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        return mOrderOngoings.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+    }
+
+    public void setLoaded() {
+        isLoading = false;
     }
 
     private class ViewHolderLoading extends RecyclerView.ViewHolder {
@@ -191,18 +211,31 @@ public class FoodAdapterPreview extends RecyclerView.Adapter<RecyclerView.ViewHo
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public class ViewHolderRow extends RecyclerView.ViewHolder {
-        public TextView tvFoodName, tvPrice;
-        public ImageView imageView;
-        public Button btnModify, btnDelete;
+        public TextView tvResName, tvStatus, tvFoodName, tvResAddress, tvOrderAmount, tvFoodPrice, tvTotalPrice;
+        public ImageView imageViewRes, imageViewFood;
+        public Button btnDetail;
 
         public ViewHolderRow(View v) {
             super(v);
-            tvFoodName = v.findViewById(R.id.textFoodNamePreview);
-            imageView = v.findViewById(R.id.imageFoodPreview);
-            tvPrice = v.findViewById(R.id.textFoodPricePreview);
-            btnModify = v.findViewById(R.id.btnFoodModify);
-            btnDelete = v.findViewById(R.id.btnFoodDelete);
+            tvResName = v.findViewById(R.id.tvResName);
+            tvStatus = v.findViewById(R.id.tvStatus);
+            tvFoodName = v.findViewById(R.id.tvFoodName);
+            tvResAddress = v.findViewById(R.id.tvResAddress);
+            tvOrderAmount = v.findViewById(R.id.tvAmountOrder);
+            tvFoodPrice = v.findViewById(R.id.tvFoodPrice);
+            tvTotalPrice = v.findViewById(R.id.tvTotalPrice);
+            imageViewRes = v.findViewById(R.id.imageViewRes);
+            imageViewFood = v.findViewById(R.id.imageViewFoodOrder);
+            btnDetail = v.findViewById(R.id.btnDetail);
+        }
 
+        public void bind(final OrderOngoing item, final OnItemClickListener listener) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(item);
+                }
+            });
         }
     }
 

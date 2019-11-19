@@ -1,11 +1,15 @@
 package com.team4of5.foodspotting;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class User {
 
     private static User instance = null;
     private int type; // 1 normal or 2 shipper or 3 owner
     private String street, district, province, name, phone, id, image;
     private boolean ownerUpdate;
+    private List<String> resIdList;
 
     private User(){
         id = "";
@@ -17,6 +21,7 @@ public class User {
         phone = "";
         image = "";
         ownerUpdate = false;
+        resIdList = new ArrayList<>();
     }
 
     public static User getCurrentUser(){
@@ -111,5 +116,9 @@ public class User {
 
     public void setOwnerUpdate(boolean ownerUpdate){
         this.ownerUpdate = ownerUpdate;
+    }
+
+    public List<String> getResIdList() {
+        return resIdList;
     }
 }

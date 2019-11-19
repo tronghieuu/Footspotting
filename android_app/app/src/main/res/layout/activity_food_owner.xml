@@ -74,6 +74,7 @@
                     android:layout_height="wrap_content"
                     android:hint="Giá tiền"
                     android:textSize="30dp"
+                    android:inputType="numberDecimal"
                     android:background="@color/color_newWhite"
                     android:paddingHorizontal="10dp"
                     android:layout_marginTop="10dp"
@@ -123,12 +124,5 @@
         </LinearLayout>
 
     </ScrollView>
-
-    <ProgressBar
-        android:id="@+id/progressBarThucdon"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_centerInParent="true"
-        android:visibility="gone" />
 
 </LinearLayout>
