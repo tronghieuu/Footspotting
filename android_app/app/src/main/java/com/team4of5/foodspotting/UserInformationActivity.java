@@ -220,6 +220,7 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
             }
             catch (IOException e)
             {
+                Toast.makeText(this,"fail",Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
             StorageReference storageReference = FirebaseStorage.getInstance().getReference();

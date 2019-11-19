@@ -26,8 +26,10 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -170,59 +172,63 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
         try {
             final GoogleSignInAccount account = task.getResult(ApiException.class);
 
-            // Signed in  successfully, show authenticated UI.
-
-            final User user = User.getCurrentUser();
-            user.reset();
-
-            // basic info
-            user.setAccountType(1);
-            user.setName(account.getDisplayName());
-            try{
-                user.setImage(account.getPhotoUrl().toString());
-            } catch(Exception e){}
-
-            final FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("user")
-                    .whereEqualTo("gmail", account.getEmail())
-                    .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+            FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    if(queryDocumentSnapshots.size() == 0){
-                        Map<String, Object> data = new HashMap<>();
-                        data.put("gmail", account.getEmail());
-                        data.put("street", "");
-                        data.put("district", "");
-                        data.put("province", "");
-                        data.put("type", "1");
-                        data.put("phone", "");
-                        if(account.getPhotoUrl() != null){
-                            data.put("image", account.getPhotoUrl().toString());
-                        } else data.put("image", "");
-                        db.collection("user")
-                                .add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                user.setId(documentReference.getId());
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    final User user = User.getCurrentUser();
+                    user.reset();
+
+                    // basic info
+                    user.setAccountType(1);
+                    user.setName(account.getDisplayName());
+                    try{
+                        user.setImage(account.getPhotoUrl().toString());
+                    } catch(Exception e){}
+
+                    final FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection("user")
+                            .whereEqualTo("gmail", account.getEmail())
+                            .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            if(queryDocumentSnapshots.size() == 0){
+                                Map<String, Object> data = new HashMap<>();
+                                data.put("gmail", account.getEmail());
+                                data.put("street", "");
+                                data.put("district", "");
+                                data.put("province", "");
+                                data.put("type", "1");
+                                data.put("phone", "");
+                                if(account.getPhotoUrl() != null){
+                                    data.put("image", account.getPhotoUrl().toString());
+                                } else data.put("image", "");
+                                db.collection("user")
+                                        .add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        user.setId(documentReference.getId());
+                                        dialog.dismiss();
+                                        setResult(Activity.RESULT_CANCELED, new Intent());
+                                        finish();
+                                    }
+                                });
+                            } else {
+                                DocumentSnapshot doc = queryDocumentSnapshots.getDocuments().get(0);
+                                user.setPhone(doc.getString("phone"));
+                                user.setStreet(doc.getString("street"));
+                                user.setDistrict(doc.getString("district"));
+                                user.setProvince(doc.getString("province"));
+                                user.setType(Integer.parseInt(doc.getString("type")));
+                                user.setId(doc.getId());
+                                user.setName(account.getDisplayName());
                                 dialog.dismiss();
                                 setResult(Activity.RESULT_CANCELED, new Intent());
                                 finish();
                             }
-                        });
-                    } else {
-                        DocumentSnapshot doc = queryDocumentSnapshots.getDocuments().get(0);
-                        user.setPhone(doc.getString("phone"));
-                        user.setStreet(doc.getString("street"));
-                        user.setDistrict(doc.getString("district"));
-                        user.setProvince(doc.getString("province"));
-                        user.setType(Integer.parseInt(doc.getString("type")));
-                        user.setId(doc.getId());
-                        user.setName(account.getDisplayName());
-                        dialog.dismiss();
-                        setResult(Activity.RESULT_CANCELED, new Intent());
-                        finish();
-                    }
 
+                        }
+                    });
                 }
             });
 
