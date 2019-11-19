@@ -137,7 +137,10 @@ public class Rate extends AppCompatActivity {
                 String useId = "";
                 useId = User.getCurrentUser().getId();
                 if (useId!="") {
-                    db.collection("rating").whereEqualTo("user_id", useId).whereEqualTo("res_id",id_restaurent).get()
+                    db.collection("restaurants")
+                            .document(id_restaurent)
+                            .collection("rating")
+                            .whereEqualTo("user_id", useId).get()
                             .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
