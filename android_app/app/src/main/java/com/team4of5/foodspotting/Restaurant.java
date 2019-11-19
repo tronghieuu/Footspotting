@@ -12,11 +12,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Restaurant implements Serializable {
-    private String id,name, phone, district, province, street, image, opening_time, type, user_id;
+    private String id,name, phone, district, province, street, image, opening_time, closing_time, type, user_id;
     private float rate;
     private List<Rating> ratingList;
     private List<Food> foods;
-    public Restaurant(String id,String name,String phone,String district,String province,String street,String image,float rate,String opening_time,String type,String user_id){
+    public Restaurant(String id,String name,String phone,String district,String province,String street,String image,float rate,String opening_time,String closing_time,String type,String user_id){
         this.id = id;
         this.name = name;
         this.phone = phone;
@@ -26,6 +26,7 @@ public class Restaurant implements Serializable {
         this.image = image;
         this.rate = rate;
         this.opening_time = opening_time;
+        this.closing_time = closing_time;
         this.type = type;
         this.user_id = user_id;
     }
@@ -130,6 +131,7 @@ public class Restaurant implements Serializable {
                     district = doc.getString("district");
                     image = doc.getString("image");
                     opening_time = doc.getString("opening_time");
+                    closing_time = doc.getString("closing_time");
                     phone = doc.getString("phone");
                     province = doc.getString("province");
                     rate = Float.parseFloat(doc.getString("rate"));
@@ -141,4 +143,11 @@ public class Restaurant implements Serializable {
         });
     }
 
+    public String getClosing_time() {
+        return closing_time;
+    }
+
+    public void setClosing_time(String closing_time) {
+        this.closing_time = closing_time;
+    }
 }

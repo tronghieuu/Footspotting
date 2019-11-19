@@ -7,6 +7,7 @@ import androidx.core.content.ContextCompat;
 
 import android.app.Activity;
 import android.app.Dialog;
+import android.app.TimePickerDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -24,6 +25,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.internal.Storage;
@@ -38,21 +40,24 @@ import com.google.firebase.storage.UploadTask;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.PriorityQueue;
 
 import io.grpc.Context;
 
 public class ResInfoActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText mEdtName, mEdtType, mEdtOpeningTime, mEdtProvince,
+    private EditText mEdtName, mEdtType, mEdtProvince,
             mEdtDistrict, mEdtAddress, mEdtPhone;
-    private Button mBtnBack, mBtnUpdate, mBtnPickPhoto;
+    private Button mBtnBack, mBtnUpdate, mBtnPickPhoto, mBtnOpenning, mBtnClosing;
     private String id_res;
     private ImageView mImageView;
     private Uri filePath;
     private static int PICK_IMAGE_REQUEST = 2341;
     private Dialog dialog;
+    private int mHour, mMinute;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,11 +71,12 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.color_owner));
         mEdtName = findViewById(R.id.edtOwnerResName);
         mEdtType = findViewById(R.id.edtOwnerResType);
-        mEdtOpeningTime = findViewById(R.id.edtOwnerResOpenTime);
         mEdtProvince = findViewById(R.id.edtOwnerResProvince);
         mEdtDistrict = findViewById(R.id.edtOwnerResDistrict);
         mEdtAddress = findViewById(R.id.edtOwnerResAddress);
         mEdtPhone = findViewById(R.id.edtOwnerResPhone);
+        mBtnOpenning = findViewById(R.id.btn_ResOpen);
+        mBtnClosing = findViewById(R.id.btn_ResClose);
         mBtnBack = findViewById(R.id.btnBackOwnerRes);
         mBtnUpdate = findViewById(R.id.btnUpdateOwnerRes);
         mBtnPickPhoto = findViewById(R.id.btnChonAnh);
@@ -110,14 +116,15 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
     }
 
     public void update() {
-        String name, type, province, district, address, phone, openingTime;
+        String name, type, province, district, address, phone, openingTime, closingTime;
         name = mEdtName.getText().toString();
         type = mEdtType.getText().toString();
         province = mEdtProvince.getText().toString();
         district = mEdtDistrict.getText().toString();
         address = mEdtAddress.getText().toString();
         phone = mEdtPhone.getText().toString();
-        openingTime = mEdtOpeningTime.getText().toString();
+        openingTime = mBtnOpenning.getText().toString();
+        closingTime = mBtnClosing.getText().toString();
 
         Map<String, Object> data = new HashMap<>();
         if(name.length() != 0) data.put("name", name);
@@ -127,6 +134,7 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
         if(address.length() != 0) data.put("street", address);
         if(phone.length() != 0) data.put("phone", phone);
         if(openingTime.length() != 0) data.put("opening_time", openingTime);
+        if(closingTime.length() != 0) data.put("closing_time", closingTime);
 
         FirebaseFirestore.getInstance().collection("restaurants").document(id_res)
                 .update(data).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -163,7 +171,8 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
                     mEdtDistrict.setHint(doc.getString("district"));
                     mEdtAddress.setHint(doc.getString("street"));
                     mEdtPhone.setHint(doc.getString("phone"));
-                    mEdtOpeningTime.setHint(doc.getString("opening_time"));
+                    mBtnOpenning.setHint(doc.getString("opening_time"));
+                    mBtnClosing.setHint(doc.getString("closing_time"));
                     new DownloadImageFromInternet(mImageView)
                             .execute(doc.getString("image"));
                     id_res = doc.getId();
@@ -195,6 +204,34 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
                 e.printStackTrace();
             }
         }
+    }
+
+    public void onClickTimePickerButtonOpen(View view) {
+        final Calendar c = Calendar.getInstance();
+        mHour = c.get(Calendar.HOUR_OF_DAY);
+        mMinute = c.get(Calendar.MINUTE);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                        mBtnOpenning.setText(hourOfDay+":"+minute);
+                    }
+                },mHour,mMinute,false);
+        timePickerDialog.show();
+    }
+
+    public void onClickTimePickerButtonClose(View view) {
+        final Calendar c = Calendar.getInstance();
+        mHour = c.get(Calendar.HOUR_OF_DAY);
+        mMinute = c.get(Calendar.MINUTE);
+        TimePickerDialog timePickerDialog = new TimePickerDialog(this,
+                new TimePickerDialog.OnTimeSetListener() {
+                    @Override
+                    public void onTimeSet(TimePicker timePicker, int hourOfDay, int minute) {
+                        mBtnClosing.setText(hourOfDay+":"+minute);
+                    }
+                },mHour,mMinute,false);
+        timePickerDialog.show();
     }
 
     private class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {

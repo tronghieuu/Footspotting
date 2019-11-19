@@ -171,25 +171,56 @@ android:background="@color/color_owner">
             android:inputType="numberDecimal"
             android:maxLines="1" />
 
-        <TextView
-            android:layout_marginTop="20dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Giờ mở cửa:"
-            android:textSize="30dp"
-            android:textColor="@color/color_newWhite"
-            android:paddingHorizontal="5dp" />
-
-        <EditText
-            android:id="@+id/edtOwnerResOpenTime"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
-            android:background="@color/color_newWhite"
-            android:textSize="30dp"
-            android:hint="13:00 - 18:30"
-            android:paddingHorizontal="5dp"
-            android:maxLines="1" />
+            android:orientation="horizontal">
+            <TextView
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Giờ mở cửa:   "
+                android:textSize="30dp"
+                android:textColor="@color/color_newWhite"
+                android:paddingHorizontal="5dp" />
+            <Button
+                android:background="@color/color_newWhite"
+                android:id="@+id/btn_ResOpen"
+                android:onClick="onClickTimePickerButtonOpen"
+                android:layout_weight="1"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="30dp"
+                android:textColor="@color/color_black"
+                android:paddingHorizontal="5dp" />
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Giờ đóng cửa:"
+                android:textSize="30dp"
+                android:textColor="@color/color_newWhite"
+                android:paddingHorizontal="5dp" />
+            <Button
+                android:background="@color/color_newWhite"
+                android:id="@+id/btn_ResClose"
+                android:onClick="onClickTimePickerButtonClose"
+                android:layout_weight="1"
+                android:layout_marginTop="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=""
+                android:textSize="30dp"
+                android:textColor="@color/color_black"
+                android:paddingHorizontal="5dp" />
+        </LinearLayout>
 
         <TextView
             android:layout_marginTop="20dp"
