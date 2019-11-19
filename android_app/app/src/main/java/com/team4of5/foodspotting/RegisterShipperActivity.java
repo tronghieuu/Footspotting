@@ -51,7 +51,7 @@ public class RegisterShipperActivity extends AppCompatActivity implements View.O
                 finish();
                 break;
             case R.id.btnShipperDangKy:
-                Intent intent = new Intent(getApplicationContext(), Shipper.class);
+                Intent intent = new Intent(getApplicationContext(), ShipperAppActivity.class);
                 startActivity(intent);
                 finish();
                 break;
