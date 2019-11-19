@@ -106,7 +106,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.btnShipperApp:
                 Toast.makeText(getActivity(), "Ứng dụng cho Shipper", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getActivity(),RegisterShipperActivity.class));
+                startActivity(new Intent(getContext(),RegisterShipperActivity.class));
                 break;
             case R.id.btnOwnerApp:
                 ownerApp();

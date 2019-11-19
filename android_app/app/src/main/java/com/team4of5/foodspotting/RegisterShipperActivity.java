@@ -1,6 +1,7 @@
 package com.team4of5.foodspotting;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -22,10 +23,13 @@ public class RegisterShipperActivity extends AppCompatActivity implements View.O
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register_shipper);
         getSupportActionBar().hide();
+        mBtnBack = findViewById(R.id.btnBackShipperDangKy);
+        mBtnCreate = findViewById(R.id.btnShipperDangKy);
         Window window = this.getWindow();
         window.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(ContextCompat.getColor(this, R.color.color_green));
         mBtnBack.setOnClickListener(this);
         mBtnCreate.setOnClickListener(this);
         dialog = new Dialog(this);
@@ -46,10 +50,10 @@ public class RegisterShipperActivity extends AppCompatActivity implements View.O
             case R.id.btnBackShipperDangKy:
                 finish();
                 break;
-            case R.id.btnShipperApp:
-                Intent intent = new Intent(getApplicationContext(), Shipper.class);
-                dialog.dismiss();
+            case R.id.btnShipperDangKy:
+                Intent intent = new Intent(getApplicationContext(), ShipperAppActivity.class);
                 startActivity(intent);
+                finish();
                 break;
         }
     }
