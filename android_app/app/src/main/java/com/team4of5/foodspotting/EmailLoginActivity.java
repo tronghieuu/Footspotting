@@ -181,7 +181,9 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                     user.setName(account.getDisplayName());
                     try{
                         user.setImage(account.getPhotoUrl().toString());
-                    } catch(Exception e){}
+                    } catch(Exception e){
+                        user.setImage("");
+                    }
 
                     final FirebaseFirestore db = FirebaseFirestore.getInstance();
                     db.collection("user")
@@ -234,7 +236,6 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
             //setResult(Activity.RESULT_CANCELED, new Intent());
             //finish();
         } catch(ApiException e) {
-
             Toast.makeText(this, "not ok", Toast.LENGTH_SHORT).show();
         }
 
