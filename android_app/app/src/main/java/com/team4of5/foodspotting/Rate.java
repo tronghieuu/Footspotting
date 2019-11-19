@@ -175,11 +175,13 @@ public class Rate extends AppCompatActivity {
                     Map<String, Object> map = new HashMap<>();
                     map.put("comment", etReview.getText().toString());
                     map.put("rate", String.valueOf(rate.getRating()));
-                    map.put("res_id", id_restaurent);
                     map.put("time", FieldValue.serverTimestamp());
                     map.put("user_id", User.getCurrentUser().getId());
                     map.put("user_name", User.getCurrentUser().getName());
-                    db.collection("rating").add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    db.collection("restaurants")
+                            .document(id_restaurent)
+                            .collection("rating")
+                            .add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                         @Override
                         public void onSuccess(DocumentReference documentReference) {
                             Toast.makeText(getApplicationContext(), "Done review", Toast.LENGTH_SHORT).show();
@@ -244,8 +246,9 @@ public class Rate extends AppCompatActivity {
         mAdapter.notifyDataSetChanged();
     }
     public void queryRating(){
-        db.collection("rating")
-                .whereEqualTo("res_id", id_restaurent)
+        db.collection("restaurants")
+                .document(id_restaurent)
+                .collection("rating")
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {

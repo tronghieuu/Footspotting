@@ -264,6 +264,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                     public void onSuccess(DocumentReference documentReference) {
                                         User.getCurrentUser().setId(documentReference.getId());
                                         User.getCurrentUser().setType(1);
+                                        User.getCurrentUser().setImage("");
                                         User.getCurrentUser().setName(username);
                                         dialog.dismiss();
                                         setResult(Activity.RESULT_CANCELED, new Intent());

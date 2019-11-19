@@ -20,6 +20,11 @@ import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -34,6 +39,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private static int RQ_INFO = 324;
     private FirebaseFirestore mDb;
     private ImageView profileImage;
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Nullable
     @Override
@@ -42,6 +48,13 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
 
         // firestore
         mDb = FirebaseFirestore.getInstance();
+
+        // google
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
 
         // email
         mAuth = FirebaseAuth.getInstance();
@@ -141,7 +154,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         mCvLogin.setVisibility(View.VISIBLE);
         mCvNoLogin.setVisibility(View.INVISIBLE);
         mTvUserName.setText(User.getCurrentUser().getName());
-        if(User.getCurrentUser().getImage() != null) {
+        if(User.getCurrentUser().getImage().length() > 0) {
             new DownloadImageFromInternet(profileImage)
                     .execute(User.getCurrentUser().getImage());
         }
@@ -150,7 +163,12 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
 
     private void logout(){
         mAuth.signOut();
-        reloadFragment();
+        mGoogleSignInClient.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                reloadFragment();
+            }
+        });
     }
 
     private void reloadFragment(){

@@ -128,8 +128,9 @@ public class Restaurent extends AppCompatActivity {
     }
 
     public void queryFood(){
-        db.collection("food")
-                .whereEqualTo("res_id", id_restaurent)
+        db.collection("restaurants")
+                .document(id_restaurent)
+                .collection("food")
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -141,7 +142,6 @@ public class Restaurent extends AppCompatActivity {
                         food.setName(doc.getString("name"));
                         food.setPrice(doc.getString("price"));
                         food.setId(doc.getId());
-                        food.setRes_id(doc.getString("res_id"));
                         mFoods.add(food);
                         mAdapter.notifyDataSetChanged();
                     }
