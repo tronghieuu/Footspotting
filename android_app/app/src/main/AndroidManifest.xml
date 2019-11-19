@@ -14,7 +14,8 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".FoodOwnerActivity"></activity>
+        <activity android:name=".RegisterShipperActivity"></activity>
+        <activity android:name=".FoodOwnerActivity" />
         <activity android:name=".ResInfoActivity" />
         <activity android:name=".OwnerAppActivity" />
         <activity android:name=".RegisterOwnerActivity" />
