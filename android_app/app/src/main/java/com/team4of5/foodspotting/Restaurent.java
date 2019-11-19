@@ -161,7 +161,7 @@ public class Restaurent extends AppCompatActivity {
                 DocumentSnapshot doc = task.getResult();
                 mShopName.setText(doc.getString("name"));
                 mShopType.setText(doc.getString("type"));
-                mOpeningTime.setText(doc.getString("opening_time"));
+                mOpeningTime.setText(doc.getString("opening_time")+" - "+doc.getString("closing_time"));
                 phonenum = doc.getString("phone");
                 mRatingShopOverall.setText(doc.getString("rate"));
                 mRatingShopOverallStar.setRating(Float.parseFloat(doc.getString("rate")));
