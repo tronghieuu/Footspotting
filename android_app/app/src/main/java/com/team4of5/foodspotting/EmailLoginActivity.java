@@ -6,7 +6,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.app.Activity;
 import android.app.Dialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
@@ -15,7 +14,6 @@ import android.view.View;
 import android.view.Window;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -26,8 +24,10 @@ import com.google.android.gms.common.api.ApiException;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -57,6 +57,7 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
 
         // google
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
@@ -98,7 +99,7 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == RQ_SIGN_UP){
-            if(User.getCurrentUser().getAccountType() != 3){
+            if(FirebaseAuth.getInstance().getCurrentUser() != null){
                 setResult(Activity.RESULT_CANCELED, new Intent());
                 finish();
             }
@@ -143,7 +144,6 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                                         User user = User.getCurrentUser();
                                         if(!queryDocumentSnapshots.isEmpty()){
                                             DocumentSnapshot doc = queryDocumentSnapshots.getDocuments().get(0);
-                                            user.setAccountType(2);
                                             user.setId(doc.getId());
                                             user.setName(doc.getString("name"));
                                             user.setImage(doc.getString("image"));
@@ -170,66 +170,72 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
         try {
             final GoogleSignInAccount account = task.getResult(ApiException.class);
 
-            // Signed in  successfully, show authenticated UI.
-
-            final User user = User.getCurrentUser();
-            user.reset();
-
-            // basic info
-            user.setAccountType(1);
-            user.setName(account.getDisplayName());
-            try{
-                user.setImage(account.getPhotoUrl().toString());
-            } catch(Exception e){}
-
-            final FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("user")
-                    .whereEqualTo("gmail", account.getEmail())
-                    .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+            FirebaseAuth.getInstance().signInWithCredential(credential).addOnCompleteListener(new OnCompleteListener<AuthResult>() {
                 @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    if(queryDocumentSnapshots.size() == 0){
-                        Map<String, Object> data = new HashMap<>();
-                        data.put("gmail", account.getEmail());
-                        data.put("street", "");
-                        data.put("district", "");
-                        data.put("province", "");
-                        data.put("type", "1");
-                        data.put("phone", "");
-                        if(account.getPhotoUrl() != null){
-                            data.put("image", account.getPhotoUrl().toString());
-                        } else data.put("image", "");
-                        db.collection("user")
-                                .add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                user.setId(documentReference.getId());
+                public void onComplete(@NonNull Task<AuthResult> task) {
+                    final User user = User.getCurrentUser();
+                    user.reset();
+
+                    // basic info
+                    user.setName(account.getDisplayName());
+                    try{
+                        user.setImage(account.getPhotoUrl().toString());
+                    } catch(Exception e){
+                        user.setImage("");
+                    }
+
+                    final FirebaseFirestore db = FirebaseFirestore.getInstance();
+                    db.collection("user")
+                            .whereEqualTo("email", account.getEmail())
+                            .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                        @Override
+                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                            if(queryDocumentSnapshots.size() == 0){
+                                Map<String, Object> data = new HashMap<>();
+                                data.put("email", account.getEmail());
+                                data.put("name", account.getDisplayName());
+                                data.put("street", "");
+                                data.put("district", "");
+                                data.put("province", "");
+                                data.put("type", "1");
+                                data.put("phone", "");
+                                if(account.getPhotoUrl() != null){
+                                    data.put("image", account.getPhotoUrl().toString());
+                                } else data.put("image", "");
+                                db.collection("user")
+                                        .add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                    @Override
+                                    public void onSuccess(DocumentReference documentReference) {
+                                        user.setId(documentReference.getId());
+                                        dialog.dismiss();
+                                        setResult(Activity.RESULT_CANCELED, new Intent());
+                                        finish();
+                                    }
+                                });
+                            } else {
+                                DocumentSnapshot doc = queryDocumentSnapshots.getDocuments().get(0);
+                                user.setName(doc.getString("name"));
+                                user.setPhone(doc.getString("phone"));
+                                user.setStreet(doc.getString("street"));
+                                user.setDistrict(doc.getString("district"));
+                                user.setProvince(doc.getString("province"));
+                                user.setType(Integer.parseInt(doc.getString("type")));
+                                user.setId(doc.getId());
+                                user.setName(account.getDisplayName());
                                 dialog.dismiss();
                                 setResult(Activity.RESULT_CANCELED, new Intent());
                                 finish();
                             }
-                        });
-                    } else {
-                        DocumentSnapshot doc = queryDocumentSnapshots.getDocuments().get(0);
-                        user.setPhone(doc.getString("phone"));
-                        user.setStreet(doc.getString("street"));
-                        user.setDistrict(doc.getString("district"));
-                        user.setProvince(doc.getString("province"));
-                        user.setType(Integer.parseInt(doc.getString("type")));
-                        user.setId(doc.getId());
-                        user.setName(account.getDisplayName());
-                        dialog.dismiss();
-                        setResult(Activity.RESULT_CANCELED, new Intent());
-                        finish();
-                    }
 
+                        }
+                    });
                 }
             });
 
             //setResult(Activity.RESULT_CANCELED, new Intent());
             //finish();
         } catch(ApiException e) {
-
             Toast.makeText(this, "not ok", Toast.LENGTH_SHORT).show();
         }
 

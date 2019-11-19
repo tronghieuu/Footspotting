@@ -11,8 +11,6 @@ import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 
-import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -21,7 +19,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity {
 
-    private GoogleSignInAccount mGoogleSignInAccount;
     private FirebaseAuth mAuth;
     private static int REQUEST_PERMISSION = 2314;
 
@@ -39,19 +36,10 @@ public class MainActivity extends AppCompatActivity {
             // email or password
             mAuth = FirebaseAuth.getInstance();
 
-            // google
-            mGoogleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
-
             // check email or google or guest
             if(mAuth.getCurrentUser() != null){
-                User.getCurrentUser().setAccountType(2);
                 getEmailAccount();
-            } else if(mGoogleSignInAccount != null){
-                User.getCurrentUser().setAccountType(1);
-                User.getCurrentUser().setName(mGoogleSignInAccount.getDisplayName());
-                getGoogleAccount();
             } else {
-                User.getCurrentUser().setAccountType(3);
                 startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                 finish();
             }
@@ -59,28 +47,6 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void getGoogleAccount(){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("user")
-                .whereEqualTo("gmail", mGoogleSignInAccount.getEmail())
-                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if(queryDocumentSnapshots.size() != 0){
-                    DocumentSnapshot doc = queryDocumentSnapshots.getDocuments().get(0);
-                    User.getCurrentUser().setId(doc.getId());
-                    User.getCurrentUser().setType(Integer.parseInt(doc.getString("type")));
-                    User.getCurrentUser().setStreet(doc.getString("street"));
-                    User.getCurrentUser().setDistrict(doc.getString("district"));
-                    User.getCurrentUser().setProvince(doc.getString("province"));
-                    User.getCurrentUser().setPhone(doc.getString("phone"));
-                    User.getCurrentUser().setImage(doc.getString("image"));
-                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                    finish();
-                }
-            }
-        });
-    }
 
     public void getEmailAccount(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -112,23 +78,10 @@ public class MainActivity extends AppCompatActivity {
             if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                 // email or password
                 mAuth = FirebaseAuth.getInstance();
-
-                // google
-                mGoogleSignInAccount = GoogleSignIn.getLastSignedInAccount(this);
-
                 // check email or google or guest
                 if(mAuth.getCurrentUser() != null){
-                    User.getCurrentUser().setAccountType(2);
                     getEmailAccount();
-                } else if(mGoogleSignInAccount != null){
-                    User.getCurrentUser().setAccountType(1);
-                    User.getCurrentUser().setName(mGoogleSignInAccount.getDisplayName());
-                    try{
-                        User.getCurrentUser().setImage(mGoogleSignInAccount.getPhotoUrl().toString());
-                    } catch(Exception e){}
-                    getGoogleAccount();
                 } else {
-                    User.getCurrentUser().setAccountType(3);
                     startActivity(new Intent(getApplicationContext(), HomeActivity.class));
                     finish();
                 }

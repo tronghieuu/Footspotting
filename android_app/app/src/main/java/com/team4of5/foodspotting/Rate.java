@@ -136,14 +136,19 @@ public class Rate extends AppCompatActivity {
                 String useId = "";
                 useId = User.getCurrentUser().getId();
                 if (useId!="") {
-                    db.collection("rating").whereEqualTo("user_id", useId).get()
+                    db.collection("restaurants")
+                            .document(id_restaurent)
+                            .collection("rating")
+                            .whereEqualTo("user_id", useId).get()
                             .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                                 @Override
                                 public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                                    DocumentSnapshot doc = queryDocumentSnapshots.getDocuments().get(0);
-                                    openDialogReviewRe(doc.getId(),doc.getString("comment"), doc.getString("rate"));
+                                    if(queryDocumentSnapshots.isEmpty()){
+                                        openDialogReviewNew();
+                                    }else {
+                                        Toast.makeText(getApplicationContext(), "You have already reviewed!", Toast.LENGTH_SHORT).show();
+                                    }
 
-                                    Toast.makeText(getApplicationContext(), "You have already reviewed!", Toast.LENGTH_SHORT).show();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -166,50 +171,28 @@ public class Rate extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 dialog.dismiss();
-                if (TextUtils.isEmpty(etReview.getText().toString())) {
+                if (etReview.getText().toString()==""|rate.getRating()==0) {
                     Toast.makeText(getApplicationContext(), "Required field!", Toast.LENGTH_SHORT).show();
                 } else {
                     Map<String, Object> map = new HashMap<>();
-                    map.put("comment", etReview);
-                    map.put("rate", rate);
-                    map.put("res_id", id_restaurent);
+                    map.put("comment", etReview.getText().toString());
+                    map.put("rate", String.valueOf(rate.getRating()));
                     map.put("time", FieldValue.serverTimestamp());
                     map.put("user_id", User.getCurrentUser().getId());
                     map.put("user_name", User.getCurrentUser().getName());
-                    db.collection("rating").add(map);
-                    Toast.makeText(getApplicationContext(), "Done review", Toast.LENGTH_SHORT).show();
-                }
+                    db.collection("restaurants")
+                            .document(id_restaurent)
+                            .collection("rating")
+                            .add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                        @Override
+                        public void onSuccess(DocumentReference documentReference) {
+                            Toast.makeText(getApplicationContext(), "Done review", Toast.LENGTH_SHORT).show();
+                            finish();
+                            startActivity(getIntent());
+                            User.getCurrentUser().setOwnerUpdate(true);
+                        }
+                    });
             }
-        });
-        dialog.show();
-    }
-    private void openDialogReviewRe(final String uId, final String uCom, final String uRate) {
-
-        etReview = dialog.findViewById(R.id.et_review);
-        rate = dialog.findViewById(R.id.rate_star);
-        btnSend = dialog.findViewById(R.id.btn_send_review);
-        etReview.setText(uCom);
-        rate.setRating(Float.parseFloat(uRate));
-        btnSend.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                dialog.dismiss();
-                if (TextUtils.isEmpty(etReview.getText().toString())) {
-                    Toast.makeText(getApplicationContext(), "Required field!", Toast.LENGTH_SHORT).show();
-                } else {
-                    if (uCom.contentEquals(etReview.getText()) | uRate.contentEquals(String.valueOf(rate.getRating()))) {
-                        db.collection("rating")
-                                .document(uId)
-                                .update("comment", etReview.getText());
-                        db.collection("rating")
-                                .document(uId)
-                                .update("rate", String.valueOf(rate.getRating()));
-                        db.collection("rating")
-                                .document(uId)
-                                .update("time", FieldValue.serverTimestamp());
-                    }
-                    Toast.makeText(getApplicationContext(), "Done review", Toast.LENGTH_SHORT).show();
-                }
             }
         });
         dialog.show();
@@ -217,7 +200,7 @@ public class Rate extends AppCompatActivity {
 
     private void setOverallReview(){
         mTextRatingNumber.setText(String.valueOf(mRates.size()));
-        int r1=0, r2=0, r3=0, r4=0, r5=0, total=0;
+        float r1=0, r2=0, r3=0, r4=0, r5=0, total=0;
         float average=0;
         for (Rating rating:mRates)
         {
@@ -265,8 +248,9 @@ public class Rate extends AppCompatActivity {
         mAdapter.notifyDataSetChanged();
     }
     public void queryRating(){
-        db.collection("rating")
-                .whereEqualTo("res_id", id_restaurent)
+        db.collection("restaurants")
+                .document(id_restaurent)
+                .collection("rating")
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
@@ -275,7 +259,7 @@ public class Rate extends AppCompatActivity {
                         Rating rating = new Rating();
                         //rating.setId(doc.getId());
                         rating.setComment(doc.getString("comment"));
-                        rating.setRate(Integer.parseInt(doc.getString("rate")));
+                        rating.setRate(Float.parseFloat(doc.getString("rate")));
                         rating.setTime(doc.getTimestamp("time").toDate().toString());
                         rating.setUser_name(doc.getString("user_name"));
                         //rating.setUser_id(doc.getString("user_id"));

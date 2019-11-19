@@ -153,13 +153,8 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
         mTvUsername.setText(User.getCurrentUser().getName());
         mTvAddress.setText(User.getCurrentUser().getProvince());
         mTvPhone.setText(User.getCurrentUser().getPhone());
-        if(User.getCurrentUser().getAccountType() == 1) {
-            GoogleSignInAccount gg = GoogleSignIn.getLastSignedInAccount(this);
-            mTvEmailInfo.setText(gg.getEmail());
-        } else {
-            FirebaseAuth auth = FirebaseAuth.getInstance();
-            mTvEmailInfo.setText(auth.getCurrentUser().getEmail());
-        }
+        FirebaseAuth auth = FirebaseAuth.getInstance();
+        mTvEmailInfo.setText(auth.getCurrentUser().getEmail());
     }
 
     @Override
@@ -176,9 +171,7 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
                 changeAddressDialog.show();
                 break;
             case R.id.btnChangePassword:
-                if(User.getCurrentUser().getAccountType() != 3) {
-                    Toast.makeText(this, "Không thể thay đổi", Toast.LENGTH_SHORT).show();
-                }
+                Toast.makeText(this, "Không thể thay đổi", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnChangePhone:
                 changePhoneDialog.show();
@@ -220,6 +213,7 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
             }
             catch (IOException e)
             {
+                Toast.makeText(this,"fail",Toast.LENGTH_SHORT).show();
                 e.printStackTrace();
             }
             StorageReference storageReference = FirebaseStorage.getInstance().getReference();

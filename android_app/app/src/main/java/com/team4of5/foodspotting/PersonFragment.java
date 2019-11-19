@@ -21,27 +21,25 @@ import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 import java.io.InputStream;
-
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PersonFragment extends Fragment implements View.OnClickListener {
 
     private CardView mCvLogin, mCvNoLogin;
     private TextView mTvUserName;
     private FirebaseAuth mAuth;
-    private GoogleSignInClient mGoogleSignInClient;
     private static int RQ_LOGIN = 10;
     private static int RQ_INFO = 324;
     private FirebaseFirestore mDb;
     private ImageView profileImage;
+    private GoogleSignInClient mGoogleSignInClient;
 
     @Nullable
     @Override
@@ -51,14 +49,15 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         // firestore
         mDb = FirebaseFirestore.getInstance();
 
-        // email
-        mAuth = FirebaseAuth.getInstance();
-
         // google
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
                 .requestEmail()
                 .build();
         mGoogleSignInClient = GoogleSignIn.getClient(getActivity(), gso);
+
+        // email
+        mAuth = FirebaseAuth.getInstance();
 
         mCvLogin = view.findViewById(R.id.cardViewLogin);
         mCvNoLogin = view.findViewById(R.id.cardViewNoLogin);
@@ -67,7 +66,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         mCvLogin.setOnClickListener(this);
         mCvNoLogin.setOnClickListener(this);
 
-        if(User.getCurrentUser().getAccountType() != 3){
+        if(FirebaseAuth.getInstance().getCurrentUser() != null){
             loginState();
         } else logoutState();
 
@@ -107,6 +106,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.btnShipperApp:
                 Toast.makeText(getActivity(), "Ứng dụng cho Shipper", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(getContext(),RegisterShipperActivity.class));
                 break;
             case R.id.btnOwnerApp:
                 ownerApp();
@@ -133,7 +133,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
         if(requestCode == RQ_LOGIN){
             if(resultCode == Activity.RESULT_CANCELED){
-                if(User.getCurrentUser().getAccountType() != 3){
+                if(FirebaseAuth.getInstance().getCurrentUser() != null){
                     Toast.makeText(getActivity(), "Đăng nhập thành công", Toast.LENGTH_SHORT).show();
                     reloadFragment();
                 }
@@ -154,7 +154,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         mCvLogin.setVisibility(View.VISIBLE);
         mCvNoLogin.setVisibility(View.INVISIBLE);
         mTvUserName.setText(User.getCurrentUser().getName());
-        if(User.getCurrentUser().getImage() != null) {
+        if(User.getCurrentUser().getImage().length() > 0) {
             new DownloadImageFromInternet(profileImage)
                     .execute(User.getCurrentUser().getImage());
         }
@@ -162,22 +162,13 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
 
 
     private void logout(){
-        int accountType = User.getCurrentUser().getAccountType();
-        if(accountType == 1){
-            mGoogleSignInClient.signOut()
-                    .addOnCompleteListener(getActivity(), new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            Toast.makeText(getActivity(), "Đăng xuất thành công", Toast.LENGTH_SHORT).show();
-                            User.getCurrentUser().setAccountType(3);
-                            reloadFragment();
-                        }
-                    });
-        } else if(accountType == 2){
-            mAuth.signOut();
-            User.getCurrentUser().setAccountType(3);
-            reloadFragment();
-        }
+        mAuth.signOut();
+        mGoogleSignInClient.signOut().addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                reloadFragment();
+            }
+        });
     }
 
     private void reloadFragment(){
@@ -190,7 +181,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     }
 
     public void ownerApp(){
-        if(User.getCurrentUser().getAccountType() == 3){
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
             Toast.makeText(getActivity(), "Hãy đăng nhập trước!", Toast.LENGTH_SHORT).show();
         }
         else if(User.getCurrentUser().getType() == 2){

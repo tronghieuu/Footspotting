@@ -10,6 +10,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class NotificationFragment extends Fragment {
     private LinearLayout linearLayoutLogin;
     private LinearLayout relativeLayoutLogout;
@@ -20,7 +22,7 @@ public class NotificationFragment extends Fragment {
         linearLayoutLogin = view.findViewById(R.id.notification_login);
         relativeLayoutLogout = view.findViewById(R.id.notification_no_login);
 
-        if(User.getCurrentUser().getAccountType() != 3){
+        if(FirebaseAuth.getInstance().getCurrentUser() != null){
             login();
         } else logout();
 

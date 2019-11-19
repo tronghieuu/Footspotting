@@ -3,7 +3,7 @@ package com.team4of5.foodspotting;
 import java.io.Serializable;
 
 public class Food implements Serializable {
-    private String id, image, info, name, res_id;
+    private String id, image, info, name;
     private String price;
     public Food(String id, String image, String info, String name, String price, String res_id){
         this.id = id;
@@ -11,7 +11,6 @@ public class Food implements Serializable {
         this.info = info;
         this.name = name;
         this.price = price;
-        this.res_id = res_id;
     }
     public Food(){
         this.id = "";
@@ -19,7 +18,6 @@ public class Food implements Serializable {
         this.info = "";
         this.name = "";
         this.price = "";
-        this.res_id = "";
     }
     public void setId(String id){
         this.id = id;
@@ -32,9 +30,6 @@ public class Food implements Serializable {
     }
     public void setName(String name){
         this.name = name;
-    }
-    public void setRes_id(String res_id){
-        this.res_id = res_id;
     }
     public void setPrice(String price){
         this.price = price;
@@ -51,9 +46,6 @@ public class Food implements Serializable {
     }
     public String getName(){
         return name;
-    }
-    public String getRes_id(){
-        return res_id;
     }
     public String getPrice(){
         return price;

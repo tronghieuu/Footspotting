@@ -3,14 +3,12 @@ package com.team4of5.foodspotting;
 public class User {
 
     private static User instance = null;
-    private int accountType; // 1 google or 2 email password or 3 guest
     private int type; // 1 normal or 2 shipper or 3 owner
     private String street, district, province, name, phone, id, image;
     private boolean ownerUpdate;
 
     private User(){
         id = "";
-        accountType = 3;
         type = 1;
         street = "";
         district = "";
@@ -26,10 +24,6 @@ public class User {
             instance = new User();
         }
         return instance;
-    }
-
-    public void setAccountType(int type){
-        accountType = type;
     }
 
     public void setType(int type){
@@ -62,10 +56,6 @@ public class User {
 
     public void setName(String name){
         this.name = name;
-    }
-
-    public int getAccountType(){
-        return accountType;
     }
 
     public int getType(){
@@ -106,7 +96,6 @@ public class User {
 
     public void reset(){
         id = "";
-        accountType = 3;
         type = 1;
         street = "";
         district = "";

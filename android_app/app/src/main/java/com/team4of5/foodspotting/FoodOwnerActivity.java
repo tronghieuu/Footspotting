@@ -198,10 +198,9 @@ public class FoodOwnerActivity extends AppCompatActivity implements View.OnClick
             map.put("info", info);
             map.put("name", name);
             map.put("price", price);
-            map.put("res_id", id_res);
 
             final FirebaseFirestore db = FirebaseFirestore.getInstance();
-            db.collection("food")
+            db.collection("restaurants").document(id_res).collection("food")
                     .add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                 @Override
                 public void onSuccess(final DocumentReference documentReference) {
@@ -218,7 +217,9 @@ public class FoodOwnerActivity extends AppCompatActivity implements View.OnClick
                                             final String imageLink = uri.toString();
                                             Map<String, Object> data = new HashMap<>();
                                             data.put("image", imageLink);
-                                            FirebaseFirestore.getInstance().collection("food")
+                                            FirebaseFirestore.getInstance().collection("restaurants")
+                                                    .document(id_res)
+                                                    .collection("food")
                                                     .document(id).update(data)
                                                     .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
@@ -241,15 +242,14 @@ public class FoodOwnerActivity extends AppCompatActivity implements View.OnClick
     }
 
     public void loadFood(){
-        FirebaseFirestore.getInstance().collection("food")
-                .whereEqualTo("res_id", id_res)
+        FirebaseFirestore.getInstance().collection("restaurants")
+                .document(id_res).collection("food")
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 if(!queryDocumentSnapshots.isEmpty()) {
                     for(DocumentSnapshot doc : queryDocumentSnapshots) {
                         Food f = new Food();
-                        f.setRes_id(doc.getString("res_id"));
                         f.setId(doc.getId());
                         f.setName(doc.getString("name"));
                         f.setInfo(doc.getString("info"));
@@ -303,7 +303,10 @@ public class FoodOwnerActivity extends AppCompatActivity implements View.OnClick
                                     if(linkImage.length() != 0){
                                         data.put("image", linkImage);
                                     }
-                                    FirebaseFirestore.getInstance().collection("food").document(mFoods.get(position).getId())
+                                    FirebaseFirestore.getInstance().collection("restaurants")
+                                            .document(id_res)
+                                            .collection("food")
+                                            .document(mFoods.get(position).getId())
                                             .update(data).addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {
@@ -328,7 +331,10 @@ public class FoodOwnerActivity extends AppCompatActivity implements View.OnClick
                         data.put("price", mEdtModifyPrice.getText().toString());
                         f.setPrice(mEdtModifyPrice.getText().toString());
                     }
-                    FirebaseFirestore.getInstance().collection("food").document(mFoods.get(position).getId())
+                    FirebaseFirestore.getInstance().collection("restaurants")
+                            .document(id_res)
+                            .collection("food")
+                            .document(mFoods.get(position).getId())
                             .update(data).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
