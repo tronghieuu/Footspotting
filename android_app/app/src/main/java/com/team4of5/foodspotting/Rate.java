@@ -22,7 +22,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
@@ -74,7 +73,7 @@ public class Rate extends AppCompatActivity {
     private Button mBtnOpenPostReview;
     private RecyclerView mRv_review;
     private String id_restaurent;
-    private String tam_username;
+    private Boolean button_show;
     private FirebaseFirestore db;
     private List<Rating> mRates;
     private RatingAdapter mAdapter;
@@ -82,12 +81,14 @@ public class Rate extends AppCompatActivity {
     private EditText etReview;
     private RatingBar rate;
     private Button btnSend;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.shop_allreview);
         getSupportActionBar().hide();
         id_restaurent = getIntent().getStringExtra("id_restaurent");
+        button_show = getIntent().getBooleanExtra("button_show",true);
         db = FirebaseFirestore.getInstance();
 
         mTextShopName = findViewById(R.id.textShopName);
@@ -130,6 +131,7 @@ public class Rate extends AppCompatActivity {
         getRes();
         queryRating();
 
+        if (button_show)
         mBtnOpenPostReview.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -162,6 +164,7 @@ public class Rate extends AppCompatActivity {
                 else  Toast.makeText(getApplicationContext(), "Login to review!!", Toast.LENGTH_SHORT).show();
             }
         });
+        else mBtnOpenPostReview.setVisibility(View.GONE);
     }
     private void openDialogReviewNew() {
 

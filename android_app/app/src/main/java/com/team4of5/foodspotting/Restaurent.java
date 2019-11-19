@@ -122,6 +122,7 @@ public class Restaurent extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(view.getContext(), Rate.class);
                 intent.putExtra("id_restaurent", id_restaurent);
+                intent.putExtra("button_show", true);
                 startActivity(intent);
             }
         });
