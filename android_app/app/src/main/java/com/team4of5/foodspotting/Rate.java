@@ -38,6 +38,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.common.primitives.UnsignedInts;
 import com.google.common.primitives.UnsignedLongs;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
@@ -150,7 +151,7 @@ public class Rate extends AppCompatActivity {
             public void onClick(View v) {
                 String useId = "";
                 useId = User.getCurrentUser().getId();
-                if (useId!="") {
+                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
                     db.collection("restaurants")
                             .document(id_restaurent)
                             .collection("rating")

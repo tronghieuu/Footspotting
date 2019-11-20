@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -126,12 +127,16 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
         mAdapter.setOnItemListener(new FoodAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Food item) {
-                mFood = item;
-                mOrderDialog.show();
-                mOrderPrice = Integer.parseInt(item.getPrice());
-                mAmountOrder = 1;
-                mTvOrderAmount.setText("1");
-                mTvOrderPrice.setText("đ"+mOrderPrice);
+                if(FirebaseAuth.getInstance().getCurrentUser() != null){
+                    mFood = item;
+                    mOrderDialog.show();
+                    mOrderPrice = Integer.parseInt(item.getPrice());
+                    mAmountOrder = 1;
+                    mTvOrderAmount.setText("1");
+                    mTvOrderPrice.setText("đ"+mOrderPrice);
+                } else{
+                    Toast.makeText(getApplicationContext(), "Bạn cần đăng nhập trước!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
