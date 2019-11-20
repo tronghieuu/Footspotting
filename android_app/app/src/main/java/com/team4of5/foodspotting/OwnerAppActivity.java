@@ -94,6 +94,9 @@ public class OwnerAppActivity extends AppCompatActivity implements View.OnClickL
                 startActivity(intent);
                 break;
             case R.id.btnDanhSachOrder:
+                Intent intent1 = new Intent(getApplicationContext(), OrderManagerActivity.class);
+                intent1.putExtra("res_id", id_res);
+                startActivity(intent1);
                 break;
             case R.id.btnDanhGiaCuaKhanhHang:
                 intent = new Intent(OwnerAppActivity.this, Rate.class);
