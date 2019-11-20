@@ -140,7 +140,6 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
             }
         });
 
-
         mShopContact.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
