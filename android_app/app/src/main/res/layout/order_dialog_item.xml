@@ -89,7 +89,7 @@
             android:id="@+id/btnDraft"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
-            android:text="Draft"
+            android:text="Add"
             android:textSize="20dp"
             android:textColor="@color/whiteTextColor"
             android:background="@color/color_red" />

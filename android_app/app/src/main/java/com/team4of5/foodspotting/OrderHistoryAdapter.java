@@ -24,13 +24,13 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import java.io.InputStream;
 import java.util.List;
 
-public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class OrderHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private List<Order> mOrders;
+    private List<UserHistory> mUserHistories;
     private Context mContext;
     private Activity mActivity;
     private OnItemClickListener mListener;
-    private BtnOngoingListener btnOngoingListener;
+    private BtnHistoryListener btnHistoryListener;
 
     // for load more
     private final int VIEW_TYPE_ITEM = 0;
@@ -43,38 +43,37 @@ public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     private int visibleThreshold = 6;
     private int lastVisibleItem, totalItemCount;
 
-    public interface BtnOngoingListener{
-        void onDetailButtonClick(View v, int position);
-        void onContactButtonClick(View v, int position);
-        void onConfirmButtonClick(View v, int position);
+    public interface BtnHistoryListener{
+        void onDeleteButtonClick(View v, int position);
+        void onVisitButtonClick(View v, int position);
     }
 
     public interface OnItemClickListener {
-        void onItemClick(Order item);
+        void onItemClick(UserHistory item);
     }
 
     public interface OnLoadMoreListener {
         void onLoadMore();
     }
 
-    public void add(int position, Order item) {
-        mOrders.add(position, item);
+    public void add(int position, UserHistory item) {
+        mUserHistories.add(position, item);
         notifyItemInserted(position);
     }
 
-    public void remove(Order item) {
-        int position = mOrders.indexOf(item);
-        mOrders.remove(position);
+    public void remove(UserHistory item) {
+        int position = mUserHistories.indexOf(item);
+        mUserHistories.remove(position);
         notifyItemRemoved(position);
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public OngoingAdapter(Context context, List<Order> orders, RecyclerView recyclerView,
-                          BtnOngoingListener btnOngoingListener) {
-        this.btnOngoingListener = btnOngoingListener;
+    public OrderHistoryAdapter(Context context, List<UserHistory> userHistories, RecyclerView recyclerView,
+                          BtnHistoryListener btnHistoryListener) {
+        this.btnHistoryListener = btnHistoryListener;
         mContext = context;
         mActivity = (Activity)context;
-        mOrders = orders;
+        mUserHistories = userHistories;
 
         // load more
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -98,7 +97,7 @@ public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
-            View view = LayoutInflater.from(mActivity).inflate(R.layout.ongoing_item, parent, false);
+            View view = LayoutInflater.from(mActivity).inflate(R.layout.history_item, parent, false);
             return new ViewHolderRow(view);
         } else if (viewType == VIEW_TYPE_LOADING) {
             View view = LayoutInflater.from(mActivity).inflate(R.layout.item_loading, parent, false);
@@ -114,84 +113,45 @@ public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         // - replace the contents of the view with that element
 
         if (holder instanceof ViewHolderRow) {
-            final Order order = mOrders.get(position);
+            UserHistory userHistory = mUserHistories.get(position);
 
-            final ViewHolderRow userViewHolder = (ViewHolderRow) holder;
+            ViewHolderRow userViewHolder = (ViewHolderRow) holder;
 
-            FirebaseFirestore.getInstance().collection("restaurants")
-                    .document(order.getRestaurant_id())
-                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if(documentSnapshot.exists()){
-                        userViewHolder.tvResName.setText(documentSnapshot.getString("name"));
-                        userViewHolder.tvResAddress.setText(
-                                documentSnapshot.getString("street")
-                                        + " " + documentSnapshot.getString("district")
-                                        + " " + documentSnapshot.getString("province")
-                        );
-                        new DownloadImageFromInternet(userViewHolder.imageViewRes)
-                                .execute(documentSnapshot.getString("image"));
-                    }
-                }
-            });
+            userViewHolder.tvResName.setText(userHistory.getRestaurant_name());
+            userViewHolder.tvResAddress.setText(userHistory.getRestaurant_address());
+            userViewHolder.tvFoodName.setText(userHistory.getFood_name());
+            userViewHolder.tvOrderAmount.setText("x"+userHistory.getFood_amount());
+            userViewHolder.tvFoodPrice.setText("đ"+userHistory.getFood_price());
+            userViewHolder.tvTotalPrice.setText(userHistory.getTotalPrice());
 
-            FirebaseFirestore.getInstance().collection("restaurants")
-                    .document(order.getRestaurant_id()).collection("food")
-                    .document(order.getFood_id()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if(documentSnapshot.exists()){
-                        userViewHolder.tvFoodName.setText(documentSnapshot.getString("name"));
-                        userViewHolder.tvFoodPrice.setText("đ"+documentSnapshot.getString("price"));
-                        userViewHolder.tvOrderAmount.setText("x"+order.getOrder_amount());
-                        userViewHolder.tvTotalPrice.setText("đ"+Integer.parseInt(documentSnapshot.getString("price"))*order.getOrder_amount());
-                        new DownloadImageFromInternet(userViewHolder.imageViewFood)
-                                .execute(documentSnapshot.getString("image"));
-                    }
-                }
-            });
-
-            userViewHolder.btnDetail.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    btnOngoingListener.onDetailButtonClick(view, position);
-                }
-            });
-
-            userViewHolder.btnContact.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    btnOngoingListener.onContactButtonClick(view, position);
-                }
-            });
-
-            userViewHolder.btnConfirm.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    btnOngoingListener.onConfirmButtonClick(view , position);
-                }
-            });
-
-            if(order.getStatus() == 1){
-                userViewHolder.btnConfirm.setVisibility(View.INVISIBLE);
-                userViewHolder.tvStatus.setText("Chờ xác nhận");
-            } else if(order.getStatus() == 2){
-                userViewHolder.btnConfirm.setVisibility(View.INVISIBLE);
-                userViewHolder.tvStatus.setText("Đã xác nhận");
-            } else if(order.getStatus() == 4) {
-                userViewHolder.btnConfirm.setVisibility(View.INVISIBLE);
-                userViewHolder.tvStatus.setText("Đang giao");
-            } else if(order.getStatus() == 5) {
-                userViewHolder.tvStatus.setText("Đã giao");
-                userViewHolder.btnConfirm.setVisibility(View.VISIBLE);
-            } else if(order.getStatus() == 0) {
+            if(userHistory.getStatus() == 0){
                 userViewHolder.tvStatus.setText("Từ chối");
-                userViewHolder.btnConfirm.setVisibility(View.VISIBLE);
+            } else if(userHistory.getStatus() == 5){
+                userViewHolder.tvStatus.setText("Đã giao");
             }
 
+            new OrderHistoryAdapter.DownloadImageFromInternet(userViewHolder.imageViewFood)
+                    .execute(userHistory.getFood_image());
+
+            new OrderHistoryAdapter.DownloadImageFromInternet(userViewHolder.imageViewRes)
+                    .execute(userHistory.getRestaurant_image());
+
+            userViewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    btnHistoryListener.onDeleteButtonClick(view , position);
+                }
+            });
+
+            userViewHolder.btnVisit.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    btnHistoryListener.onVisitButtonClick(view , position);
+                }
+            });
+
             // binding item click listner
-            userViewHolder.bind(mOrders.get(position), mListener);
+            userViewHolder.bind(mUserHistories.get(position), mListener);
         } else if (holder instanceof ViewHolderLoading) {
             ViewHolderLoading loadingViewHolder = (ViewHolderLoading) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
@@ -202,7 +162,7 @@ public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mOrders == null ? 0 : mOrders.size();
+        return mUserHistories == null ? 0 : mUserHistories.size();
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
@@ -215,7 +175,7 @@ public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemViewType(int position) {
-        return mOrders.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        return mUserHistories.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
     public void setLoaded() {
@@ -266,26 +226,24 @@ public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public class ViewHolderRow extends RecyclerView.ViewHolder {
         public TextView tvResName, tvStatus, tvFoodName, tvResAddress, tvOrderAmount, tvFoodPrice, tvTotalPrice;
         public ImageView imageViewRes, imageViewFood;
-        public Button btnDetail, btnContact, btnConfirm;
+        public Button btnDelete, btnVisit;
 
         public ViewHolderRow(View v) {
             super(v);
-            tvResName = v.findViewById(R.id.tvResName);
-            tvStatus = v.findViewById(R.id.tvStatus);
-            tvFoodName = v.findViewById(R.id.tvFoodName);
-            tvResAddress = v.findViewById(R.id.tvResAddress);
-            tvOrderAmount = v.findViewById(R.id.tvAmountOrder);
-            tvFoodPrice = v.findViewById(R.id.tvFoodPrice);
-            tvTotalPrice = v.findViewById(R.id.tvTotalPrice);
-            imageViewRes = v.findViewById(R.id.imageViewRes);
-            imageViewFood = v.findViewById(R.id.imageViewFoodOrder);
-            btnDetail = v.findViewById(R.id.btnDetail);
-            btnContact = v.findViewById(R.id.btnContact);
-            btnConfirm = v.findViewById(R.id.btnConfirm);
-            btnConfirm.setVisibility(View.INVISIBLE);
+            tvResName = v.findViewById(R.id.tvResNameHistory);
+            tvStatus = v.findViewById(R.id.tvStatusHistory);
+            tvFoodName = v.findViewById(R.id.tvFoodNameHistory);
+            tvResAddress = v.findViewById(R.id.tvResAddressHistory);
+            tvOrderAmount = v.findViewById(R.id.tvAmountOrderHistory);
+            tvFoodPrice = v.findViewById(R.id.tvFoodPriceHistory);
+            tvTotalPrice = v.findViewById(R.id.tvTotalPriceHistory);
+            imageViewRes = v.findViewById(R.id.imageViewResHistory);
+            imageViewFood = v.findViewById(R.id.imageViewFoodOrderHistory);
+            btnDelete = v.findViewById(R.id.btnDelete);
+            btnVisit = v.findViewById(R.id.btnVisit);
         }
 
-        public void bind(final Order item, final OnItemClickListener listener) {
+        public void bind(final UserHistory item, final OnItemClickListener listener) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

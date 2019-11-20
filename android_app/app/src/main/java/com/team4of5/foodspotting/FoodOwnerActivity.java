@@ -100,14 +100,22 @@ public class FoodOwnerActivity extends AppCompatActivity implements View.OnClick
             @Override
             public void onDeleteButtonClick(View v, final int position) {
                 loadingDialog.show();
-                FirebaseFirestore.getInstance().collection("food")
+                FirebaseFirestore.getInstance().collection("restaurants")
+                        .document(id_res).collection("food")
                         .document(mFoods.get(position).getId())
                         .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        mFoods.remove(position);
-                        mAdapter.notifyDataSetChanged();
-                        loadingDialog.dismiss();
+                        StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+                        StorageReference ref = storageReference.child("foodImage/"+ mFoods.get(position).getId());
+                        ref.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                mFoods.remove(position);
+                                mAdapter.notifyDataSetChanged();
+                                loadingDialog.dismiss();
+                            }
+                        });
                     }
                 });
             }

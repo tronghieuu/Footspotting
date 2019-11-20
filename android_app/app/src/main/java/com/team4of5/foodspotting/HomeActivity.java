@@ -26,7 +26,6 @@ public class HomeActivity extends AppCompatActivity {
         getSupportActionBar().hide();
         bottomNav.setSelectedItemId(R.id.nav_home);
         //getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new HomeFragment()).commit();
-        Intent intent = new Intent();
     }
 
     private BottomNavigationView.OnNavigationItemSelectedListener navListener =
@@ -81,7 +80,7 @@ public class HomeActivity extends AppCompatActivity {
                             ft.detach(frg);
                             ft.attach(frg);
                             ft.commit();
-                        } else if((fragTag.contentEquals("List") || fragTag.contentEquals("Noti")) && User.getCurrentUser().isListUpdate()){
+                        } else if(fragTag.contentEquals("List") && User.getCurrentUser().isListUpdate()){
                             User.getCurrentUser().setListUpdate(false);
                             Fragment frg = getSupportFragmentManager().findFragmentByTag(fragTag);
                             FragmentTransaction ft = t.beginTransaction();

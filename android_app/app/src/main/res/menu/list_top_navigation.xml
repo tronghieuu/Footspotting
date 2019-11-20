@@ -7,6 +7,6 @@
         android:id="@+id/nav_history"
         android:title="History"></item>
     <item
-        android:id="@+id/nav_draft"
-        android:title="Draft"></item>
+        android:id="@+id/nav_cart"
+        android:title="Cart"></item>
 </menu>

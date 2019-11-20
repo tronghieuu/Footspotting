@@ -58,7 +58,6 @@ public class Rate extends AppCompatActivity {
     private TextView mTextTotalRating;
     private RatingBar mRatingShopOverall;
     private TextView mTextRatingNumber;
-    private TextView mTextShopName;
     private LinearLayout mLl_percentage_5;
     private LinearLayout mLl_percentage_4;
     private LinearLayout mLl_percentage_3;
@@ -81,6 +80,7 @@ public class Rate extends AppCompatActivity {
     private EditText etReview;
     private RatingBar rate;
     private Button btnSend;
+    private Button mBtnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,7 +91,13 @@ public class Rate extends AppCompatActivity {
         button_show = getIntent().getBooleanExtra("button_show",true);
         db = FirebaseFirestore.getInstance();
 
-        mTextShopName = findViewById(R.id.textShopName);
+        mBtnBack = findViewById(R.id.btnBackShopAllReview);
+        mBtnBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                finish();
+            }
+        });
         mTextTotalRating = findViewById(R.id.textTotalRating);
         mRatingShopOverall = findViewById(R.id.ratingShopOverall);
         mTextRatingNumber = findViewById(R.id.textRatingNumber);
@@ -123,12 +129,18 @@ public class Rate extends AppCompatActivity {
         mRv_review = findViewById(R.id.rvReviewList);
         mRv_review.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false));
         mAdapter = new RatingAdapter(this, mRates, mRv_review);
+        mAdapter.setOnItemListener(new RatingAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Rating item) {
+
+            }
+        });
         mRv_review.setAdapter(mAdapter);
 
         mTextTotalRating.setText("0.0");
         mRatingShopOverall.setRating(0);
         mTextRatingNumber.setText("0");
-        getRes();
+
         queryRating();
 
         if (button_show)
@@ -149,9 +161,38 @@ public class Rate extends AppCompatActivity {
                                     if(queryDocumentSnapshots.isEmpty()){
                                         openDialogReviewNew();
                                     }else {
-                                        Toast.makeText(getApplicationContext(), "You have already reviewed!", Toast.LENGTH_SHORT).show();
+                                        final DocumentSnapshot doc = queryDocumentSnapshots.getDocuments().get(0);
+                                        etReview = dialog.findViewById(R.id.et_review);
+                                        etReview.setText(doc.getString("comment"));
+                                        rate = dialog.findViewById(R.id.rate_star);
+                                        rate.setRating(Float.parseFloat(doc.getString("rate")));
+                                        btnSend = dialog.findViewById(R.id.btn_send_review);
+                                        btnSend.setText("Chỉnh sửa đánh giá");
+                                        btnSend.setOnClickListener(new View.OnClickListener() {
+                                            @Override
+                                            public void onClick(View view) {
+                                                dialog.dismiss();
+                                                Map<String, Object> map = new HashMap<>();
+                                                map.put("comment", etReview.getText().toString());
+                                                map.put("rate", String.valueOf(rate.getRating()));
+                                                map.put("time", FieldValue.serverTimestamp());
+                                                db.collection("restaurants")
+                                                        .document(id_restaurent)
+                                                        .collection("rating")
+                                                        .document(doc.getId())
+                                                        .update(map).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                    @Override
+                                                    public void onSuccess(Void aVoid) {
+                                                        Toast.makeText(getApplicationContext(), "Done review", Toast.LENGTH_SHORT).show();
+                                                        finish();
+                                                        startActivity(getIntent());
+                                                        User.getCurrentUser().setOwnerUpdate(true);
+                                                    }
+                                                });
+                                        }
+                                        });
                                     }
-
+                                    dialog.show();
                                 }
                             })
                             .addOnFailureListener(new OnFailureListener() {
@@ -201,6 +242,7 @@ public class Rate extends AppCompatActivity {
         });
         dialog.show();
     }
+
 
     private void setOverallReview(){
         mTextRatingNumber.setText(String.valueOf(mRates.size()));
@@ -278,17 +320,4 @@ public class Rate extends AppCompatActivity {
 
 
     }
-
-    public void getRes(){
-        db.collection("restaurants")
-                .document(id_restaurent)
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                DocumentSnapshot doc = task.getResult();
-                mTextShopName.setText(doc.getString("name"));
-            }
-        });
-    }
-
 }
