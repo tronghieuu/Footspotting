@@ -105,8 +105,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 Toast.makeText(getActivity(), "Lịch sử mua hàng", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnShipperApp:
-                Toast.makeText(getActivity(), "Ứng dụng cho Shipper", Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(getContext(),RegisterShipperActivity.class));
+                shipperApp();
                 break;
             case R.id.btnOwnerApp:
                 ownerApp();
@@ -182,6 +181,21 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         ft.detach(frg);
         ft.attach(frg);
         ft.commit();
+    }
+
+    public void shipperApp(){
+        if(FirebaseAuth.getInstance().getCurrentUser() == null){
+            Toast.makeText(getActivity(), "Hãy đăng nhập trước!", Toast.LENGTH_SHORT).show();
+        }
+        else if(User.getCurrentUser().getType() == 3){
+            Toast.makeText(getActivity(), "Chủ quán không thể sử dụng chức năng này", Toast.LENGTH_SHORT).show();
+        }
+        else if(User.getCurrentUser().getType() == 1) {
+            startActivity(new Intent(getActivity(), RegisterShipperActivity.class));
+        }
+        else if(User.getCurrentUser().getType() == 2) {
+            startActivity(new Intent(getActivity(), ShipperAppActivity.class));
+        }
     }
 
     public void ownerApp(){
