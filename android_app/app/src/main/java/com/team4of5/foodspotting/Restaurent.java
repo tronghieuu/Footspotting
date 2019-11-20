@@ -21,13 +21,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.material.card.MaterialCardView;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -175,31 +172,21 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
                 break;
             case R.id.btnOrder:
                 mOrderDialog.dismiss();
-                long timestamp = new Date().getTime();
+                final long timestamp = new Date().getTime();
                 dialog.show();
                 Map<String, Object> order = new HashMap<>();
                 order.put("timestamp", timestamp);
                 order.put("user_id", User.getCurrentUser().getId());
                 order.put("food_id", mFood.getId());
-                order.put("amount", mAmountOrder);
-                order.put("status", 1);
-                FirebaseFirestore.getInstance().collection("restaurants")
-                        .document(id_restaurent)
-                        .collection("order")
+                order.put("amount", mAmountOrder+"");
+                order.put("status", "1");
+                order.put("restaurant_id", id_restaurent);
+                FirebaseFirestore.getInstance().collection("order")
                         .add(order).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
-                        Map<String, Object> user_order = new HashMap<>();
-                        user_order.put("restaurant_id", id_restaurent);
-                        FirebaseFirestore.getInstance().collection("user")
-                                .document(User.getCurrentUser().getId())
-                                .collection("restaurant_id_order")
-                                .add(user_order).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                            @Override
-                            public void onSuccess(DocumentReference documentReference) {
-                                dialog.dismiss();
-                            }
-                        });
+                        User.getCurrentUser().setListUpdate(true);
+                        dialog.dismiss();
                     }
                 });
                 break;

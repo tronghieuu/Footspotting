@@ -124,6 +124,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 Toast.makeText(getActivity(), "Cài đặt cá nhân", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnLogout:
+                User.getCurrentUser().setListUpdate(true);
                 logout();
         }
     }

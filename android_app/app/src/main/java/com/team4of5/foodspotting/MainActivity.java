@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 public class MainActivity extends AppCompatActivity {
@@ -65,18 +66,8 @@ public class MainActivity extends AppCompatActivity {
                     User.getCurrentUser().setDistrict(doc.getString("district"));
                     User.getCurrentUser().setProvince(doc.getString("province"));
                     User.getCurrentUser().setPhone(doc.getString("phone"));
-                    FirebaseFirestore.getInstance().collection("user").document(doc.getId())
-                            .collection("restaurant_id_order")
-                            .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                        @Override
-                        public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                            for(DocumentSnapshot doc:queryDocumentSnapshots){
-                                User.getCurrentUser().getResIdList().add(doc.getString("restaurant_id"));
-                            }
-                            startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                            finish();
-                        }
-                    });
+                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                    finish();
                 }
             }
         });

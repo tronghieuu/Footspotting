@@ -17,12 +17,16 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.InputStream;
 import java.util.List;
 
 public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private List<OrderOngoing> mOrderOngoings;
+    private List<Order> mOrders;
     private Context mContext;
     private Activity mActivity;
     private OnItemClickListener mListener;
@@ -41,34 +45,35 @@ public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     public interface BtnOngoingListener{
         void onDetailButtonClick(View v, int position);
+        void onContactButtonClick(View v, int position);
     }
 
     public interface OnItemClickListener {
-        void onItemClick(OrderOngoing item);
+        void onItemClick(Order item);
     }
 
     public interface OnLoadMoreListener {
         void onLoadMore();
     }
 
-    public void add(int position, OrderOngoing item) {
-        mOrderOngoings.add(position, item);
+    public void add(int position, Order item) {
+        mOrders.add(position, item);
         notifyItemInserted(position);
     }
 
-    public void remove(OrderOngoing item) {
-        int position = mOrderOngoings.indexOf(item);
-        mOrderOngoings.remove(position);
+    public void remove(Order item) {
+        int position = mOrders.indexOf(item);
+        mOrders.remove(position);
         notifyItemRemoved(position);
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public OngoingAdapter(Context context, List<OrderOngoing> orderOngoings, RecyclerView recyclerView,
+    public OngoingAdapter(Context context, List<Order> orders, RecyclerView recyclerView,
                           BtnOngoingListener btnOngoingListener) {
         this.btnOngoingListener = btnOngoingListener;
         mContext = context;
         mActivity = (Activity)context;
-        mOrderOngoings = orderOngoings;
+        mOrders = orders;
 
         // load more
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -108,37 +113,66 @@ public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
         // - replace the contents of the view with that element
 
         if (holder instanceof ViewHolderRow) {
-            OrderOngoing orderOngoing = mOrderOngoings.get(position);
+            final Order order = mOrders.get(position);
 
-            ViewHolderRow userViewHolder = (ViewHolderRow) holder;
+            final ViewHolderRow userViewHolder = (ViewHolderRow) holder;
 
+            FirebaseFirestore.getInstance().collection("restaurants")
+                    .document(order.getRestaurant_id())
+                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if(documentSnapshot.exists()){
+                        userViewHolder.tvResName.setText(documentSnapshot.getString("name"));
+                        userViewHolder.tvResAddress.setText(
+                                documentSnapshot.getString("street")
+                                        + " " + documentSnapshot.getString("district")
+                                        + " " + documentSnapshot.getString("province")
+                        );
+                        new DownloadImageFromInternet(userViewHolder.imageViewRes)
+                                .execute(documentSnapshot.getString("image"));
+                    }
+                }
+            });
 
-            userViewHolder.tvResName.setText(orderOngoing.getResName());
-            userViewHolder.tvResAddress.setText(orderOngoing.getResAddress());
-            userViewHolder.tvFoodName.setText(orderOngoing.getFoodName());
-            userViewHolder.tvFoodPrice.setText(orderOngoing.getFoodPrice());
-            userViewHolder.tvOrderAmount.setText(orderOngoing.getFoodAmount());
-            userViewHolder.tvTotalPrice.setText(orderOngoing.getTotalPrice());
+            FirebaseFirestore.getInstance().collection("restaurants")
+                    .document(order.getRestaurant_id()).collection("food")
+                    .document(order.getFood_id()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if(documentSnapshot.exists()){
+                        userViewHolder.tvFoodName.setText(documentSnapshot.getString("name"));
+                        userViewHolder.tvFoodPrice.setText("đ"+documentSnapshot.getString("price"));
+                        userViewHolder.tvOrderAmount.setText("x"+order.getOrder_amount());
+                        userViewHolder.tvTotalPrice.setText("đ"+Integer.parseInt(documentSnapshot.getString("price"))*order.getOrder_amount());
+                        new DownloadImageFromInternet(userViewHolder.imageViewFood)
+                                .execute(documentSnapshot.getString("image"));
+                    }
+                }
+            });
+
             userViewHolder.btnDetail.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     btnOngoingListener.onDetailButtonClick(view, position);
                 }
             });
-            if(orderOngoing.getStatus() == 1){
+
+            userViewHolder.btnContact.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    btnOngoingListener.onContactButtonClick(view, position);
+                }
+            });
+
+            if(order.getStatus() == 1){
                 userViewHolder.tvStatus.setText("Chờ xác nhận");
-            } else if(orderOngoing.getStatus() == 2){
-                userViewHolder.tvStatus.setText("Đang giao");
+            } else if(order.getStatus() == 2){
+                userViewHolder.tvStatus.setText("Đã xác nhận");
             }
 
-            new DownloadImageFromInternet(userViewHolder.imageViewFood)
-                    .execute(orderOngoing.getFoodImage());
-
-            new DownloadImageFromInternet(userViewHolder.imageViewRes)
-                    .execute(orderOngoing.getResImage());
-
             // binding item click listner
-            userViewHolder.bind(mOrderOngoings.get(position), mListener);
+            userViewHolder.bind(mOrders.get(position), mListener);
         } else if (holder instanceof ViewHolderLoading) {
             ViewHolderLoading loadingViewHolder = (ViewHolderLoading) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
@@ -149,7 +183,7 @@ public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mOrderOngoings == null ? 0 : mOrderOngoings.size();
+        return mOrders == null ? 0 : mOrders.size();
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
@@ -162,7 +196,7 @@ public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
 
     @Override
     public int getItemViewType(int position) {
-        return mOrderOngoings.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        return mOrders.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
     public void setLoaded() {
@@ -213,7 +247,7 @@ public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public class ViewHolderRow extends RecyclerView.ViewHolder {
         public TextView tvResName, tvStatus, tvFoodName, tvResAddress, tvOrderAmount, tvFoodPrice, tvTotalPrice;
         public ImageView imageViewRes, imageViewFood;
-        public Button btnDetail;
+        public Button btnDetail, btnContact;
 
         public ViewHolderRow(View v) {
             super(v);
@@ -227,9 +261,10 @@ public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             imageViewRes = v.findViewById(R.id.imageViewRes);
             imageViewFood = v.findViewById(R.id.imageViewFoodOrder);
             btnDetail = v.findViewById(R.id.btnDetail);
+            btnContact = v.findViewById(R.id.btnContact);
         }
 
-        public void bind(final OrderOngoing item, final OnItemClickListener listener) {
+        public void bind(final Order item, final OnItemClickListener listener) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

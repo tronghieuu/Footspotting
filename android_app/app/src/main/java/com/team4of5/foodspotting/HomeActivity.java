@@ -74,14 +74,15 @@ public class HomeActivity extends AppCompatActivity {
 
                     if(getSupportFragmentManager().findFragmentByTag(fragTag)!=null) {
                         t.beginTransaction().show(getSupportFragmentManager().findFragmentByTag(fragTag)).commit();
-                        if(!fragTag.contentEquals("Home")){
+                        if(fragTag.contentEquals("Home") && User.getCurrentUser().getOwnerUpdate()){
+                            User.getCurrentUser().setOwnerUpdate(false);
                             Fragment frg = getSupportFragmentManager().findFragmentByTag(fragTag);
                             FragmentTransaction ft = t.beginTransaction();
                             ft.detach(frg);
                             ft.attach(frg);
                             ft.commit();
-                        } else if(fragTag.contentEquals("Home") && User.getCurrentUser().getOwnerUpdate()){
-                            User.getCurrentUser().setOwnerUpdate(false);
+                        } else if((fragTag.contentEquals("List") || fragTag.contentEquals("Noti")) && User.getCurrentUser().isListUpdate()){
+                            User.getCurrentUser().setListUpdate(false);
                             Fragment frg = getSupportFragmentManager().findFragmentByTag(fragTag);
                             FragmentTransaction ft = t.beginTransaction();
                             ft.detach(frg);

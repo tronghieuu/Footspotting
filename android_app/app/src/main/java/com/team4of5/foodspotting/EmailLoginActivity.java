@@ -153,6 +153,7 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                                             user.setProvince(doc.getString("province"));
                                             user.setPhone(doc.getString("phone"));
                                         }
+                                        User.getCurrentUser().setListUpdate(true);
                                         dialog.dismiss();
                                         setResult(Activity.RESULT_CANCELED, new Intent());
                                         finish();
@@ -209,6 +210,7 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                                     public void onSuccess(DocumentReference documentReference) {
                                         user.setId(documentReference.getId());
                                         dialog.dismiss();
+                                        User.getCurrentUser().setListUpdate(true);
                                         setResult(Activity.RESULT_CANCELED, new Intent());
                                         finish();
                                     }
