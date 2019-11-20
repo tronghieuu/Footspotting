@@ -13,20 +13,24 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+
 import java.io.InputStream;
 import java.util.List;
 
-public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private List<Food> mFoods;
+    private List<Order> mOrders;
     private Context mContext;
     private Activity mActivity;
     private OnItemClickListener mListener;
+    private BtnOngoingListener btnOngoingListener;
 
     // for load more
     private final int VIEW_TYPE_ITEM = 0;
@@ -39,31 +43,37 @@ public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private int visibleThreshold = 6;
     private int lastVisibleItem, totalItemCount;
 
+    public interface BtnOngoingListener{
+        void onDetailButtonClick(View v, int position);
+        void onContactButtonClick(View v, int position);
+    }
+
     public interface OnItemClickListener {
-        void onItemClick(Food item);
+        void onItemClick(Order item);
     }
 
     public interface OnLoadMoreListener {
         void onLoadMore();
     }
 
-    public void add(int position, Food item) {
-        mFoods.add(position, item);
+    public void add(int position, Order item) {
+        mOrders.add(position, item);
         notifyItemInserted(position);
     }
 
-    public void remove(Food item) {
-        int position = mFoods.indexOf(item);
-        mFoods.remove(position);
+    public void remove(Order item) {
+        int position = mOrders.indexOf(item);
+        mOrders.remove(position);
         notifyItemRemoved(position);
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public FoodAdapter(Context context, List<Food> foods, RecyclerView recyclerView) {
-
+    public OngoingAdapter(Context context, List<Order> orders, RecyclerView recyclerView,
+                          BtnOngoingListener btnOngoingListener) {
+        this.btnOngoingListener = btnOngoingListener;
         mContext = context;
         mActivity = (Activity)context;
-        mFoods = foods;
+        mOrders = orders;
 
         // load more
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -87,7 +97,7 @@ public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
-            View view = LayoutInflater.from(mActivity).inflate(R.layout.shop_item, parent, false);
+            View view = LayoutInflater.from(mActivity).inflate(R.layout.ongoing_item, parent, false);
             return new ViewHolderRow(view);
         } else if (viewType == VIEW_TYPE_LOADING) {
             View view = LayoutInflater.from(mActivity).inflate(R.layout.item_loading, parent, false);
@@ -98,23 +108,71 @@ public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
         if (holder instanceof ViewHolderRow) {
-            Food food = mFoods.get(position);
+            final Order order = mOrders.get(position);
 
-            ViewHolderRow userViewHolder = (ViewHolderRow) holder;
+            final ViewHolderRow userViewHolder = (ViewHolderRow) holder;
 
+            FirebaseFirestore.getInstance().collection("restaurants")
+                    .document(order.getRestaurant_id())
+                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if(documentSnapshot.exists()){
+                        userViewHolder.tvResName.setText(documentSnapshot.getString("name"));
+                        userViewHolder.tvResAddress.setText(
+                                documentSnapshot.getString("street")
+                                        + " " + documentSnapshot.getString("district")
+                                        + " " + documentSnapshot.getString("province")
+                        );
+                        new DownloadImageFromInternet(userViewHolder.imageViewRes)
+                                .execute(documentSnapshot.getString("image"));
+                    }
+                }
+            });
 
-            userViewHolder.tvPrice.setText("đ"+food.getPrice());
-            userViewHolder.tvFoodName.setText(food.getName());
-            new DownloadImageFromInternet(userViewHolder.imageView)
-                    .execute(food.getImage());
+            FirebaseFirestore.getInstance().collection("restaurants")
+                    .document(order.getRestaurant_id()).collection("food")
+                    .document(order.getFood_id()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                @Override
+                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                    if(documentSnapshot.exists()){
+                        userViewHolder.tvFoodName.setText(documentSnapshot.getString("name"));
+                        userViewHolder.tvFoodPrice.setText("đ"+documentSnapshot.getString("price"));
+                        userViewHolder.tvOrderAmount.setText("x"+order.getOrder_amount());
+                        userViewHolder.tvTotalPrice.setText("đ"+Integer.parseInt(documentSnapshot.getString("price"))*order.getOrder_amount());
+                        new DownloadImageFromInternet(userViewHolder.imageViewFood)
+                                .execute(documentSnapshot.getString("image"));
+                    }
+                }
+            });
+
+            userViewHolder.btnDetail.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    btnOngoingListener.onDetailButtonClick(view, position);
+                }
+            });
+
+            userViewHolder.btnContact.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    btnOngoingListener.onContactButtonClick(view, position);
+                }
+            });
+
+            if(order.getStatus() == 1){
+                userViewHolder.tvStatus.setText("Chờ xác nhận");
+            } else if(order.getStatus() == 2){
+                userViewHolder.tvStatus.setText("Đã xác nhận");
+            }
 
             // binding item click listner
-            userViewHolder.bind(mFoods.get(position), mListener);
+            userViewHolder.bind(mOrders.get(position), mListener);
         } else if (holder instanceof ViewHolderLoading) {
             ViewHolderLoading loadingViewHolder = (ViewHolderLoading) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
@@ -125,7 +183,7 @@ public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mFoods == null ? 0 : mFoods.size();
+        return mOrders == null ? 0 : mOrders.size();
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
@@ -138,7 +196,7 @@ public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     @Override
     public int getItemViewType(int position) {
-        return mFoods.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        return mOrders.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
     public void setLoaded() {
@@ -187,18 +245,26 @@ public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public class ViewHolderRow extends RecyclerView.ViewHolder {
-        public TextView tvFoodName, tvPrice;
-        public ImageView imageView;
-
+        public TextView tvResName, tvStatus, tvFoodName, tvResAddress, tvOrderAmount, tvFoodPrice, tvTotalPrice;
+        public ImageView imageViewRes, imageViewFood;
+        public Button btnDetail, btnContact;
 
         public ViewHolderRow(View v) {
             super(v);
-            tvFoodName = v.findViewById(R.id.textFoodName);
-            imageView = v.findViewById(R.id.imageFood);
-            tvPrice = v.findViewById(R.id.textFoodPrice);
+            tvResName = v.findViewById(R.id.tvResName);
+            tvStatus = v.findViewById(R.id.tvStatus);
+            tvFoodName = v.findViewById(R.id.tvFoodName);
+            tvResAddress = v.findViewById(R.id.tvResAddress);
+            tvOrderAmount = v.findViewById(R.id.tvAmountOrder);
+            tvFoodPrice = v.findViewById(R.id.tvFoodPrice);
+            tvTotalPrice = v.findViewById(R.id.tvTotalPrice);
+            imageViewRes = v.findViewById(R.id.imageViewRes);
+            imageViewFood = v.findViewById(R.id.imageViewFoodOrder);
+            btnDetail = v.findViewById(R.id.btnDetail);
+            btnContact = v.findViewById(R.id.btnContact);
         }
 
-        public void bind(final Food item, final OnItemClickListener listener) {
+        public void bind(final Order item, final OnItemClickListener listener) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

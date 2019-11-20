@@ -107,7 +107,7 @@ public class FoodAdapterPreview extends RecyclerView.Adapter<RecyclerView.ViewHo
 
             ViewHolderRow userViewHolder = (ViewHolderRow) holder;
 
-            userViewHolder.tvPrice.setText(food.getPrice());
+            userViewHolder.tvPrice.setText("đ"+food.getPrice());
             userViewHolder.tvFoodName.setText(food.getName());
             new DownloadImageFromInternet(userViewHolder.imageView)
                     .execute(food.getImage());

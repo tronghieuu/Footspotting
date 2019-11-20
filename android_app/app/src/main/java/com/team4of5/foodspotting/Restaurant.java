@@ -1,12 +1,5 @@
 package com.team4of5.foodspotting;
 
-import androidx.annotation.NonNull;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -117,31 +110,6 @@ public class Restaurant implements Serializable {
         return rate;
     }
     public List<Rating> getRatingList(){return ratingList;}
-
-    public void updateResInfo(String idd){
-        FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("restaurants").document(idd)
-                .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
-                    DocumentSnapshot doc = task.getResult();
-                    id = doc.getId();
-                    name = doc.getString("name");
-                    district = doc.getString("district");
-                    image = doc.getString("image");
-                    opening_time = doc.getString("opening_time");
-                    closing_time = doc.getString("closing_time");
-                    phone = doc.getString("phone");
-                    province = doc.getString("province");
-                    rate = Float.parseFloat(doc.getString("rate"));
-                    street = doc.getString("street");
-                    type = doc.getString("type");
-                    user_id = doc.getString("user_id");
-                }
-            }
-        });
-    }
 
     public String getClosing_time() {
         return closing_time;

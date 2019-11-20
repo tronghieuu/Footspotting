@@ -1,53 +1,84 @@
 package com.team4of5.foodspotting;
 
-import java.io.Serializable;
+public class Order {
+    private String restaurant_id, food_id, user_id, id;
+    private int order_amount, status;
+    private long timestamp;
 
-public class Order implements Serializable {
-    private String id, food_id, time, user_id;
-    private int amount;
     public Order(){
-        this.id ="";
-        this.amount =0;
-        this.food_id ="";
-        this.time = "";
-        this.user_id ="";
+        restaurant_id = "";
+        food_id = "";
+        user_id = "";
+        order_amount = 1;
+        status = 1;
+        timestamp = 0;
+        id = "";
     }
-    private Order(String id, int amount, String food_id, String time,String user_id){
-        this.id =id;
-        this.amount =amount;
+
+    public Order(String restaurant_id, String food_id, String user_id, int order_amount, int status, long timestamp, String id){
+        this.restaurant_id = restaurant_id;
         this.food_id = food_id;
-        this.time = time;
-        this.user_id ="";
-    }
-    public void setId(String id){
+        this.user_id = user_id;
+        this.order_amount = order_amount;
+        this.status = status;
+        this.timestamp = timestamp;
         this.id = id;
     }
-    public void setFood_id(String food_id){
-        this.food_id = food_id;
-    }
-    public void setTime(String time){
-        this.time = time;
-    }
-    public void setUser_id(String user_id){
-        this.user_id = user_id;
-    }
-    public void setAmount(int amount){
-        this.amount = amount;
+
+    public String getRestaurant_id() {
+        return restaurant_id;
     }
 
-    public String getId(){
-        return id;
+    public void setRestaurant_id(String restaurant_id) {
+        this.restaurant_id = restaurant_id;
     }
-    public String getFood_id(){
+
+    public String getFood_id() {
         return food_id;
     }
-    public String getTime(){
-        return time;
+
+    public void setFood_id(String food_id) {
+        this.food_id = food_id;
     }
-    public String getUser_id(){
+
+    public String getUser_id() {
         return user_id;
     }
-    public int getAmount(){
-        return getAmount();
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public int getOrder_amount() {
+        return order_amount;
+    }
+
+    public void setOrder_amount(int order_amount) {
+        this.order_amount = order_amount;
+    }
+
+    public long getTimestamp() {
+        return timestamp;
+    }
+
+    public void setTimestamp(long timestamp) {
+        this.timestamp = timestamp;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
     }
 }
+

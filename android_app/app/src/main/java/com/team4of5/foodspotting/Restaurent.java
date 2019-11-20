@@ -1,47 +1,43 @@
 package com.team4of5.foodspotting;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.Manifest;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
-import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.RatingBar;
-import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Restaurent extends AppCompatActivity {
+public class Restaurent extends AppCompatActivity implements View.OnClickListener {
     private TextView mShopName;
     private TextView mShopType;
     private TextView mOpeningTime;
@@ -51,7 +47,6 @@ public class Restaurent extends AppCompatActivity {
     private RatingBar mRatingShopOverallStar;
     private TextView mShopAddress;
     private TextView mShowAllReview;
-    private SearchView mSearchFood;
     private RecyclerView mRecylerView;
     private String phonenum;
     private String id_restaurent;
@@ -59,7 +54,11 @@ public class Restaurent extends AppCompatActivity {
     private ImageView mImageView;
     private List<Food> mFoods;
     private FoodAdapter mAdapter;
-    private Dialog dialog;
+    private Dialog dialog, mOrderDialog;
+    private TextView mTvOrderAmount, mTvOrderPrice;
+    private Button mBtnDecrease, mBtnIncrease, mBtnDraft, mBtnOrder;
+    private int mAmountOrder, mOrderPrice;
+    private Food mFood;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +77,6 @@ public class Restaurent extends AppCompatActivity {
         mRatingShopOverallStar = findViewById(R.id.ratingShopOverallStar);
         mShopAddress = findViewById(R.id.textShopAddress);
         mShowAllReview = findViewById(R.id.textShopShowAllReview);
-        mSearchFood = findViewById(R.id.searchFood);
         mImageView = findViewById(R.id.imageShop);
 
         dialog = new Dialog(this);
@@ -86,6 +84,27 @@ public class Restaurent extends AppCompatActivity {
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         dialog.setContentView(R.layout.item_loading);
         dialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+
+            }
+        });
+
+        mOrderDialog = new Dialog(this);
+        mOrderDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        mOrderDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        mOrderDialog.setContentView(R.layout.order_dialog_item);
+        mTvOrderAmount = mOrderDialog.findViewById(R.id.tvOrderAmount);
+        mTvOrderPrice = mOrderDialog.findViewById(R.id.tvOrderPrice);
+        mBtnDecrease = mOrderDialog.findViewById(R.id.btnDecrease);
+        mBtnDecrease.setOnClickListener(this);
+        mBtnIncrease = mOrderDialog.findViewById(R.id.btnIncrease);
+        mBtnIncrease.setOnClickListener(this);
+        mBtnDraft = mOrderDialog.findViewById(R.id.btnDraft);
+        mBtnDraft.setOnClickListener(this);
+        mBtnOrder = mOrderDialog.findViewById(R.id.btnOrder);
+        mBtnOrder.setOnClickListener(this);
+        mOrderDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
 
@@ -103,7 +122,12 @@ public class Restaurent extends AppCompatActivity {
         mAdapter.setOnItemListener(new FoodAdapter.OnItemClickListener() {
             @Override
             public void onItemClick(Food item) {
-                Toast.makeText(getApplicationContext(), "Food detail", Toast.LENGTH_SHORT).show();
+                mFood = item;
+                mOrderDialog.show();
+                mOrderPrice = Integer.parseInt(item.getPrice());
+                mAmountOrder = 1;
+                mTvOrderAmount.setText("1");
+                mTvOrderPrice.setText("đ"+mOrderPrice);
             }
         });
 
@@ -126,6 +150,47 @@ public class Restaurent extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+    }
+
+    @Override
+    public void onClick(View view) {
+        switch (view.getId()){
+            case R.id.btnIncrease:
+                mAmountOrder++;
+                mTvOrderAmount.setText(mAmountOrder+"");
+                mTvOrderPrice.setText("đ"+String.valueOf(mOrderPrice*mAmountOrder));
+                break;
+            case R.id.btnDecrease:
+                if(mAmountOrder>1){
+                    mAmountOrder--;
+                    mTvOrderAmount.setText(mAmountOrder);
+                    mTvOrderPrice.setText("đ"+String.valueOf(mOrderPrice*mAmountOrder));
+                }
+                break;
+            case R.id.btnDraft:
+                mOrderDialog.dismiss();
+                break;
+            case R.id.btnOrder:
+                mOrderDialog.dismiss();
+                final long timestamp = new Date().getTime();
+                dialog.show();
+                Map<String, Object> order = new HashMap<>();
+                order.put("timestamp", timestamp);
+                order.put("user_id", User.getCurrentUser().getId());
+                order.put("food_id", mFood.getId());
+                order.put("amount", mAmountOrder+"");
+                order.put("status", "1");
+                order.put("restaurant_id", id_restaurent);
+                FirebaseFirestore.getInstance().collection("order")
+                        .add(order).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                    @Override
+                    public void onSuccess(DocumentReference documentReference) {
+                        User.getCurrentUser().setListUpdate(true);
+                        dialog.dismiss();
+                    }
+                });
+                break;
+        }
     }
 
     public void queryFood(){

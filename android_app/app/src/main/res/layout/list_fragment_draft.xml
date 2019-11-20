@@ -11,10 +11,10 @@
         android:layout_height="match_parent"
         android:background="@color/cardview_light_background"
         android:orientation="vertical">
-        <ListView
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/lv_ongoing"></ListView>
+            android:layout_height="match_parent"
+            android:id="@+id/recycleViewDraft" />
     </LinearLayout>
 
     <RelativeLayout
@@ -29,7 +29,7 @@
             android:layout_margin="100dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:src="@drawable/logo_login"></ImageView>
+            android:src="@drawable/logo_login" />
 
         <TextView
             android:layout_marginTop="50dp"
@@ -39,6 +39,6 @@
             android:layout_centerInParent="true"
             android:textStyle="bold"
             android:textSize="20sp"
-            android:text="Please login to continue!"></TextView>
+            android:text="Please login to continue!" />
     </RelativeLayout>
 </RelativeLayout>

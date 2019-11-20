@@ -5,16 +5,6 @@
     android:layout_height="match_parent"
     android:background="@color/color_black_transparent">
 
-    <SearchView
-        android:id="@+id/searchFood"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:queryHint="Tìm kiếm món ăn"
-        android:iconifiedByDefault="false"
-        android:layout_alignParentTop="true"
-        android:layout_margin="10dp"
-        android:focusable="false"
-        android:background="@color/color_white"/>
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -200,12 +190,29 @@
 
             </FrameLayout>
 
+            <RelativeLayout
+                android:layout_marginHorizontal="10dp"
+                android:layout_marginTop="10dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/color_red">
+
+                <TextView
+                    android:textStyle="bold"
+                    android:textColor="@color/whiteTextColor"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="30dp"
+                    android:text="ORDER"
+                    android:layout_centerInParent="true" />
+            </RelativeLayout>
 
             <androidx.recyclerview.widget.RecyclerView
+                android:layout_marginHorizontal="10dp"
                 android:id="@+id/recycleViewFoodList"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/color_white"
+                android:background="@color/color_black_transparent"
                 android:layout_marginBottom="10dp"/>
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>

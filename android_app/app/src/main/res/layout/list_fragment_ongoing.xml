@@ -10,10 +10,11 @@
         android:layout_height="match_parent"
         android:background="@color/cardview_light_background"
         android:orientation="vertical">
-        <ListView
+        <androidx.recyclerview.widget.RecyclerView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/lv_ongoing"></ListView>
+            android:layout_height="match_parent"
+            android:id="@+id/recycleViewOngoing"
+            android:background="@color/color_black_transparent"/>
     </LinearLayout>
 
     <RelativeLayout
