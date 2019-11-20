@@ -154,6 +154,9 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                                             user.setPhone(doc.getString("phone"));
                                         }
                                         User.getCurrentUser().setListUpdate(true);
+                                        User.getCurrentUser().setHistoryUpdate(true);
+                                        User.getCurrentUser().setCartUpdate(true);
+                                        User.getCurrentUser().setOrderUpdate(true);
                                         dialog.dismiss();
                                         setResult(Activity.RESULT_CANCELED, new Intent());
                                         finish();
@@ -211,6 +214,9 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                                         user.setId(documentReference.getId());
                                         dialog.dismiss();
                                         User.getCurrentUser().setListUpdate(true);
+                                        User.getCurrentUser().setHistoryUpdate(true);
+                                        User.getCurrentUser().setCartUpdate(true);
+                                        User.getCurrentUser().setOrderUpdate(true);
                                         setResult(Activity.RESULT_CANCELED, new Intent());
                                         finish();
                                     }
@@ -226,6 +232,10 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                                 user.setId(doc.getId());
                                 user.setName(account.getDisplayName());
                                 dialog.dismiss();
+                                User.getCurrentUser().setListUpdate(true);
+                                User.getCurrentUser().setHistoryUpdate(true);
+                                User.getCurrentUser().setCartUpdate(true);
+                                User.getCurrentUser().setOrderUpdate(true);
                                 setResult(Activity.RESULT_CANCELED, new Intent());
                                 finish();
                             }

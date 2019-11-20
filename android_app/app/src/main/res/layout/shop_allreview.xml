@@ -9,17 +9,40 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical">
-        <TextView
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="bottom"
-            android:maxLines="2"
-            android:ellipsize="end"
-            android:text="Tên quán"
-            android:textColor="@color/colorAccent"
-            android:textSize="30sp"
-            android:id="@+id/textShopName"
-            />
+            android:layout_height="wrap_content">
+
+            <androidx.appcompat.widget.Toolbar
+                android:background="@color/color_red"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/toolbar"
+                android:minHeight="?android:attr/actionBarSize"
+                android:layout_centerHorizontal="true">
+
+                <TextView
+                    android:id="@+id/tvReview"
+                    android:gravity="center"
+                    android:textSize="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:maxLines="2"
+                    style="@style/headerText"
+                    android:text="Đánh giá quán ăn" />
+
+            </androidx.appcompat.widget.Toolbar>
+
+            <Button
+                android:id="@+id/btnBackShopAllReview"
+                android:layout_centerVertical="true"
+                android:paddingStart="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:drawableStart="@drawable/ic_navigate_before"
+                android:background="?android:attr/selectableItemBackground"/>
+
+        </RelativeLayout>
 
         <androidx.cardview.widget.CardView
             android:layout_width="match_parent"

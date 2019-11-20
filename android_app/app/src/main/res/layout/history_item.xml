@@ -19,14 +19,14 @@
             android:background="@color/whiteTextColor">
 
             <ImageView
-                android:id="@+id/imageViewRes"
+                android:id="@+id/imageViewResHistory"
                 android:layout_margin="10dp"
                 android:layout_width="30dp"
                 android:layout_height="30dp"
                 android:src="@drawable/avatar"/>
 
             <TextView
-                android:id="@+id/tvResName"
+                android:id="@+id/tvResNameHistory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -35,7 +35,7 @@
                 android:text="Tên nhà hàng" />
 
             <TextView
-                android:id="@+id/tvStatus"
+                android:id="@+id/tvStatusHistory"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
@@ -52,7 +52,7 @@
             android:background="@color/whiteTextColor">
 
             <ImageView
-                android:id="@+id/imageViewFoodOrder"
+                android:id="@+id/imageViewFoodOrderHistory"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_margin="10dp"
@@ -65,7 +65,7 @@
                 android:orientation="vertical">
 
                 <TextView
-                    android:id="@+id/tvFoodName"
+                    android:id="@+id/tvFoodNameHistory"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="20dp"
@@ -80,7 +80,7 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/tvResAddress"
+                        android:id="@+id/tvResAddressHistory"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="20dp"
@@ -89,7 +89,7 @@
                         android:layout_weight="1" />
 
                     <TextView
-                        android:id="@+id/tvAmountOrder"
+                        android:id="@+id/tvAmountOrderHistory"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textSize="15dp"
@@ -104,7 +104,7 @@
             android:background="@color/whiteTextColor">
 
             <TextView
-                android:id="@+id/tvFoodPrice"
+                android:id="@+id/tvFoodPriceHistory"
                 android:layout_marginEnd="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -130,7 +130,7 @@
                 android:layout_margin="10dp"/>
 
             <TextView
-                android:id="@+id/tvTotalPrice"
+                android:id="@+id/tvTotalPriceHistory"
                 android:layout_margin="10dp"
                 android:layout_centerVertical="true"
                 android:layout_width="wrap_content"
@@ -149,34 +149,23 @@
             android:background="@color/whiteTextColor">
 
             <Button
-                android:id="@+id/btnDetail"
+                android:id="@+id/btnDelete"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="10dp"
-                android:text="     Hủy     "
+                android:layout_alignParentEnd="true"
+                android:layout_marginEnd="10dp"
+                android:text="     Xóa     "
                 android:textSize="20dp"
                 android:textColor="@color/whiteTextColor"
                 android:background="@color/color_red" />
 
             <Button
-                android:id="@+id/btnConfirm"
+                android:id="@+id/btnVisit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
                 android:layout_marginStart="10dp"
-                android:text="     Xác nhận     "
-                android:textSize="20dp"
-                android:textColor="@color/whiteTextColor"
-                android:background="@color/color_greyy" />
-
-            <Button
-                android:id="@+id/btnContact"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                android:text="     Liên hệ     "
+                android:text="     Ghé quán     "
                 android:textSize="20dp"
                 android:textColor="@color/whiteTextColor"
                 android:background="@color/color_red" />

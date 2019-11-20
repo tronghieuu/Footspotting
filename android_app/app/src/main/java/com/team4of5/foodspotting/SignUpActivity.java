@@ -268,6 +268,9 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                                         User.getCurrentUser().setName(username);
                                         dialog.dismiss();
                                         User.getCurrentUser().setListUpdate(true);
+                                        User.getCurrentUser().setHistoryUpdate(true);
+                                        User.getCurrentUser().setCartUpdate(true);
+                                        User.getCurrentUser().setOrderUpdate(true);
                                         setResult(Activity.RESULT_CANCELED, new Intent());
                                         finish();
                                     }

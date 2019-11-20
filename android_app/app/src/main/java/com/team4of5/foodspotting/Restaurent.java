@@ -21,6 +21,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,7 +39,6 @@ import java.util.List;
 import java.util.Map;
 
 public class Restaurent extends AppCompatActivity implements View.OnClickListener {
-    private TextView mShopName;
     private TextView mShopType;
     private TextView mOpeningTime;
     private Button mShopContact;
@@ -59,6 +59,8 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
     private Button mBtnDecrease, mBtnIncrease, mBtnDraft, mBtnOrder;
     private int mAmountOrder, mOrderPrice;
     private Food mFood;
+    private TextView mTvResName;
+    private Button mBtnBack;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +70,6 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
 
         id_restaurent = getIntent().getStringExtra("id_restaurent");
         db = FirebaseFirestore.getInstance();
-        mShopName = findViewById(R.id.textShopName);
         mShopType = findViewById(R.id.textShopType);
         mOpeningTime = findViewById(R.id.textOpeningTime);
         mShopContact = findViewById(R.id.buttonShopContact);
@@ -78,6 +79,9 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
         mShopAddress = findViewById(R.id.textShopAddress);
         mShowAllReview = findViewById(R.id.textShopShowAllReview);
         mImageView = findViewById(R.id.imageShop);
+        mBtnBack = findViewById(R.id.btnBackResDetail);
+        mBtnBack.setOnClickListener(this);
+        mTvResName = findViewById(R.id.tvResDetailName);
 
         dialog = new Dialog(this);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -168,6 +172,11 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
                 }
                 break;
             case R.id.btnDraft:
+                User.getCurrentUser().setListUpdate(true);
+                User.getCurrentUser().setCartUpdate(true);
+                User.getCurrentUser().setHistoryUpdate(true);
+                User.getCurrentUser().setOrderUpdate(true);
+                Toast.makeText(getApplicationContext(), "Coming soon!", Toast.LENGTH_SHORT).show();
                 mOrderDialog.dismiss();
                 break;
             case R.id.btnOrder:
@@ -186,9 +195,15 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
                     @Override
                     public void onSuccess(DocumentReference documentReference) {
                         User.getCurrentUser().setListUpdate(true);
+                        User.getCurrentUser().setCartUpdate(true);
+                        User.getCurrentUser().setHistoryUpdate(true);
+                        User.getCurrentUser().setOrderUpdate(true);
                         dialog.dismiss();
                     }
                 });
+                break;
+            case R.id.btnBackResDetail:
+                finish();
                 break;
         }
     }
@@ -224,7 +239,7 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 DocumentSnapshot doc = task.getResult();
-                mShopName.setText(doc.getString("name"));
+                mTvResName.setText(doc.getString("name"));
                 mShopType.setText(doc.getString("type"));
                 mOpeningTime.setText(doc.getString("opening_time")+" - "+doc.getString("closing_time"));
                 phonenum = doc.getString("phone");

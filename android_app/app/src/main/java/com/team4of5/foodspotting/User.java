@@ -3,9 +3,9 @@ package com.team4of5.foodspotting;
 public class User {
 
     private static User instance = null;
-    private int type; // 1 normal or 2 shipper or 3 owner
+    private int type, orderTab; // 1 normal or 2 shipper or 3 owner
     private String street, district, province, name, phone, id, image;
-    private boolean ownerUpdate, listUpdate;
+    private boolean ownerUpdate, listUpdate, orderUpdate, historyUpdate, cartUpdate;
 
     private User(){
         id = "";
@@ -18,6 +18,7 @@ public class User {
         image = "";
         ownerUpdate = false;
         listUpdate = false;
+        orderTab = 0;
     }
 
     public static User getCurrentUser(){
@@ -120,5 +121,37 @@ public class User {
 
     public void setListUpdate(boolean listUpdate) {
         this.listUpdate = listUpdate;
+    }
+
+    public int getOrderTab() {
+        return orderTab;
+    }
+
+    public void setOrderTab(int orderTab) {
+        this.orderTab = orderTab;
+    }
+
+    public boolean isOrderUpdate() {
+        return orderUpdate;
+    }
+
+    public void setOrderUpdate(boolean orderUpdate) {
+        this.orderUpdate = orderUpdate;
+    }
+
+    public boolean isHistoryUpdate() {
+        return historyUpdate;
+    }
+
+    public void setHistoryUpdate(boolean historyUpdate) {
+        this.historyUpdate = historyUpdate;
+    }
+
+    public boolean isCartUpdate() {
+        return cartUpdate;
+    }
+
+    public void setCartUpdate(boolean cartUpdate) {
+        this.cartUpdate = cartUpdate;
     }
 }

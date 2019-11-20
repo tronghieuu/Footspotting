@@ -125,6 +125,9 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 break;
             case R.id.btnLogout:
                 User.getCurrentUser().setListUpdate(true);
+                User.getCurrentUser().setHistoryUpdate(true);
+                User.getCurrentUser().setCartUpdate(true);
+                User.getCurrentUser().setOrderUpdate(true);
                 logout();
         }
     }
