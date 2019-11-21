@@ -22,7 +22,8 @@ btnLogin.addEventListener('click', e =>{
     const Password = txtPassword.value;
     const auth = firebase.auth();
     const promise = auth.signInWithEmailAndPassword(email, Password);
-    console.log("Here");
+    console.log(email);
+    console.log(Password);
     promise.catch(e => console.log(e.message))
 });
 
@@ -37,10 +38,10 @@ btnLogin.addEventListener('click', e =>{
 //     promise.catch(e => console.log(e.message))
 // })
 
-firebase.auth().onAuthStateChanged(firebaseUser =>{
+firebase.auth().onAuthStateChanged(function(firebaseUse){
     if(firebaseUser){
         consolele.log(firebaseUser);
-        // window.location="index.html";
+        window.location="index.html";
     } else{
         console.log('not logged in');
         // window.location.reload(); 
