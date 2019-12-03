@@ -1,20 +1,16 @@
-package com.team4of5.foodspotting;
+package com.team4of5.foodspotting.shipper;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.RelativeLayout;
-import android.widget.Toast;
+
+import com.team4of5.foodspotting.R;
 
 public class ShipperAppActivity extends AppCompatActivity implements View.OnClickListener {
-    private Button mBtnBackShipper;
-    private RelativeLayout mBtnDanhSachOrderShipper, mBtnDanhSachOrderAccepted, mBtnDanhSachOrderCompleted;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,13 +22,7 @@ public class ShipperAppActivity extends AppCompatActivity implements View.OnClic
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.color_green));
-        mBtnBackShipper = findViewById(R.id.btnBackShipper);
-        mBtnDanhSachOrderShipper = findViewById(R.id.btnDanhSachOrderShipper);
-        mBtnDanhSachOrderCompleted = findViewById(R.id.btnDanhSachOrderCompleted);
-        mBtnBackShipper.setOnClickListener(this);
-        mBtnDanhSachOrderShipper.setOnClickListener(this);
-        mBtnDanhSachOrderAccepted.setOnClickListener(this);
-        mBtnDanhSachOrderCompleted.setOnClickListener(this);
+
     }
 
     @Override
