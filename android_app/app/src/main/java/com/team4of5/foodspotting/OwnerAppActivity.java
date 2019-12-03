@@ -10,8 +10,10 @@ import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
@@ -19,6 +21,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentReference;
@@ -28,9 +31,11 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.firestore.WriteBatch;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.team4of5.foodspotting.object.User;
 import com.team4of5.foodspotting.rating.Rate;
 
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
@@ -41,9 +46,10 @@ public class OwnerAppActivity extends AppCompatActivity implements View.OnClickL
             mBtnDanhGiaCuaKhachHang;
     private Button mBtnBack;
     private ImageView mImageView;
-    private static int RQ_UPDATE = 234;
+    private static int RQ_UPDATE = 234, PICK_IMAGE_REQUEST =11;
     private String id_res;
-    private Dialog dialog;
+    private Dialog dialog, loadingDialog;
+    private Uri filePath;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,7 +67,14 @@ public class OwnerAppActivity extends AppCompatActivity implements View.OnClickL
         mBtnBack = findViewById(R.id.btnBackOwner);
         mBtnDongQuan = findViewById(R.id.btnDongQuan);
         mImageView = findViewById(R.id.imageOwnerRes);
+        mImageView.setOnClickListener(this);
         setImage();
+
+        // Dialog
+        loadingDialog = new Dialog(this);
+        loadingDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        loadingDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        loadingDialog.setContentView(R.layout.item_loading);
 
         dialog = new Dialog(this);
         dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -86,6 +99,12 @@ public class OwnerAppActivity extends AppCompatActivity implements View.OnClickL
     public void onClick(View view) {
         Intent intent;
         switch (view.getId()) {
+            case R.id.imageOwnerRes:
+                Intent intentImage = new Intent();
+                intentImage.setType("image/*");
+                intentImage.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intentImage, "Select Picture"), PICK_IMAGE_REQUEST);
+                break;
             case R.id.btnThongTinQuan:
                 startActivityForResult(new Intent(OwnerAppActivity.this, ResInfoActivity.class), RQ_UPDATE);
                 break;
@@ -211,6 +230,44 @@ public class OwnerAppActivity extends AppCompatActivity implements View.OnClickL
                     this.recreate();
                 }
             }
+        }
+        else if(requestCode == PICK_IMAGE_REQUEST && resultCode == RESULT_OK
+                && data != null && data.getData() != null )
+        {
+            loadingDialog.show();
+            filePath = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath);
+                mImageView.setImageBitmap(bitmap);
+            }
+            catch (IOException e)
+            {
+                Toast.makeText(this,"fail",Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+            final StorageReference ref = storageReference.child("restaurantImage/"+ id_res);
+            ref.putFile(filePath).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Map<String, Object> data = new HashMap<>();
+                            data.put("image", uri.toString());
+                            User.getCurrentUser().setImage(uri.toString());
+                            FirebaseFirestore.getInstance().collection("restaurants")
+                                    .document(id_res).update(data)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            loadingDialog.dismiss();
+                                        }
+                                    });
+                        }
+                    });
+                }
+            });
         }
     }
 }

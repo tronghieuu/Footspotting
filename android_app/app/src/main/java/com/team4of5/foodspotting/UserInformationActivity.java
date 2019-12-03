@@ -253,7 +253,7 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
                 }
             });
         }
-        if(requestCode == PICK_IMAGE_REQUEST1 && resultCode == RESULT_OK
+        else if(requestCode == PICK_IMAGE_REQUEST1 && resultCode == RESULT_OK
                 && data != null && data.getData() != null )
         {
             loadingDialog.show();
