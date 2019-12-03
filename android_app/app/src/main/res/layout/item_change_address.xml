@@ -7,7 +7,7 @@
     android:padding="20dp"
     android:background="@color/color_white">
 
-    <EditText
+    <Spinner
         android:id="@+id/edtChangeProvince"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -16,7 +16,7 @@
         android:paddingHorizontal="10dp"
         android:maxLines="1" />
 
-    <EditText
+    <Spinner
         android:id="@+id/edtChangeDistrict"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
