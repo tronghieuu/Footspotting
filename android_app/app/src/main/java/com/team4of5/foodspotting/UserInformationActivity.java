@@ -17,6 +17,7 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -66,6 +67,7 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
             "Hải Châu",
             "Liên Chiểu",
             "Hòa Khánh"};
+    ArrayAdapter<String> adapter1 = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -106,33 +108,25 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
         adapter.setDropDownViewResource
                 (android.R.layout.simple_list_item_single_choice);
         mEdtChangeProvince.setAdapter(adapter);
-        ArrayAdapter<String> adapter1 = null;
-        if(mEdtChangeProvince.getSelectedItem().toString().equals("Hà Nội"))
-               adapter1=new ArrayAdapter<String>
-                    (
-                            this,
-                            android.R.layout.simple_spinner_item,
-                            arr1
-                    );
-        if(mEdtChangeProvince.getSelectedItem().toString().equals("TT Huế"))
-            adapter1=new ArrayAdapter<String>
-                    (
-                            this,
-                            android.R.layout.simple_spinner_item,
-                            arr2
-                    );
-        if(mEdtChangeProvince.getSelectedItem().toString().equals("Đà Nẵng"))
-            adapter1=new ArrayAdapter<String>
-                    (
-                            this,
-                            android.R.layout.simple_spinner_item,
-                            arr3
-                    );
+
+        mEdtChangeProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                setAddress();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+
+            }
+        });
+
 
         mEdtChangeDistrict = changeAddressDialog.findViewById(R.id.edtChangeDistrict);
         adapter1.setDropDownViewResource
                 (android.R.layout.simple_list_item_single_choice);
-        mEdtChangeDistrict.setAdapter(adapter);
+        mEdtChangeDistrict.setAdapter(adapter1);
 
         mEdtChangeStreet = changeAddressDialog.findViewById(R.id.edtChangeStreet);
         mBtnChangeAddress_diff = changeAddressDialog.findViewById(R.id.btnUpdateAddress);
@@ -208,6 +202,30 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
         mTvPhone.setText(User.getCurrentUser().getPhone());
         FirebaseAuth auth = FirebaseAuth.getInstance();
         mTvEmailInfo.setText(auth.getCurrentUser().getEmail());
+    }
+    public void setAddress()
+    {
+        if(mEdtChangeProvince.getSelectedItem().toString().equals("Hà Nội"))
+            adapter1=new ArrayAdapter<String>
+                    (
+                            this,
+                            android.R.layout.simple_spinner_item,
+                            arr1
+                    );
+        if(mEdtChangeProvince.getSelectedItem().toString().equals("TT Huế"))
+            adapter1=new ArrayAdapter<String>
+                    (
+                            this,
+                            android.R.layout.simple_spinner_item,
+                            arr2
+                    );
+        if(mEdtChangeProvince.getSelectedItem().toString().equals("Đà Nẵng"))
+            adapter1=new ArrayAdapter<String>
+                    (
+                            this,
+                            android.R.layout.simple_spinner_item,
+                            arr3
+                    );
     }
 
     @Override
