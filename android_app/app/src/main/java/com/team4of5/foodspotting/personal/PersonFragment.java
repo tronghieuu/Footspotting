@@ -37,6 +37,8 @@ import com.team4of5.foodspotting.object.User;
 
 import java.io.InputStream;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class PersonFragment extends Fragment implements View.OnClickListener {
 
     private CardView mCvLogin, mCvNoLogin;
@@ -45,7 +47,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private static int RQ_LOGIN = 10;
     private static int RQ_INFO = 324;
     private FirebaseFirestore mDb;
-    private ImageView profileImage;
+    private CircleImageView profileImage;
     private GoogleSignInClient mGoogleSignInClient;
 
     @Nullable
