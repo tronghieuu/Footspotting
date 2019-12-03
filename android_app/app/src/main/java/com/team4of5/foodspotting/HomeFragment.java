@@ -70,7 +70,7 @@ public class HomeFragment extends Fragment {
         mRestaurents = new ArrayList<>();
         mRecylerView = view.findViewById(R.id.recycleViewHome);
         mRecylerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-        mAdapter = new NearRestaurantReccyclerViewAdapter(getActivity() , mRestaurents, mRecylerView);
+        mAdapter = new NearRestaurantReccyclerViewAdapter(getActivity() , mRestaurents, mRecylerView, "All");
         mRecylerView.setAdapter(mAdapter);
         queryRestaurant();
 
@@ -92,7 +92,7 @@ public class HomeFragment extends Fragment {
         mRecylerView2=view.findViewById(R.id.searchRecycle);
         mRecylerView2.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
        // getAllFoodData();
-        mAdapter2=new NearRestaurantReccyclerViewAdapter(getActivity(),mRestaurents2,mRecylerView2);
+        mAdapter2=new NearRestaurantReccyclerViewAdapter(getActivity(),mRestaurents2,mRecylerView2,"Search");
        // searchAdapter=new SearchRecycleAdapter(getActivity(),foods,mRecylerView2);
         mRecylerView2.setAdapter(mAdapter2);
 

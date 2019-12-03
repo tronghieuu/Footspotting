@@ -17,9 +17,11 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -42,12 +44,28 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
             , mBtnChangePassword, mBtnChangePayment, mBtnchangeName, mBtnChangePhoneNum, mBtnChangeAddress_diff;
     private TextView mTvUsername, mTvPhone, mTvAddress, mTvEmailInfo;
     private Dialog changePasswordDialog, changeNameDialog, changePhoneDialog, changeAddressDialog, loadingDialog;
-    private EditText mEdtCurrentPassword, mEdtNewPassword, mEdtConfirmPassword, mEdtChangeProvince,
-    mEdtChangeDistrict, mEdtChangeStreet, mEdtChangeName, mEdtChangePhone;
+    private EditText mEdtCurrentPassword, mEdtNewPassword, mEdtConfirmPassword, mEdtChangeStreet, mEdtChangeName, mEdtChangePhone;
     private String province, district, street, name, phone;
     private ImageView profileImage;
     private static int PICK_IMAGE_REQUEST = 23;
     private Uri filePath;
+    private Spinner  mEdtChangeProvince,
+            mEdtChangeDistrict;
+    String arr[]={
+            "Hà Nội",
+            "TT Huế",
+            "Đà Nẵng"};
+    String arr1[]={
+            "Quận 1",
+            "Quận 2",
+            "Quận 3"};
+    String arr2[]={
+            "Phú Vang",
+            "Phú Thượng"};
+    String arr3[]={
+            "Hải Châu",
+            "Liên Chiểu",
+            "Hòa Khánh"};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,7 +97,43 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
         changeAddressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         changeAddressDialog.setContentView(R.layout.item_change_address);
         mEdtChangeProvince = changeAddressDialog.findViewById(R.id.edtChangeProvince);
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>
+                (
+                        this,
+                        android.R.layout.simple_spinner_item,
+                        arr
+                );
+        adapter.setDropDownViewResource
+                (android.R.layout.simple_list_item_single_choice);
+        mEdtChangeProvince.setAdapter(adapter);
+        ArrayAdapter<String> adapter1 = null;
+        if(mEdtChangeProvince.getSelectedItem().toString().equals("Hà Nội"))
+               adapter1=new ArrayAdapter<String>
+                    (
+                            this,
+                            android.R.layout.simple_spinner_item,
+                            arr1
+                    );
+        if(mEdtChangeProvince.getSelectedItem().toString().equals("TT Huế"))
+            adapter1=new ArrayAdapter<String>
+                    (
+                            this,
+                            android.R.layout.simple_spinner_item,
+                            arr2
+                    );
+        if(mEdtChangeProvince.getSelectedItem().toString().equals("Đà Nẵng"))
+            adapter1=new ArrayAdapter<String>
+                    (
+                            this,
+                            android.R.layout.simple_spinner_item,
+                            arr3
+                    );
+
         mEdtChangeDistrict = changeAddressDialog.findViewById(R.id.edtChangeDistrict);
+        adapter1.setDropDownViewResource
+                (android.R.layout.simple_list_item_single_choice);
+        mEdtChangeDistrict.setAdapter(adapter);
+
         mEdtChangeStreet = changeAddressDialog.findViewById(R.id.edtChangeStreet);
         mBtnChangeAddress_diff = changeAddressDialog.findViewById(R.id.btnUpdateAddress);
         mBtnChangeAddress_diff.setOnClickListener(this);
@@ -87,8 +141,8 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
                 mEdtChangeStreet.setText("");
-                mEdtChangeDistrict.setText("");
-                mEdtChangeProvince.setText("");
+                mEdtChangeDistrict.setSelection(0);
+                mEdtChangeProvince.setSelection(0);
             }
         });
 
@@ -249,8 +303,8 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
     }
 
     public void changeAddress() {
-        province = mEdtChangeProvince.getText().toString();
-        district = mEdtChangeDistrict.getText().toString();
+        province = mEdtChangeProvince.getSelectedItem().toString();
+        district = mEdtChangeDistrict.getSelectedItem().toString();
         street = mEdtChangeStreet.getText().toString();
         if(province.length() == 0) {
             Toast.makeText(this, "chưa nhập tình/thành phố", Toast.LENGTH_SHORT).show();
