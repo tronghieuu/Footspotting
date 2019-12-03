@@ -17,7 +17,6 @@
         <activity android:name=".OrderManagerActivity"></activity>
         <activity android:name=".ShipperAppActivity" />
         <activity android:name=".RegisterShipperActivity" />
-        <activity android:name=".Shipper" />
         <activity android:name=".FoodOwnerActivity" />
         <activity android:name=".ResInfoActivity" />
         <activity android:name=".OwnerAppActivity" />
