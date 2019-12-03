@@ -6,7 +6,10 @@ import android.os.Handler;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.SearchView;
+import android.widget.Spinner;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -23,6 +26,8 @@ import com.team4of5.foodspotting.object.ImageModel;
 import com.team4of5.foodspotting.object.Restaurant;
 import com.team4of5.foodspotting.restaurant.NearRestaurantReccyclerViewAdapter;
 import com.team4of5.foodspotting.restaurant.Restaurent;
+import com.team4of5.foodspotting.search.SearchRecycleAdapter;
+import com.team4of5.foodspotting.search.food;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.ArrayList;
@@ -37,11 +42,14 @@ public class HomeFragment extends Fragment {
     private static int currentPage = 0;
     private static int NUM_PAGES = 0;
     private ArrayList<ImageModel> imageModelArrayList;
-    private RecyclerView mRecylerView;
-    private NearRestaurantReccyclerViewAdapter mAdapter;
-    private List<Restaurant> mRestaurents;
+    private RecyclerView mRecylerView,mRecylerView2;
+    private NearRestaurantReccyclerViewAdapter mAdapter,mAdapter2;
+    private List<Restaurant> mRestaurents,mRestaurents2;
+    private List<food> foods;
     private SearchView mEdtSearch;
+    private SearchRecycleAdapter searchAdapter;
     private FirebaseFirestore db;
+    private Spinner sp_city;
 
     private int[] myImageList = new int[]{R.drawable.slide1, R.drawable.slide2,
             R.drawable.slide3};
@@ -76,6 +84,57 @@ public class HomeFragment extends Fragment {
             }
         });
 
+        //Search
+        foods=new ArrayList<>();
+        mRestaurents2 = new ArrayList<>();
+        sp_city=view.findViewById(R.id.sp_city);
+        mEdtSearch=view.findViewById(R.id.searchHome);
+        mRecylerView2=view.findViewById(R.id.searchRecycle);
+        mRecylerView2.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
+       // getAllFoodData();
+        mAdapter2=new NearRestaurantReccyclerViewAdapter(getActivity(),mRestaurents2,mRecylerView2);
+       // searchAdapter=new SearchRecycleAdapter(getActivity(),foods,mRecylerView2);
+        mRecylerView2.setAdapter(mAdapter2);
+
+        mEdtSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String s) {
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String s) {
+                if(mEdtSearch.getQuery()==null || mEdtSearch.getQuery().length()<1) mRecylerView2.setVisibility(View.GONE);
+                else {
+                    search();
+                    mRecylerView2.setVisibility(View.VISIBLE);
+                }
+                return true;
+            }
+        });
+        mAdapter2.setOnItemListener(new NearRestaurantReccyclerViewAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(Restaurant item) {
+                Intent intent = new Intent(getActivity(), Restaurent.class);
+                intent.putExtra("id_restaurent", item.getId());
+                startActivity(intent);
+            }
+        });
+        sp_city.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                if(mEdtSearch.getQuery()==null || mEdtSearch.getQuery().length()<1) mRecylerView2.setVisibility(View.GONE);
+                else {
+                    search();
+                    mRecylerView2.setVisibility(View.VISIBLE);
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+            }
+        });
         return view;
     }
 
@@ -156,5 +215,43 @@ public class HomeFragment extends Fragment {
             }
         });
     }
+    public void search()
+    {
+        mRestaurents2.clear();
+        for (final Restaurant r:
+             mRestaurents) {
+            if(r.getName().contains(mEdtSearch.getQuery().toString())&& r.getProvince().equals(sp_city.getSelectedItem().toString())){
+                mRestaurents2.add(r);
+            }
 
+        }
+        mAdapter2.notifyDataSetChanged();
+    }
+public void getAllFoodData()
+{
+    for ( Restaurant res:mRestaurents) {
+        final Restaurant r= res;
+        db.collection("restaurants").document(r.getId()).collection("food")
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            @Override
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if (!queryDocumentSnapshots.isEmpty()) {
+                    for (DocumentSnapshot doc : queryDocumentSnapshots) {
+                        food res = new food();
+                        res.setId(doc.getId());
+                        res.setImage(doc.getString("image"));
+                        res.setInfo(doc.getString("info"));
+                        res.setName(doc.getString("name"));
+                        res.setPrice(doc.getString("price"));
+                        res.setRes(r.getName());
+                        res.setResID(r.getId());
+
+                        foods.add(res);
+                        searchAdapter.notifyDataSetChanged();
+                    }
+                }
+            }
+        });
+    }
+}
 }
