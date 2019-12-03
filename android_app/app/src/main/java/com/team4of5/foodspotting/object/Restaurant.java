@@ -1,4 +1,7 @@
-package com.team4of5.foodspotting;
+package com.team4of5.foodspotting.object;
+
+import com.team4of5.foodspotting.object.Food;
+import com.team4of5.foodspotting.object.Rating;
 
 import java.io.Serializable;
 import java.util.ArrayList;

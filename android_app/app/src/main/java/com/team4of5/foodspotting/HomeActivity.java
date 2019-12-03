@@ -1,19 +1,18 @@
 package com.team4of5.foodspotting;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
-import android.view.WindowManager;
-import android.widget.Toast;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.team4of5.foodspotting.list.ListFragment;
+import com.team4of5.foodspotting.object.User;
+import com.team4of5.foodspotting.personal.PersonFragment;
 
 public class HomeActivity extends AppCompatActivity {
 

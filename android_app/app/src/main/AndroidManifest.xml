@@ -25,8 +25,8 @@
         <activity android:name=".SignUpActivity" />
         <activity android:name=".EmailLoginActivity" />
         <activity android:name=".UserInformationActivity" />
-        <activity android:name=".Restaurent" />
-        <activity android:name=".Rate" />
+        <activity android:name=".restaurant.Restaurent" />
+        <activity android:name=".rating.Rate" />
         <activity android:name=".HomeActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

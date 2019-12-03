@@ -1,4 +1,4 @@
-package com.team4of5.foodspotting;
+package com.team4of5.foodspotting.restaurant;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,32 +9,31 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.firebase.firestore.FirebaseFirestore;
+import com.team4of5.foodspotting.R;
+import com.team4of5.foodspotting.object.Restaurant;
 
 import java.io.InputStream;
 import java.util.List;
 
-public class FoodAdapterPreview extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class NearRestaurantReccyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private List<Food> mFoods;
+    private List<Restaurant> mRestaurants;
     private Context mContext;
     private Activity mActivity;
-    private FoodButtonListener mBtnFoodListener;
-
+    private OnItemClickListener mListener;
 
     // for load more
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
+    private OnLoadMoreListener onLoadMoreListener;
 
     // The minimum amount of items to have below your current scroll position
     // before loading more.
@@ -42,34 +41,31 @@ public class FoodAdapterPreview extends RecyclerView.Adapter<RecyclerView.ViewHo
     private int visibleThreshold = 6;
     private int lastVisibleItem, totalItemCount;
 
-    public interface FoodButtonListener {
-        void onDeleteButtonClick(View v, int position);
-        void onModifyButtonClick(View v, int position);
+    public interface OnItemClickListener {
+        void onItemClick(Restaurant item);
     }
 
     public interface OnLoadMoreListener {
         void onLoadMore();
     }
 
-    public void add(int position, Food item) {
-        mFoods.add(position, item);
+    public void add(int position, Restaurant item) {
+        mRestaurants.add(position, item);
         notifyItemInserted(position);
     }
 
-    public void remove(Food item) {
-        int position = mFoods.indexOf(item);
-        mFoods.remove(position);
+    public void remove(Restaurant item) {
+        int position = mRestaurants.indexOf(item);
+        mRestaurants.remove(position);
         notifyItemRemoved(position);
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public FoodAdapterPreview(Context context, List<Food> foods, RecyclerView recyclerView,
-                              FoodButtonListener btnFoodListener) {
+    public NearRestaurantReccyclerViewAdapter(Context context, List<Restaurant> restaurants, RecyclerView recyclerView) {
 
         mContext = context;
         mActivity = (Activity)context;
-        mFoods = foods;
-        mBtnFoodListener = btnFoodListener;
+        mRestaurants = restaurants;
 
         // load more
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -79,6 +75,12 @@ public class FoodAdapterPreview extends RecyclerView.Adapter<RecyclerView.ViewHo
                 super.onScrolled(recyclerView, dx, dy);
                 totalItemCount = linearLayoutManager.getItemCount();
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
+                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
+                    if (onLoadMoreListener != null) {
+                        onLoadMoreListener.onLoadMore();
+                    }
+                    isLoading = true;
+                }
             }
         });
     }
@@ -87,7 +89,7 @@ public class FoodAdapterPreview extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
-            View view = LayoutInflater.from(mActivity).inflate(R.layout.item_food_preview, parent, false);
+            View view = LayoutInflater.from(mActivity).inflate(R.layout.fragment_home_item, parent, false);
             return new ViewHolderRow(view);
         } else if (viewType == VIEW_TYPE_LOADING) {
             View view = LayoutInflater.from(mActivity).inflate(R.layout.item_loading, parent, false);
@@ -98,38 +100,23 @@ public class FoodAdapterPreview extends RecyclerView.Adapter<RecyclerView.ViewHo
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
         if (holder instanceof ViewHolderRow) {
-            final Food food = mFoods.get(position);
+            Restaurant restaurant = mRestaurants.get(position);
 
             ViewHolderRow userViewHolder = (ViewHolderRow) holder;
 
-            userViewHolder.tvPrice.setText("đ"+food.getPrice());
-            userViewHolder.tvFoodName.setText(food.getName());
+            userViewHolder.ratingBar.setRating((float)restaurant.getRate());
+            userViewHolder.tvRestName.setText(restaurant.getName());
+            userViewHolder.tvRestAddress.setText(restaurant.getAddress());
             new DownloadImageFromInternet(userViewHolder.imageView)
-                    .execute(food.getImage());
+                    .execute(restaurant.getImage());
 
             // binding item click listner
-
-
-
-            userViewHolder.btnModify.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mBtnFoodListener.onModifyButtonClick(view, position);
-                }
-            });
-
-            userViewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    mBtnFoodListener.onDeleteButtonClick(view, position);
-                }
-            });
-
+            userViewHolder.bind(mRestaurants.get(position), mListener);
         } else if (holder instanceof ViewHolderLoading) {
             ViewHolderLoading loadingViewHolder = (ViewHolderLoading) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
@@ -140,13 +127,24 @@ public class FoodAdapterPreview extends RecyclerView.Adapter<RecyclerView.ViewHo
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mFoods == null ? 0 : mFoods.size();
+        return mRestaurants == null ? 0 : mRestaurants.size();
     }
 
+    public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
+        this.onLoadMoreListener = mOnLoadMoreListener;
+    }
+
+    public void setOnItemListener(OnItemClickListener listener) {
+        this.mListener = listener;
+    }
 
     @Override
     public int getItemViewType(int position) {
-        return mFoods.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        return mRestaurants.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+    }
+
+    public void setLoaded() {
+        isLoading = false;
     }
 
     private class ViewHolderLoading extends RecyclerView.ViewHolder {
@@ -191,19 +189,27 @@ public class FoodAdapterPreview extends RecyclerView.Adapter<RecyclerView.ViewHo
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public class ViewHolderRow extends RecyclerView.ViewHolder {
-        public TextView tvFoodName, tvPrice;
+        public TextView tvRestName, tvRestAddress;
         public ImageView imageView;
-        public Button btnModify, btnDelete;
+        public RatingBar ratingBar;
 
         public ViewHolderRow(View v) {
             super(v);
-            tvFoodName = v.findViewById(R.id.textFoodNamePreview);
-            imageView = v.findViewById(R.id.imageFoodPreview);
-            tvPrice = v.findViewById(R.id.textFoodPricePreview);
-            btnModify = v.findViewById(R.id.btnFoodModify);
-            btnDelete = v.findViewById(R.id.btnFoodDelete);
+            tvRestName = v.findViewById(R.id.tvRestaurantName);
+            tvRestAddress = v.findViewById(R.id.tvRestaurantAddress);
+            imageView = v.findViewById(R.id.imageShop);
+            ratingBar = v.findViewById(R.id.ratingShopOverall);
+        }
 
+        public void bind(final Restaurant item, final OnItemClickListener listener) {
+            itemView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    listener.onItemClick(item);
+                }
+            });
         }
     }
 
 }
+

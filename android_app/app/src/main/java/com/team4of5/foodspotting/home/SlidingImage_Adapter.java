@@ -1,4 +1,4 @@
-package com.team4of5.foodspotting;
+package com.team4of5.foodspotting.home;
 
 import android.content.Context;
 import android.os.Parcelable;
@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 
 import androidx.viewpager.widget.PagerAdapter;
+
+import com.team4of5.foodspotting.R;
+import com.team4of5.foodspotting.object.ImageModel;
 
 import java.util.ArrayList;
 

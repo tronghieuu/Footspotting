@@ -1,15 +1,10 @@
-package com.team4of5.foodspotting;
+package com.team4of5.foodspotting.rating;
 
 import android.app.Activity;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.os.AsyncTask;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.RatingBar;
 import android.widget.TextView;
@@ -17,12 +12,14 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import java.io.InputStream;
+import com.team4of5.foodspotting.R;
+import com.team4of5.foodspotting.object.Rating;
+
 import java.util.List;
 
-public class NearRestaurantReccyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class RatingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private List<Restaurant> mRestaurants;
+    private List<Rating> mRatings;
     private Context mContext;
     private Activity mActivity;
     private OnItemClickListener mListener;
@@ -39,30 +36,30 @@ public class NearRestaurantReccyclerViewAdapter extends RecyclerView.Adapter<Rec
     private int lastVisibleItem, totalItemCount;
 
     public interface OnItemClickListener {
-        void onItemClick(Restaurant item);
+        void onItemClick(Rating item);
     }
 
     public interface OnLoadMoreListener {
         void onLoadMore();
     }
 
-    public void add(int position, Restaurant item) {
-        mRestaurants.add(position, item);
+    public void add(int position, Rating item) {
+        mRatings.add(position, item);
         notifyItemInserted(position);
     }
 
-    public void remove(Restaurant item) {
-        int position = mRestaurants.indexOf(item);
-        mRestaurants.remove(position);
+    public void remove(Rating item) {
+        int position = mRatings.indexOf(item);
+        mRatings.remove(position);
         notifyItemRemoved(position);
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public NearRestaurantReccyclerViewAdapter(Context context, List<Restaurant> restaurants, RecyclerView recyclerView) {
+    public RatingAdapter(Context context, List<Rating> ratings, RecyclerView recyclerView) {
 
         mContext = context;
         mActivity = (Activity)context;
-        mRestaurants = restaurants;
+        mRatings = ratings;
 
         // load more
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -86,7 +83,7 @@ public class NearRestaurantReccyclerViewAdapter extends RecyclerView.Adapter<Rec
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
-            View view = LayoutInflater.from(mActivity).inflate(R.layout.fragment_home_item, parent, false);
+            View view = LayoutInflater.from(mActivity).inflate(R.layout.shop_item_review, parent, false);
             return new ViewHolderRow(view);
         } else if (viewType == VIEW_TYPE_LOADING) {
             View view = LayoutInflater.from(mActivity).inflate(R.layout.item_loading, parent, false);
@@ -102,18 +99,18 @@ public class NearRestaurantReccyclerViewAdapter extends RecyclerView.Adapter<Rec
         // - replace the contents of the view with that element
 
         if (holder instanceof ViewHolderRow) {
-            Restaurant restaurant = mRestaurants.get(position);
+            Rating rating = mRatings.get(position);
 
             ViewHolderRow userViewHolder = (ViewHolderRow) holder;
 
-            userViewHolder.ratingBar.setRating((float)restaurant.getRate());
-            userViewHolder.tvRestName.setText(restaurant.getName());
-            userViewHolder.tvRestAddress.setText(restaurant.getAddress());
-            new DownloadImageFromInternet(userViewHolder.imageView)
-                    .execute(restaurant.getImage());
+
+            userViewHolder.tvUserName.setText(rating.getUser_name());
+            userViewHolder.tvComment.setText(rating.getComment());
+            userViewHolder.tvTime.setText(rating.getTime());
+            userViewHolder.rateRating.setRating((float)rating.getRate());
 
             // binding item click listner
-            userViewHolder.bind(mRestaurants.get(position), mListener);
+            userViewHolder.bind(mRatings.get(position), mListener);
         } else if (holder instanceof ViewHolderLoading) {
             ViewHolderLoading loadingViewHolder = (ViewHolderLoading) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
@@ -124,7 +121,7 @@ public class NearRestaurantReccyclerViewAdapter extends RecyclerView.Adapter<Rec
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mRestaurants == null ? 0 : mRestaurants.size();
+        return mRatings == null ? 0 : mRatings.size();
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
@@ -137,7 +134,7 @@ public class NearRestaurantReccyclerViewAdapter extends RecyclerView.Adapter<Rec
 
     @Override
     public int getItemViewType(int position) {
-        return mRestaurants.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        return mRatings.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
     public void setLoaded() {
@@ -153,52 +150,24 @@ public class NearRestaurantReccyclerViewAdapter extends RecyclerView.Adapter<Rec
         }
     }
 
-    private class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
-
-        ImageView imageView;
-
-        public DownloadImageFromInternet(ImageView imageView){
-            this.imageView = imageView;
-        }
-
-        @Override
-        protected Bitmap doInBackground(String... urls) {
-            String imageURL = urls[0];
-            Bitmap bimage = null;
-            try {
-                InputStream in = new java.net.URL(imageURL).openStream();
-                bimage = BitmapFactory.decodeStream(in);
-
-            } catch (Exception e) {
-                Log.e("Error Message", e.getMessage());
-                e.printStackTrace();
-            }
-            return bimage;
-        }
-
-        @Override
-        protected void onPostExecute(Bitmap result) {
-            imageView.setImageBitmap(result);
-        }
-    }
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public class ViewHolderRow extends RecyclerView.ViewHolder {
-        public TextView tvRestName, tvRestAddress;
-        public ImageView imageView;
-        public RatingBar ratingBar;
+        public TextView tvUserName, tvComment, tvTime;
+        public RatingBar rateRating;
+
 
         public ViewHolderRow(View v) {
             super(v);
-            tvRestName = v.findViewById(R.id.tvRestaurantName);
-            tvRestAddress = v.findViewById(R.id.tvRestaurantAddress);
-            imageView = v.findViewById(R.id.imageShop);
-            ratingBar = v.findViewById(R.id.ratingShopOverall);
+            tvUserName = v.findViewById(R.id.textShopReviewUserName);
+            rateRating = v.findViewById(R.id.ratingShopPerson);
+            tvComment = v.findViewById(R.id.textReviewComment);
+            tvTime = v.findViewById(R.id.texTimeOfRating);
         }
 
-        public void bind(final Restaurant item, final OnItemClickListener listener) {
+        public void bind(final Rating item, final OnItemClickListener listener) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -209,4 +178,3 @@ public class NearRestaurantReccyclerViewAdapter extends RecyclerView.Adapter<Rec
     }
 
 }
-

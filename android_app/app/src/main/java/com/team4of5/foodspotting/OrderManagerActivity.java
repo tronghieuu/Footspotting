@@ -14,6 +14,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.team4of5.foodspotting.restaurant.WaitConfirmFragment;
 
 public class OrderManagerActivity extends AppCompatActivity {
 
