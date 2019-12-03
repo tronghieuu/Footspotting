@@ -36,6 +36,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class UserInformationActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button mBtnBack, mBtnChangeUsername, mBtnChangePhone, mBtnChangeAddress, mBtnUpdatePassword
@@ -45,7 +47,7 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
     private EditText mEdtCurrentPassword, mEdtNewPassword, mEdtConfirmPassword, mEdtChangeProvince,
     mEdtChangeDistrict, mEdtChangeStreet, mEdtChangeName, mEdtChangePhone;
     private String province, district, street, name, phone;
-    private ImageView profileImage;
+    private CircleImageView profileImage;
     private static int PICK_IMAGE_REQUEST = 23;
     private Uri filePath;
 
