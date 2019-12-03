@@ -1,4 +1,4 @@
-package com.team4of5.foodspotting;
+package com.team4of5.foodspotting.list;
 
 import android.app.Activity;
 import android.content.Context;
@@ -20,6 +20,8 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.team4of5.foodspotting.R;
+import com.team4of5.foodspotting.object.Order;
 
 import java.io.InputStream;
 import java.util.List;

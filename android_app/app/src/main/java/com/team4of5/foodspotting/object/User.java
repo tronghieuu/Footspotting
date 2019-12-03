@@ -1,4 +1,4 @@
-package com.team4of5.foodspotting;
+package com.team4of5.foodspotting.object;
 
 public class User {
 

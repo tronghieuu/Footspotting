@@ -1,4 +1,4 @@
-package com.team4of5.foodspotting;
+package com.team4of5.foodspotting.restaurant;
 
 import android.os.Bundle;
 
@@ -7,6 +7,8 @@ import androidx.fragment.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
+import com.team4of5.foodspotting.R;
 
 
 public class WaitConfirmFragment extends Fragment {

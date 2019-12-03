@@ -18,6 +18,11 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.team4of5.foodspotting.home.SlidingImage_Adapter;
+import com.team4of5.foodspotting.object.ImageModel;
+import com.team4of5.foodspotting.object.Restaurant;
+import com.team4of5.foodspotting.restaurant.NearRestaurantReccyclerViewAdapter;
+import com.team4of5.foodspotting.restaurant.Restaurent;
 import com.viewpagerindicator.CirclePageIndicator;
 
 import java.util.ArrayList;

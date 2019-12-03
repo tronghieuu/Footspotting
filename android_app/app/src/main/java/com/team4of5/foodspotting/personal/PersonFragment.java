@@ -1,4 +1,4 @@
-package com.team4of5.foodspotting;
+package com.team4of5.foodspotting.personal;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -26,6 +26,14 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.team4of5.foodspotting.EmailLoginActivity;
+import com.team4of5.foodspotting.OwnerAppActivity;
+import com.team4of5.foodspotting.R;
+import com.team4of5.foodspotting.RegisterOwnerActivity;
+import com.team4of5.foodspotting.RegisterShipperActivity;
+import com.team4of5.foodspotting.ShipperAppActivity;
+import com.team4of5.foodspotting.UserInformationActivity;
+import com.team4of5.foodspotting.object.User;
 
 import java.io.InputStream;
 

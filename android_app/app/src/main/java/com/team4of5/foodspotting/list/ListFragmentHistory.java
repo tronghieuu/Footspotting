@@ -1,4 +1,4 @@
-package com.team4of5.foodspotting;
+package com.team4of5.foodspotting.list;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -20,10 +20,13 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.team4of5.foodspotting.R;
+import com.team4of5.foodspotting.object.User;
+import com.team4of5.foodspotting.object.UserHistory;
+import com.team4of5.foodspotting.restaurant.Restaurent;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -1,4 +1,4 @@
-package com.team4of5.foodspotting;
+package com.team4of5.foodspotting.list;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
@@ -27,6 +27,9 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.team4of5.foodspotting.R;
+import com.team4of5.foodspotting.object.Order;
+import com.team4of5.foodspotting.object.User;
 
 import java.util.ArrayList;
 import java.util.Date;

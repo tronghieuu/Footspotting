@@ -1,4 +1,4 @@
-package com.team4of5.foodspotting;
+package com.team4of5.foodspotting.food;
 
 import android.app.Activity;
 import android.content.Context;
@@ -9,22 +9,22 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
-import android.widget.RatingBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.team4of5.foodspotting.R;
+import com.team4of5.foodspotting.object.Food;
+
 import java.io.InputStream;
 import java.util.List;
 
-public class RatingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private List<Rating> mRatings;
+    private List<Food> mFoods;
     private Context mContext;
     private Activity mActivity;
     private OnItemClickListener mListener;
@@ -41,30 +41,30 @@ public class RatingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     private int lastVisibleItem, totalItemCount;
 
     public interface OnItemClickListener {
-        void onItemClick(Rating item);
+        void onItemClick(Food item);
     }
 
     public interface OnLoadMoreListener {
         void onLoadMore();
     }
 
-    public void add(int position, Rating item) {
-        mRatings.add(position, item);
+    public void add(int position, Food item) {
+        mFoods.add(position, item);
         notifyItemInserted(position);
     }
 
-    public void remove(Rating item) {
-        int position = mRatings.indexOf(item);
-        mRatings.remove(position);
+    public void remove(Food item) {
+        int position = mFoods.indexOf(item);
+        mFoods.remove(position);
         notifyItemRemoved(position);
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public RatingAdapter(Context context, List<Rating> ratings, RecyclerView recyclerView) {
+    public FoodAdapter(Context context, List<Food> foods, RecyclerView recyclerView) {
 
         mContext = context;
         mActivity = (Activity)context;
-        mRatings = ratings;
+        mFoods = foods;
 
         // load more
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -88,7 +88,7 @@ public class RatingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
-            View view = LayoutInflater.from(mActivity).inflate(R.layout.shop_item_review, parent, false);
+            View view = LayoutInflater.from(mActivity).inflate(R.layout.shop_item, parent, false);
             return new ViewHolderRow(view);
         } else if (viewType == VIEW_TYPE_LOADING) {
             View view = LayoutInflater.from(mActivity).inflate(R.layout.item_loading, parent, false);
@@ -104,18 +104,18 @@ public class RatingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         // - replace the contents of the view with that element
 
         if (holder instanceof ViewHolderRow) {
-            Rating rating = mRatings.get(position);
+            Food food = mFoods.get(position);
 
             ViewHolderRow userViewHolder = (ViewHolderRow) holder;
 
 
-            userViewHolder.tvUserName.setText(rating.getUser_name());
-            userViewHolder.tvComment.setText(rating.getComment());
-            userViewHolder.tvTime.setText(rating.getTime());
-            userViewHolder.rateRating.setRating((float)rating.getRate());
+            userViewHolder.tvPrice.setText("đ"+food.getPrice());
+            userViewHolder.tvFoodName.setText(food.getName());
+            new DownloadImageFromInternet(userViewHolder.imageView)
+                    .execute(food.getImage());
 
             // binding item click listner
-            userViewHolder.bind(mRatings.get(position), mListener);
+            userViewHolder.bind(mFoods.get(position), mListener);
         } else if (holder instanceof ViewHolderLoading) {
             ViewHolderLoading loadingViewHolder = (ViewHolderLoading) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
@@ -126,7 +126,7 @@ public class RatingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     // Return the size of your dataset (invoked by the layout manager)
     @Override
     public int getItemCount() {
-        return mRatings == null ? 0 : mRatings.size();
+        return mFoods == null ? 0 : mFoods.size();
     }
 
     public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
@@ -139,7 +139,7 @@ public class RatingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
 
     @Override
     public int getItemViewType(int position) {
-        return mRatings.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
+        return mFoods.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
     }
 
     public void setLoaded() {
@@ -155,24 +155,51 @@ public class RatingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
     }
 
+    private class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
+
+        ImageView imageView;
+
+        public DownloadImageFromInternet(ImageView imageView){
+            this.imageView = imageView;
+        }
+
+        @Override
+        protected Bitmap doInBackground(String... urls) {
+            String imageURL = urls[0];
+            Bitmap bimage = null;
+            try {
+                InputStream in = new java.net.URL(imageURL).openStream();
+                bimage = BitmapFactory.decodeStream(in);
+
+            } catch (Exception e) {
+                Log.e("Error Message", e.getMessage());
+                e.printStackTrace();
+            }
+            return bimage;
+        }
+
+        @Override
+        protected void onPostExecute(Bitmap result) {
+            imageView.setImageBitmap(result);
+        }
+    }
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public class ViewHolderRow extends RecyclerView.ViewHolder {
-        public TextView tvUserName, tvComment, tvTime;
-        public RatingBar rateRating;
+        public TextView tvFoodName, tvPrice;
+        public ImageView imageView;
 
 
         public ViewHolderRow(View v) {
             super(v);
-            tvUserName = v.findViewById(R.id.textShopReviewUserName);
-            rateRating = v.findViewById(R.id.ratingShopPerson);
-            tvComment = v.findViewById(R.id.textReviewComment);
-            tvTime = v.findViewById(R.id.texTimeOfRating);
+            tvFoodName = v.findViewById(R.id.textFoodName);
+            imageView = v.findViewById(R.id.imageFood);
+            tvPrice = v.findViewById(R.id.textFoodPrice);
         }
 
-        public void bind(final Rating item, final OnItemClickListener listener) {
+        public void bind(final Food item, final OnItemClickListener listener) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

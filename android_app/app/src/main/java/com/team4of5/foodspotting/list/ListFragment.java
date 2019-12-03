@@ -1,4 +1,4 @@
-package com.team4of5.foodspotting;
+package com.team4of5.foodspotting.list;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -13,6 +13,8 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
+import com.team4of5.foodspotting.R;
+import com.team4of5.foodspotting.object.User;
 
 public class ListFragment extends Fragment {
     @Nullable

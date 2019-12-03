@@ -1,4 +1,4 @@
-package com.team4of5.foodspotting;
+package com.team4of5.foodspotting.food;
 
 import android.app.Activity;
 import android.content.Context;
@@ -13,25 +13,27 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.team4of5.foodspotting.R;
+import com.team4of5.foodspotting.object.Food;
+
 import java.io.InputStream;
 import java.util.List;
 
-public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class FoodAdapterPreview extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private List<Food> mFoods;
     private Context mContext;
     private Activity mActivity;
-    private OnItemClickListener mListener;
+    private FoodButtonListener mBtnFoodListener;
+
 
     // for load more
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
-    private OnLoadMoreListener onLoadMoreListener;
 
     // The minimum amount of items to have below your current scroll position
     // before loading more.
@@ -39,8 +41,9 @@ public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     private int visibleThreshold = 6;
     private int lastVisibleItem, totalItemCount;
 
-    public interface OnItemClickListener {
-        void onItemClick(Food item);
+    public interface FoodButtonListener {
+        void onDeleteButtonClick(View v, int position);
+        void onModifyButtonClick(View v, int position);
     }
 
     public interface OnLoadMoreListener {
@@ -59,11 +62,13 @@ public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public FoodAdapter(Context context, List<Food> foods, RecyclerView recyclerView) {
+    public FoodAdapterPreview(Context context, List<Food> foods, RecyclerView recyclerView,
+                              FoodButtonListener btnFoodListener) {
 
         mContext = context;
         mActivity = (Activity)context;
         mFoods = foods;
+        mBtnFoodListener = btnFoodListener;
 
         // load more
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -73,12 +78,6 @@ public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                 super.onScrolled(recyclerView, dx, dy);
                 totalItemCount = linearLayoutManager.getItemCount();
                 lastVisibleItem = linearLayoutManager.findLastVisibleItemPosition();
-                if (!isLoading && totalItemCount <= (lastVisibleItem + visibleThreshold)) {
-                    if (onLoadMoreListener != null) {
-                        onLoadMoreListener.onLoadMore();
-                    }
-                    isLoading = true;
-                }
             }
         });
     }
@@ -87,7 +86,7 @@ public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
-            View view = LayoutInflater.from(mActivity).inflate(R.layout.shop_item, parent, false);
+            View view = LayoutInflater.from(mActivity).inflate(R.layout.item_food_preview, parent, false);
             return new ViewHolderRow(view);
         } else if (viewType == VIEW_TYPE_LOADING) {
             View view = LayoutInflater.from(mActivity).inflate(R.layout.item_loading, parent, false);
@@ -98,15 +97,14 @@ public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     // Replace the contents of a view (invoked by the layout manager)
     @Override
-    public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+    public void onBindViewHolder(RecyclerView.ViewHolder holder, final int position) {
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
         if (holder instanceof ViewHolderRow) {
-            Food food = mFoods.get(position);
+            final Food food = mFoods.get(position);
 
             ViewHolderRow userViewHolder = (ViewHolderRow) holder;
-
 
             userViewHolder.tvPrice.setText("đ"+food.getPrice());
             userViewHolder.tvFoodName.setText(food.getName());
@@ -114,7 +112,23 @@ public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
                     .execute(food.getImage());
 
             // binding item click listner
-            userViewHolder.bind(mFoods.get(position), mListener);
+
+
+
+            userViewHolder.btnModify.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mBtnFoodListener.onModifyButtonClick(view, position);
+                }
+            });
+
+            userViewHolder.btnDelete.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    mBtnFoodListener.onDeleteButtonClick(view, position);
+                }
+            });
+
         } else if (holder instanceof ViewHolderLoading) {
             ViewHolderLoading loadingViewHolder = (ViewHolderLoading) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
@@ -128,21 +142,10 @@ public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
         return mFoods == null ? 0 : mFoods.size();
     }
 
-    public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
-        this.onLoadMoreListener = mOnLoadMoreListener;
-    }
-
-    public void setOnItemListener(OnItemClickListener listener) {
-        this.mListener = listener;
-    }
 
     @Override
     public int getItemViewType(int position) {
         return mFoods.get(position) == null ? VIEW_TYPE_LOADING : VIEW_TYPE_ITEM;
-    }
-
-    public void setLoaded() {
-        isLoading = false;
     }
 
     private class ViewHolderLoading extends RecyclerView.ViewHolder {
@@ -189,22 +192,16 @@ public class FoodAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
     public class ViewHolderRow extends RecyclerView.ViewHolder {
         public TextView tvFoodName, tvPrice;
         public ImageView imageView;
-
+        public Button btnModify, btnDelete;
 
         public ViewHolderRow(View v) {
             super(v);
-            tvFoodName = v.findViewById(R.id.textFoodName);
-            imageView = v.findViewById(R.id.imageFood);
-            tvPrice = v.findViewById(R.id.textFoodPrice);
-        }
+            tvFoodName = v.findViewById(R.id.textFoodNamePreview);
+            imageView = v.findViewById(R.id.imageFoodPreview);
+            tvPrice = v.findViewById(R.id.textFoodPricePreview);
+            btnModify = v.findViewById(R.id.btnFoodModify);
+            btnDelete = v.findViewById(R.id.btnFoodDelete);
 
-        public void bind(final Food item, final OnItemClickListener listener) {
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    listener.onItemClick(item);
-                }
-            });
         }
     }
 

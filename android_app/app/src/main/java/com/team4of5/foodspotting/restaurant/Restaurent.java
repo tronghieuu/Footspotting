@@ -1,4 +1,4 @@
-package com.team4of5.foodspotting;
+package com.team4of5.foodspotting.restaurant;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -31,6 +31,11 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.team4of5.foodspotting.R;
+import com.team4of5.foodspotting.food.FoodAdapter;
+import com.team4of5.foodspotting.object.Food;
+import com.team4of5.foodspotting.object.User;
+import com.team4of5.foodspotting.rating.Rate;
 
 import java.io.InputStream;
 import java.util.ArrayList;
