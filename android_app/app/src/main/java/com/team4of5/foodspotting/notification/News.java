@@ -63,4 +63,14 @@ public class News implements Serializable {
     private String title;
     private String content;
     private String address;
+
+    public String getDateCreated() {
+        return dateCreated;
+    }
+
+    public void setDateCreated(String dateCreated) {
+        this.dateCreated = dateCreated;
+    }
+
+    private String dateCreated;
 }

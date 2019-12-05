@@ -102,7 +102,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public class ViewHolderRow extends RecyclerView.ViewHolder {
-        public TextView tvRestName, tvRestAddress, tvTitle;
+        public TextView tvRestName, tvRestAddress, tvTitle, dateCreated;
         public ImageView imageView;
 
         public ViewHolderRow(View v) {
@@ -111,6 +111,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             tvTitle = v.findViewById(R.id.tvTitleNews);
             tvRestAddress = v.findViewById(R.id.tvRestaurantAddressNews);
             imageView = v.findViewById(R.id.imageNews);
+            dateCreated = v.findViewById(R.id.tvDateCreated);
         }
 
         public void bind(final News item, final OnItemClickListener listener) {
@@ -136,6 +137,7 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             userViewHolder.tvRestName.setText(tin.getTenquan());
             userViewHolder.tvTitle.setText(tin.getTitle());
             userViewHolder.tvRestAddress.setText(tin.getAddress());
+            userViewHolder.dateCreated.setText(tin.getDateCreated());
             new DownloadImageFromInternet(userViewHolder.imageView)
                     .execute(tin.getImage());
 
