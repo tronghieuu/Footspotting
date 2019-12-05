@@ -30,8 +30,8 @@ import com.team4of5.foodspotting.EmailLoginActivity;
 import com.team4of5.foodspotting.OwnerAppActivity;
 import com.team4of5.foodspotting.R;
 import com.team4of5.foodspotting.RegisterOwnerActivity;
-import com.team4of5.foodspotting.RegisterShipperActivity;
-import com.team4of5.foodspotting.ShipperAppActivity;
+import com.team4of5.foodspotting.shipper.RegisterShipperActivity;
+import com.team4of5.foodspotting.shipper.ShipperAppActivity;
 import com.team4of5.foodspotting.UserInformationActivity;
 import com.team4of5.foodspotting.object.User;
 
