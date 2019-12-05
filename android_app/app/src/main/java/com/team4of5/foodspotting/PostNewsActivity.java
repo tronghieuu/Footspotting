@@ -3,6 +3,7 @@ package com.team4of5.foodspotting;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
 
 import android.app.Dialog;
 import android.content.Intent;
@@ -40,6 +41,8 @@ import com.team4of5.foodspotting.object.User;
 
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -144,6 +147,7 @@ public class PostNewsActivity extends AppCompatActivity {
                                 map.put("title", title);
                                 map.put("tenquan", tenquan);
                                 map.put("address", address);
+                                map.put("dateCreated",new Date().toString());
 
                                 FirebaseFirestore db1 = FirebaseFirestore.getInstance();
                                 db1.collection("restaurants").document(id_res).collection("news")
