@@ -68,9 +68,8 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
             "Hải Châu",
             "Liên Chiểu",
             "Hòa Khánh"};
-    private CircleImageView profileImage;
-    private static int PICK_IMAGE_REQUEST = 23,PICK_IMAGE_REQUEST1 = 11;
-    private Uri filePath, filePath1;
+    private static int PICK_IMAGE_REQUEST1 = 11;
+    private Uri  filePath1;
     private ImageView mBackground;
 
     @Override
