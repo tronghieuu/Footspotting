@@ -21,6 +21,7 @@ import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -46,9 +47,25 @@ import java.util.Map;
 
 public class ResInfoActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText mEdtName, mEdtType, mEdtProvince,
-            mEdtDistrict, mEdtAddress, mEdtPhone;
-    //private Spinner
+    private EditText mEdtName, mEdtType, mEdtAddress, mEdtPhone;
+    private Spinner mEdtProvince,
+                mEdtDistrict;
+    ArrayAdapter<String> adapter1 = null;
+    String arr[]={
+            "Hà Nội",
+            "TT Huế",
+            "Đà Nẵng"};
+    String arr1[]={
+            "Quận 1",
+            "Quận 2",
+            "Quận 3"};
+    String arr2[]={
+            "Phú Vang",
+            "Phú Thượng"};
+    String arr3[]={
+            "Hải Châu",
+            "Liên Chiểu",
+            "Hòa Khánh"};
     private Button mBtnBack, mBtnUpdate, mBtnPickPhoto, mBtnOpenning, mBtnClosing;
     private String id_res;
     private ImageView mImageView;
@@ -56,6 +73,31 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
     private static int PICK_IMAGE_REQUEST = 2341;
     private Dialog dialog;
     private int mHour, mMinute;
+
+    public void setAddress()
+    {
+        if(mEdtProvince.getSelectedItem().toString().equals("Hà Nội"))
+            adapter1=new ArrayAdapter<String>
+                    (
+                            this,
+                            android.R.layout.simple_spinner_item,
+                            arr1
+                    );
+        if(mEdtProvince.getSelectedItem().toString().equals("TT Huế"))
+            adapter1=new ArrayAdapter<String>
+                    (
+                            this,
+                            android.R.layout.simple_spinner_item,
+                            arr2
+                    );
+        if(mEdtProvince.getSelectedItem().toString().equals("Đà Nẵng"))
+            adapter1=new ArrayAdapter<String>
+                    (
+                            this,
+                            android.R.layout.simple_spinner_item,
+                            arr3
+                    );
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -71,6 +113,23 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
         mEdtType = findViewById(R.id.edtOwnerResType);
         mEdtProvince = findViewById(R.id.edtOwnerResProvince);
         mEdtDistrict = findViewById(R.id.edtOwnerResDistrict);
+
+        ///////////
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>
+                (
+                        this,
+                        android.R.layout.simple_spinner_item,
+                        arr
+                );
+        adapter.setDropDownViewResource
+                (android.R.layout.simple_list_item_single_choice);
+        mEdtProvince.setAdapter(adapter);
+
+
+        adapter1.setDropDownViewResource
+                (android.R.layout.simple_list_item_single_choice);
+        mEdtDistrict.setAdapter(adapter1);
+        ///////////
         mEdtAddress = findViewById(R.id.edtOwnerResAddress);
         mEdtPhone = findViewById(R.id.edtOwnerResPhone);
         mBtnOpenning = findViewById(R.id.btn_ResOpen);
@@ -117,8 +176,8 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
         String name, type, province, district, address, phone, openingTime, closingTime;
         name = mEdtName.getText().toString();
         type = mEdtType.getText().toString();
-        province = mEdtProvince.getText().toString();
-        district = mEdtDistrict.getText().toString();
+        province = mEdtProvince.getSelectedItem().toString();
+        district = mEdtDistrict.getSelectedItem().toString();
         address = mEdtAddress.getText().toString();
         phone = mEdtPhone.getText().toString();
         openingTime = mBtnOpenning.getText().toString();
@@ -165,8 +224,7 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
                     DocumentSnapshot doc = queryDocumentSnapshots.getDocuments().get(0);
                     mEdtName.setHint(doc.getString("name"));
                     mEdtType.setHint(doc.getString("type"));
-                    mEdtProvince.setHint(doc.getString("province"));
-                    mEdtDistrict.setHint(doc.getString("district"));
+
                     mEdtAddress.setHint(doc.getString("street"));
                     mEdtPhone.setHint(doc.getString("phone"));
                     mBtnOpenning.setHint(doc.getString("opening_time"));
