@@ -16,9 +16,12 @@ import android.provider.MediaStore;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -37,14 +40,59 @@ import java.util.Map;
 
 public class RegisterOwnerActivity extends AppCompatActivity implements View.OnClickListener {
 
-    private EditText mEdtName, mEdtType, mEdtProvince,
-            mEdtDistrict, mEdtAddress, mEdtPhone;
+    private EditText mEdtName, mEdtType, mEdtAddress, mEdtPhone;
     private Button mBtnBack, mBtnCreate, mBtnPickPhoto, mBtnResOpenDangKy, mBtnResCloseDangKy;
     private ImageView mImageView;
     private Uri filePath;
     private static int PICK_IMAGE_REQUEST = 341;
     private Dialog dialog;
     private int mHour, mMinute;
+
+    private Spinner mEdtProvince,
+            mEdtDistrict;
+    ArrayAdapter<String> adapter1 = null;
+    String arr[]={
+            "Hà Nội",
+            "TT Huế",
+            "Đà Nẵng"};
+    String arr1[]={
+            "Quận 1",
+            "Quận 2",
+            "Quận 3"};
+    String arr2[]={
+            "Phú Vang",
+            "Phú Thượng"};
+    String arr3[]={
+            "Hải Châu",
+            "Liên Chiểu",
+            "Hòa Khánh"};
+    public void setAddress()
+    {
+        if(mEdtProvince.getSelectedItem().toString().equals("Hà Nội"))
+            adapter1=new ArrayAdapter<String>
+                    (
+                            this,
+                            android.R.layout.simple_spinner_item,
+                            arr1
+                    );
+        if(mEdtProvince.getSelectedItem().toString().equals("TT Huế"))
+            adapter1=new ArrayAdapter<String>
+                    (
+                            this,
+                            android.R.layout.simple_spinner_item,
+                            arr2
+                    );
+        if(mEdtProvince.getSelectedItem().toString().equals("Đà Nẵng"))
+            adapter1=new ArrayAdapter<String>
+                    (
+                            this,
+                            android.R.layout.simple_spinner_item,
+                            arr3
+                    );
+        adapter1.setDropDownViewResource
+                (android.R.layout.simple_list_item_single_choice);
+        mEdtDistrict.setAdapter(adapter1);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -60,6 +108,39 @@ public class RegisterOwnerActivity extends AppCompatActivity implements View.OnC
         mEdtType = findViewById(R.id.edtOwnerResTypeDangKy);
         mEdtProvince = findViewById(R.id.edtOwnerResProvinceDangKy);
         mEdtDistrict = findViewById(R.id.edtOwnerResDistrictDangKy);
+
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>
+                (
+                        this,
+                        android.R.layout.simple_spinner_item,
+                        arr
+                );
+        adapter.setDropDownViewResource
+                (android.R.layout.simple_list_item_single_choice);
+        mEdtProvince.setAdapter(adapter);
+        mEdtProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                setAddress();adapter1.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+
+            }
+        });
+
+        adapter1=new ArrayAdapter<String>
+                (
+                        this,
+                        android.R.layout.simple_spinner_item,
+                        arr1
+                );
+        adapter1.setDropDownViewResource
+                (android.R.layout.simple_list_item_single_choice);
+        mEdtDistrict.setAdapter(adapter1);
+
         mEdtAddress = findViewById(R.id.edtOwnerResAddressDangKy);
         mEdtPhone = findViewById(R.id.edtOwnerResPhoneDangKy);
         mBtnResOpenDangKy = findViewById(R.id.btn_ResOpenDangky);
@@ -131,19 +212,19 @@ public class RegisterOwnerActivity extends AppCompatActivity implements View.OnC
             toast.show();
             return;
         }
-        final String type = mEdtProvince.getText().toString();
+        final String type = mEdtProvince.getSelectedItem().toString();
         if(type.length() == 0){
             toast.setText("Chưa nhập đủ thông tin!");
             toast.show();
             return;
         }
-        final String province = mEdtProvince.getText().toString();
+        final String province = mEdtProvince.getSelectedItem().toString();
         if(province.length() == 0){
             toast.setText("Chưa nhập đủ thông tin!");
             toast.show();
             return;
         }
-        final String district = mEdtDistrict.getText().toString();
+        final String district = mEdtDistrict.getSelectedItem().toString();
         if(district.length() == 0){
             toast.setText("Chưa nhập đủ thông tin!");
             toast.show();
