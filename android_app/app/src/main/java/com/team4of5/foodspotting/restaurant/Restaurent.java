@@ -67,6 +67,7 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
     private Food mFood;
     private TextView mTvResName;
     private Button mBtnBack;
+    private String province;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -192,28 +193,30 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
                 mOrderDialog.dismiss();
                 if(User.getCurrentUser().getProvince().length() != 0
                     && User.getCurrentUser().getPhone().length() != 0) {
-                    final long timestamp = new Date().getTime();
-                    dialog.show();
-                    Map<String, Object> order = new HashMap<>();
-                    order.put("timestamp", timestamp);
-                    order.put("user_id", User.getCurrentUser().getId());
-                    order.put("food_id", mFood.getId());
-                    order.put("amount", mAmountOrder+"");
-                    order.put("status", "1");
-                    order.put("restaurant_id", id_restaurent);
-                    order.put("shipper_id", "");
-                    order.put("area", User.getCurrentUser().getProvince());
-                    FirebaseFirestore.getInstance().collection("order")
-                            .add(order).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                        @Override
-                        public void onSuccess(DocumentReference documentReference) {
-                            User.getCurrentUser().setListUpdate(true);
-                            User.getCurrentUser().setCartUpdate(true);
-                            User.getCurrentUser().setHistoryUpdate(true);
-                            User.getCurrentUser().setOrderUpdate(true);
-                            dialog.dismiss();
-                        }
-                    });
+                    if(User.getCurrentUser().getProvince().contentEquals(province)){
+                        final long timestamp = new Date().getTime();
+                        dialog.show();
+                        Map<String, Object> order = new HashMap<>();
+                        order.put("timestamp", timestamp);
+                        order.put("user_id", User.getCurrentUser().getId());
+                        order.put("food_id", mFood.getId());
+                        order.put("amount", mAmountOrder+"");
+                        order.put("status", "1");
+                        order.put("restaurant_id", id_restaurent);
+                        order.put("shipper_id", "");
+                        order.put("area", User.getCurrentUser().getProvince());
+                        FirebaseFirestore.getInstance().collection("order")
+                                .add(order).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                            @Override
+                            public void onSuccess(DocumentReference documentReference) {
+                                User.getCurrentUser().setListUpdate(true);
+                                User.getCurrentUser().setCartUpdate(true);
+                                User.getCurrentUser().setHistoryUpdate(true);
+                                User.getCurrentUser().setOrderUpdate(true);
+                                dialog.dismiss();
+                            }
+                        });
+                    }
                 } else Toast.makeText(this, "Hãy cập nhật thông tin cá nhân!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnBackResDetail:
@@ -253,6 +256,7 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
             @Override
             public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                 DocumentSnapshot doc = task.getResult();
+                province = doc.getString("province");
                 mTvResName.setText(doc.getString("name"));
                 mShopType.setText(doc.getString("type"));
                 mOpeningTime.setText(doc.getString("opening_time")+" - "+doc.getString("closing_time"));
@@ -262,6 +266,7 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
                 String address = doc.getString("street") + " " +
                         doc.getString("district") + " " + doc.getString("province");
                 mShopAddress.setText(address);
+
                 new Restaurent.DownloadImageFromInternet(mImageView)
                         .execute(doc.getString("image"));
             }
