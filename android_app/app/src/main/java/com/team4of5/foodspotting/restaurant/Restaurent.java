@@ -199,6 +199,8 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
                 order.put("amount", mAmountOrder+"");
                 order.put("status", "1");
                 order.put("restaurant_id", id_restaurent);
+                order.put("shipper_id", "");
+                order.put("area", User.getCurrentUser().getProvince());
                 FirebaseFirestore.getInstance().collection("order")
                         .add(order).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                     @Override

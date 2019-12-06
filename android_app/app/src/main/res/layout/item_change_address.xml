@@ -10,7 +10,7 @@
     <Spinner
         android:id="@+id/edtChangeProvince"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:textSize="30dp"
         android:hint="tỉnh/thành phố"
         android:paddingHorizontal="10dp"
@@ -19,7 +19,7 @@
     <Spinner
         android:id="@+id/edtChangeDistrict"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:textSize="30dp"
         android:hint="quận/huyện"
         android:paddingHorizontal="10dp"
