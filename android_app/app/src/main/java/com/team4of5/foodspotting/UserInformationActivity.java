@@ -71,6 +71,9 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
             "Hòa Khánh"};
 
     ArrayAdapter<String> adapter1 = null;
+    private static int PICK_IMAGE_REQUEST1 = 11;
+    private Uri filePath1;
+    private ImageView mBackground;
 
 
     @Override
