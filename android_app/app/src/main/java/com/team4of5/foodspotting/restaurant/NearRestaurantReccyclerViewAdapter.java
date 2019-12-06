@@ -40,6 +40,7 @@ public class NearRestaurantReccyclerViewAdapter extends RecyclerView.Adapter<Rec
     private boolean isLoading;
     private int visibleThreshold = 6;
     private int lastVisibleItem, totalItemCount;
+    String status;
 
     public interface OnItemClickListener {
         void onItemClick(Restaurant item);
@@ -61,11 +62,12 @@ public class NearRestaurantReccyclerViewAdapter extends RecyclerView.Adapter<Rec
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public NearRestaurantReccyclerViewAdapter(Context context, List<Restaurant> restaurants, RecyclerView recyclerView) {
+    public NearRestaurantReccyclerViewAdapter(Context context, List<Restaurant> restaurants, RecyclerView recyclerView,String status ) {
 
         mContext = context;
         mActivity = (Activity)context;
         mRestaurants = restaurants;
+        this.status=status;
 
         // load more
         final LinearLayoutManager linearLayoutManager = (LinearLayoutManager) recyclerView.getLayoutManager();
@@ -109,12 +111,20 @@ public class NearRestaurantReccyclerViewAdapter extends RecyclerView.Adapter<Rec
 
             ViewHolderRow userViewHolder = (ViewHolderRow) holder;
 
-            userViewHolder.ratingBar.setRating((float)restaurant.getRate());
-            userViewHolder.tvRestName.setText(restaurant.getName());
-            userViewHolder.tvRestAddress.setText(restaurant.getAddress());
-            new DownloadImageFromInternet(userViewHolder.imageView)
-                    .execute(restaurant.getImage());
+            if(status=="Search"){
 
+                userViewHolder.tvRestName.setText(restaurant.getName()+"    "+restaurant.getRate());
+                userViewHolder.tvRestAddress.setText(restaurant.getAddress());
+                new DownloadImageFromInternet(userViewHolder.imageView)
+                        .execute(restaurant.getImage());
+            }
+            else {
+                userViewHolder.ratingBar.setRating((float) restaurant.getRate());
+                userViewHolder.tvRestName.setText(restaurant.getName());
+                userViewHolder.tvRestAddress.setText(restaurant.getAddress());
+                new DownloadImageFromInternet(userViewHolder.imageView)
+                        .execute(restaurant.getImage());
+            }
             // binding item click listner
             userViewHolder.bind(mRestaurants.get(position), mListener);
         } else if (holder instanceof ViewHolderLoading) {

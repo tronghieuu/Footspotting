@@ -17,9 +17,11 @@ import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.Window;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,18 +38,39 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class UserInformationActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button mBtnBack, mBtnChangeUsername, mBtnChangePhone, mBtnChangeAddress, mBtnUpdatePassword
             , mBtnChangePassword, mBtnChangePayment, mBtnchangeName, mBtnChangePhoneNum, mBtnChangeAddress_diff;
     private TextView mTvUsername, mTvPhone, mTvAddress, mTvEmailInfo;
     private Dialog changePasswordDialog, changeNameDialog, changePhoneDialog, changeAddressDialog, loadingDialog;
-    private EditText mEdtCurrentPassword, mEdtNewPassword, mEdtConfirmPassword, mEdtChangeProvince,
-    mEdtChangeDistrict, mEdtChangeStreet, mEdtChangeName, mEdtChangePhone;
+    private EditText mEdtCurrentPassword, mEdtNewPassword, mEdtConfirmPassword, mEdtChangeStreet, mEdtChangeName, mEdtChangePhone;
     private String province, district, street, name, phone;
     private ImageView profileImage;
     private static int PICK_IMAGE_REQUEST = 23;
     private Uri filePath;
+    private Spinner  mEdtChangeProvince,
+            mEdtChangeDistrict;
+    String arr[]={
+            "Hà Nội",
+            "TT Huế",
+            "Đà Nẵng"};
+    String arr1[]={
+            "Quận 1",
+            "Quận 2",
+            "Quận 3"};
+    String arr2[]={
+            "Phú Vang",
+            "Phú Thượng"};
+    String arr3[]={
+            "Hải Châu",
+            "Liên Chiểu",
+            "Hòa Khánh"};
+    private static int PICK_IMAGE_REQUEST1 = 11;
+    private Uri  filePath1;
+    private ImageView mBackground;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -65,6 +88,9 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
         mTvAddress = findViewById(R.id.tvChangeAddress);
         mTvEmailInfo = findViewById(R.id.tvEmailIfo);
 
+        mBackground = findViewById(R.id.background);
+        mBackground.setOnClickListener(this);
+
         profileImage = findViewById(R.id.imageViewAvatar);
         profileImage.setOnClickListener(this);
 
@@ -79,7 +105,43 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
         changeAddressDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
         changeAddressDialog.setContentView(R.layout.item_change_address);
         mEdtChangeProvince = changeAddressDialog.findViewById(R.id.edtChangeProvince);
+        ArrayAdapter<String> adapter=new ArrayAdapter<String>
+                (
+                        this,
+                        android.R.layout.simple_spinner_item,
+                        arr
+                );
+        adapter.setDropDownViewResource
+                (android.R.layout.simple_list_item_single_choice);
+        mEdtChangeProvince.setAdapter(adapter);
+        ArrayAdapter<String> adapter1 = null;
+        if(mEdtChangeProvince.getSelectedItem().toString().equals("Hà Nội"))
+               adapter1=new ArrayAdapter<String>
+                    (
+                            this,
+                            android.R.layout.simple_spinner_item,
+                            arr1
+                    );
+        if(mEdtChangeProvince.getSelectedItem().toString().equals("TT Huế"))
+            adapter1=new ArrayAdapter<String>
+                    (
+                            this,
+                            android.R.layout.simple_spinner_item,
+                            arr2
+                    );
+        if(mEdtChangeProvince.getSelectedItem().toString().equals("Đà Nẵng"))
+            adapter1=new ArrayAdapter<String>
+                    (
+                            this,
+                            android.R.layout.simple_spinner_item,
+                            arr3
+                    );
+
         mEdtChangeDistrict = changeAddressDialog.findViewById(R.id.edtChangeDistrict);
+        adapter1.setDropDownViewResource
+                (android.R.layout.simple_list_item_single_choice);
+        mEdtChangeDistrict.setAdapter(adapter);
+
         mEdtChangeStreet = changeAddressDialog.findViewById(R.id.edtChangeStreet);
         mBtnChangeAddress_diff = changeAddressDialog.findViewById(R.id.btnUpdateAddress);
         mBtnChangeAddress_diff.setOnClickListener(this);
@@ -87,8 +149,8 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
             @Override
             public void onDismiss(DialogInterface dialogInterface) {
                 mEdtChangeStreet.setText("");
-                mEdtChangeDistrict.setText("");
-                mEdtChangeProvince.setText("");
+                mEdtChangeDistrict.setSelection(0);
+                mEdtChangeProvince.setSelection(0);
             }
         });
 
@@ -147,6 +209,8 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
         mBtnChangePayment.setOnClickListener(this);
 
         // data
+        new DownloadImageFromInternet(mBackground)
+                .execute(User.getCurrentUser().getBackground());
         new DownloadImageFromInternet(profileImage)
                 .execute(User.getCurrentUser().getImage());
         mTvUsername.setText(User.getCurrentUser().getName());
@@ -159,6 +223,12 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.background:
+                Intent intentBackground = new Intent();
+                intentBackground.setType("image/*");
+                intentBackground.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intentBackground, "Select Picture"), PICK_IMAGE_REQUEST1);
+                break;
             case R.id.btnBackProfile:
                 setResult(Activity.RESULT_CANCELED, new Intent());
                 finish();
@@ -239,6 +309,44 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
                 }
             });
         }
+        else if(requestCode == PICK_IMAGE_REQUEST1 && resultCode == RESULT_OK
+                && data != null && data.getData() != null )
+        {
+            loadingDialog.show();
+            filePath1 = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath1);
+                mBackground.setImageBitmap(bitmap);
+            }
+            catch (IOException e)
+            {
+                Toast.makeText(this,"fail",Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+            final StorageReference ref = storageReference.child("userImageBackground/"+ User.getCurrentUser().getId());
+            ref.putFile(filePath1).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Map<String, Object> data = new HashMap<>();
+                            data.put("background", uri.toString());
+                            User.getCurrentUser().setBackground(uri.toString());
+                            FirebaseFirestore.getInstance().collection("user")
+                                    .document(User.getCurrentUser().getId()).update(data)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            loadingDialog.dismiss();
+                                        }
+                                    });
+                        }
+                    });
+                }
+            });
+        }
     }
 
     public void changePass() {
@@ -249,8 +357,8 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
     }
 
     public void changeAddress() {
-        province = mEdtChangeProvince.getText().toString();
-        district = mEdtChangeDistrict.getText().toString();
+        province = mEdtChangeProvince.getSelectedItem().toString();
+        district = mEdtChangeDistrict.getSelectedItem().toString();
         street = mEdtChangeStreet.getText().toString();
         if(province.length() == 0) {
             Toast.makeText(this, "chưa nhập tình/thành phố", Toast.LENGTH_SHORT).show();

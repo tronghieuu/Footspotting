@@ -24,6 +24,7 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Spinner;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
@@ -47,6 +48,7 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
 
     private EditText mEdtName, mEdtType, mEdtProvince,
             mEdtDistrict, mEdtAddress, mEdtPhone;
+    //private Spinner
     private Button mBtnBack, mBtnUpdate, mBtnPickPhoto, mBtnOpenning, mBtnClosing;
     private String id_res;
     private ImageView mImageView;

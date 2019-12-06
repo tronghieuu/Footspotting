@@ -11,6 +11,7 @@ import android.view.MenuItem;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.team4of5.foodspotting.list.ListFragment;
+import com.team4of5.foodspotting.notification.NotificationFragment;
 import com.team4of5.foodspotting.object.User;
 import com.team4of5.foodspotting.personal.PersonFragment;
 

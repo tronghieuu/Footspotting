@@ -208,6 +208,9 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                                 if(account.getPhotoUrl() != null){
                                     data.put("image", account.getPhotoUrl().toString());
                                 } else data.put("image", "");
+                                if(account.getPhotoUrl() != null){
+                                    data.put("background", account.getPhotoUrl().toString());
+                                } else data.put("background", "");
                                 db.collection("user")
                                         .add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                     @Override
