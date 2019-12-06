@@ -39,6 +39,8 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
 
+import de.hdodenhof.circleimageview.CircleImageView;
+
 public class UserInformationActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button mBtnBack, mBtnChangeUsername, mBtnChangePhone, mBtnChangeAddress, mBtnUpdatePassword
@@ -67,7 +69,14 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
             "Hải Châu",
             "Liên Chiểu",
             "Hòa Khánh"};
+<<<<<<< HEAD
     ArrayAdapter<String> adapter1 = null;
+=======
+    private CircleImageView profileImage;
+    private static int PICK_IMAGE_REQUEST = 23,PICK_IMAGE_REQUEST1 = 11;
+    private Uri filePath, filePath1;
+    private ImageView mBackground;
+>>>>>>> 6036e1e58755f55aa3c050884b4a6202ab7740dd
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -84,6 +93,9 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
         mTvPhone = findViewById(R.id.tvChangePhone);
         mTvAddress = findViewById(R.id.tvChangeAddress);
         mTvEmailInfo = findViewById(R.id.tvEmailIfo);
+
+        mBackground = findViewById(R.id.background);
+        mBackground.setOnClickListener(this);
 
         profileImage = findViewById(R.id.imageViewAvatar);
         profileImage.setOnClickListener(this);
@@ -195,6 +207,8 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
         mBtnChangePayment.setOnClickListener(this);
 
         // data
+        new DownloadImageFromInternet(mBackground)
+                .execute(User.getCurrentUser().getBackground());
         new DownloadImageFromInternet(profileImage)
                 .execute(User.getCurrentUser().getImage());
         mTvUsername.setText(User.getCurrentUser().getName());
@@ -231,6 +245,12 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.background:
+                Intent intentBackground = new Intent();
+                intentBackground.setType("image/*");
+                intentBackground.setAction(Intent.ACTION_GET_CONTENT);
+                startActivityForResult(Intent.createChooser(intentBackground, "Select Picture"), PICK_IMAGE_REQUEST1);
+                break;
             case R.id.btnBackProfile:
                 setResult(Activity.RESULT_CANCELED, new Intent());
                 finish();
@@ -298,6 +318,44 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
                             Map<String, Object> data = new HashMap<>();
                             data.put("image", uri.toString());
                             User.getCurrentUser().setImage(uri.toString());
+                            FirebaseFirestore.getInstance().collection("user")
+                                    .document(User.getCurrentUser().getId()).update(data)
+                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+                                            loadingDialog.dismiss();
+                                        }
+                                    });
+                        }
+                    });
+                }
+            });
+        }
+        else if(requestCode == PICK_IMAGE_REQUEST1 && resultCode == RESULT_OK
+                && data != null && data.getData() != null )
+        {
+            loadingDialog.show();
+            filePath1 = data.getData();
+            try {
+                Bitmap bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), filePath1);
+                mBackground.setImageBitmap(bitmap);
+            }
+            catch (IOException e)
+            {
+                Toast.makeText(this,"fail",Toast.LENGTH_SHORT).show();
+                e.printStackTrace();
+            }
+            StorageReference storageReference = FirebaseStorage.getInstance().getReference();
+            final StorageReference ref = storageReference.child("userImageBackground/"+ User.getCurrentUser().getId());
+            ref.putFile(filePath1).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+                @Override
+                public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                    ref.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Map<String, Object> data = new HashMap<>();
+                            data.put("background", uri.toString());
+                            User.getCurrentUser().setBackground(uri.toString());
                             FirebaseFirestore.getInstance().collection("user")
                                     .document(User.getCurrentUser().getId()).update(data)
                                     .addOnSuccessListener(new OnSuccessListener<Void>() {

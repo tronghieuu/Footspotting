@@ -30,12 +30,14 @@ import com.team4of5.foodspotting.EmailLoginActivity;
 import com.team4of5.foodspotting.OwnerAppActivity;
 import com.team4of5.foodspotting.R;
 import com.team4of5.foodspotting.RegisterOwnerActivity;
-import com.team4of5.foodspotting.RegisterShipperActivity;
-import com.team4of5.foodspotting.ShipperAppActivity;
+import com.team4of5.foodspotting.shipper.RegisterShipperActivity;
+import com.team4of5.foodspotting.shipper.ShipperAppActivity;
 import com.team4of5.foodspotting.UserInformationActivity;
 import com.team4of5.foodspotting.object.User;
 
 import java.io.InputStream;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class PersonFragment extends Fragment implements View.OnClickListener {
 
@@ -45,7 +47,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     private static int RQ_LOGIN = 10;
     private static int RQ_INFO = 324;
     private FirebaseFirestore mDb;
-    private ImageView profileImage;
+    private CircleImageView profileImage;
     private GoogleSignInClient mGoogleSignInClient;
 
     @Nullable

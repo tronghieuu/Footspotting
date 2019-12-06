@@ -63,6 +63,7 @@ public class MainActivity extends AppCompatActivity {
                     User.getCurrentUser().setStreet(doc.getString("street"));
                     User.getCurrentUser().setName(doc.getString("name"));
                     User.getCurrentUser().setImage(doc.getString("image"));
+                    User.getCurrentUser().setBackground(doc.getString("background"));
                     User.getCurrentUser().setDistrict(doc.getString("district"));
                     User.getCurrentUser().setProvince(doc.getString("province"));
                     User.getCurrentUser().setPhone(doc.getString("phone"));

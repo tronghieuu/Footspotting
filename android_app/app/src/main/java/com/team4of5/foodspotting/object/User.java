@@ -4,7 +4,23 @@ public class User {
 
     private static User instance = null;
     private int type, orderTab; // 1 normal or 2 shipper or 3 owner
-    private String street, district, province, name, phone, id, image;
+    private String street;
+    private String district;
+    private String province;
+    private String name;
+    private String phone;
+    private String id;
+    private String image;
+
+    public String getBackground() {
+        return background;
+    }
+
+    public void setBackground(String background) {
+        this.background = background;
+    }
+
+    private String background;
     private boolean ownerUpdate, listUpdate, orderUpdate, historyUpdate, cartUpdate;
 
     private User(){
@@ -16,6 +32,7 @@ public class User {
         name = "";
         phone = "";
         image = "";
+        background ="";
         ownerUpdate = false;
         listUpdate = false;
         orderTab = 0;
@@ -105,6 +122,7 @@ public class User {
         name = "";
         phone = "";
         image = "";
+        background = "";
     }
 
     public boolean getOwnerUpdate(){
