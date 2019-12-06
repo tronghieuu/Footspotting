@@ -35,10 +35,10 @@ import java.util.List;
 import java.util.Map;
 
 
-public class WaitShipFragment extends Fragment {
+public class WaitGetFragment extends Fragment {
     private LinearLayout linearLayoutLogin;
     private RelativeLayout relativeLayoutLogout;
-    private WaitShipAdapter waitConfirmAdapter;
+    private WaitGetAdapter waitGetAdapter;
     private List<Order> mOrders;
     private RecyclerView mRecyclerView;
     private Dialog dialog;
@@ -56,28 +56,13 @@ public class WaitShipFragment extends Fragment {
             mOrders = new ArrayList<>();
             mRecyclerView = view.findViewById(R.id.recycleViewOngoing);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-            waitConfirmAdapter = new WaitShipAdapter(getActivity(), mOrders, mRecyclerView, new WaitShipAdapter.BtnOngoingListener(){
-                @Override
-                public void onCancelButtonClick(View v, final int position) {
-                    dialog.show();
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("status", "0");
-                    FirebaseFirestore.getInstance().collection("order")
-                            .document(mOrders.get(position).getId()).update(data)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    mOrders.remove(position);
-                                    waitConfirmAdapter.notifyDataSetChanged();
-                                    dialog.dismiss();
-                                }
-                            });
-                }
+            waitGetAdapter = new WaitGetAdapter(getActivity(), mOrders, mRecyclerView, new WaitGetAdapter.BtnOngoingListener(){
+
                 @Override
                 public void onContactButtonClick(View v, int position) {
                     dialog.show();
                     FirebaseFirestore.getInstance().collection("user")
-                            .document(mOrders.get(position).getUser_id())
+                            .document(mOrders.get(position).getShipper_id())
                             .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
                         @Override
                         public void onSuccess(DocumentSnapshot documentSnapshot) {
@@ -90,13 +75,13 @@ public class WaitShipFragment extends Fragment {
                 }
 
             });
-            waitConfirmAdapter.setOnItemListener(new WaitShipAdapter.OnItemClickListener() {
+            waitGetAdapter.setOnItemListener(new WaitGetAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(Order item) {
 
                 }
             });
-            mRecyclerView.setAdapter(waitConfirmAdapter);
+            mRecyclerView.setAdapter(waitGetAdapter);
 
             dialog = new Dialog(getActivity());
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -130,7 +115,7 @@ public class WaitShipFragment extends Fragment {
         res_id = getActivity().getIntent().getStringExtra("res_id");
         FirebaseFirestore.getInstance().collection("order")
                 .whereEqualTo("restaurant_id", res_id)
-                .whereEqualTo("status","2")
+                .whereEqualTo("status","3")
                 .orderBy("timestamp", Query.Direction.ASCENDING)
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -145,7 +130,7 @@ public class WaitShipFragment extends Fragment {
                             doc.getId(),doc.getString("shipper_id"), doc.getString("area")));
                     Toast.makeText(getContext(), "Done ", Toast.LENGTH_SHORT).show();
 
-                    waitConfirmAdapter.notifyDataSetChanged();
+                    waitGetAdapter.notifyDataSetChanged();
                 }
             }
         });

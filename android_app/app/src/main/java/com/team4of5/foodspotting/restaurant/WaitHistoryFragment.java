@@ -30,15 +30,13 @@ import com.team4of5.foodspotting.R;
 import com.team4of5.foodspotting.object.Order;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 
-public class WaitShipFragment extends Fragment {
+public class WaitHistoryFragment extends Fragment {
     private LinearLayout linearLayoutLogin;
     private RelativeLayout relativeLayoutLogout;
-    private WaitShipAdapter waitConfirmAdapter;
+    private WaitHistoryAdapter waitHistoryAdapter;
     private List<Order> mOrders;
     private RecyclerView mRecyclerView;
     private Dialog dialog;
@@ -56,47 +54,14 @@ public class WaitShipFragment extends Fragment {
             mOrders = new ArrayList<>();
             mRecyclerView = view.findViewById(R.id.recycleViewOngoing);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
-            waitConfirmAdapter = new WaitShipAdapter(getActivity(), mOrders, mRecyclerView, new WaitShipAdapter.BtnOngoingListener(){
-                @Override
-                public void onCancelButtonClick(View v, final int position) {
-                    dialog.show();
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("status", "0");
-                    FirebaseFirestore.getInstance().collection("order")
-                            .document(mOrders.get(position).getId()).update(data)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    mOrders.remove(position);
-                                    waitConfirmAdapter.notifyDataSetChanged();
-                                    dialog.dismiss();
-                                }
-                            });
-                }
-                @Override
-                public void onContactButtonClick(View v, int position) {
-                    dialog.show();
-                    FirebaseFirestore.getInstance().collection("user")
-                            .document(mOrders.get(position).getUser_id())
-                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            Intent intent = new Intent(Intent.ACTION_DIAL);
-                            intent.setData(Uri.parse("tel:" +documentSnapshot.getString("phone")));
-                            dialog.dismiss();
-                            startActivity(intent);
-                        }
-                    });
-                }
-
-            });
-            waitConfirmAdapter.setOnItemListener(new WaitShipAdapter.OnItemClickListener() {
+            waitHistoryAdapter = new WaitHistoryAdapter(getActivity(), mOrders, mRecyclerView);
+            waitHistoryAdapter.setOnItemListener(new WaitHistoryAdapter.OnItemClickListener() {
                 @Override
                 public void onItemClick(Order item) {
 
                 }
             });
-            mRecyclerView.setAdapter(waitConfirmAdapter);
+            mRecyclerView.setAdapter(waitHistoryAdapter);
 
             dialog = new Dialog(getActivity());
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -128,9 +93,9 @@ public class WaitShipFragment extends Fragment {
 
     public void getListOrder(){
         res_id = getActivity().getIntent().getStringExtra("res_id");
-        FirebaseFirestore.getInstance().collection("order")
-                .whereEqualTo("restaurant_id", res_id)
-                .whereEqualTo("status","2")
+        FirebaseFirestore.getInstance().collection("restaurants")
+                .document(res_id)
+                .collection("history")
                 .orderBy("timestamp", Query.Direction.ASCENDING)
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -145,7 +110,7 @@ public class WaitShipFragment extends Fragment {
                             doc.getId(),doc.getString("shipper_id"), doc.getString("area")));
                     Toast.makeText(getContext(), "Done ", Toast.LENGTH_SHORT).show();
 
-                    waitConfirmAdapter.notifyDataSetChanged();
+                    waitHistoryAdapter.notifyDataSetChanged();
                 }
             }
         });
