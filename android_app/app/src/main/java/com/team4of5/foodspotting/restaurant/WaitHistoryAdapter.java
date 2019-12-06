@@ -26,14 +26,12 @@ import com.team4of5.foodspotting.object.Order;
 import java.io.InputStream;
 import java.util.List;
 
-public class WaitShipAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class WaitHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private List<Order> mOrders;
     private Context mContext;
     private Activity mActivity;
     private OnItemClickListener mListener;
-    private BtnOngoingListener btnOngoingListener;
-
     // for load more
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
@@ -45,10 +43,7 @@ public class WaitShipAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     private int visibleThreshold = 6;
     private int lastVisibleItem, totalItemCount;
 
-    public interface BtnOngoingListener{
-        void onCancelButtonClick(View v, int position);
-        void onContactButtonClick(View v, int position);
-    }
+
 
     public interface OnItemClickListener {
         void onItemClick(Order item);
@@ -70,9 +65,7 @@ public class WaitShipAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public WaitShipAdapter(Context context, List<Order> orders, RecyclerView recyclerView,
-                           BtnOngoingListener btnOngoingListener) {
-        this.btnOngoingListener = btnOngoingListener;
+    public WaitHistoryAdapter(Context context, List<Order> orders, RecyclerView recyclerView) {
         mContext = context;
         mActivity = (Activity)context;
         mOrders = orders;
@@ -150,23 +143,8 @@ public class WaitShipAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             });
 
 
-            userViewHolder.btnCancel.setVisibility(View.VISIBLE);
-            userViewHolder.btnCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    btnOngoingListener.onCancelButtonClick(view, position);
-                }
-            });
-            userViewHolder.btnContact.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    btnOngoingListener.onContactButtonClick(view, position);
-                }
-            });
 
-
-
-            // binding item click listner
+            // binding item click listener
             userViewHolder.bind(mOrders.get(position), mListener);
         } else if (holder instanceof ViewHolderLoading) {
             ViewHolderLoading loadingViewHolder = (ViewHolderLoading) holder;
@@ -242,7 +220,6 @@ public class WaitShipAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
     public class ViewHolderRow extends RecyclerView.ViewHolder {
         public TextView tvFoodName, tvUserAddress, tvOrderAmount, tvFoodPrice, tvTotalPrice;
         public ImageView imageViewFood;
-        public Button  btnContact, btnCancel;
 
         public ViewHolderRow(View v) {
             super(v);
@@ -252,8 +229,6 @@ public class WaitShipAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolde
             tvFoodPrice = v.findViewById(R.id.tvFoodPrice);
             tvTotalPrice = v.findViewById(R.id.tvTotalPrice);
             imageViewFood = v.findViewById(R.id.imageViewFoodOrder);
-            btnCancel = v.findViewById(R.id.btnCancel);
-            btnContact = v.findViewById(R.id.btnContact);
         }
 
         public void bind(final Order item, final OnItemClickListener listener) {
