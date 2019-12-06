@@ -75,6 +75,7 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
     private Uri filePath1;
     private ImageView mBackground;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -121,7 +122,7 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
         mEdtChangeProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                setAddress();
+                setAddress();adapter1.notifyDataSetChanged();
             }
 
             @Override
@@ -130,6 +131,13 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
 
             }
         });
+
+        adapter1=new ArrayAdapter<String>
+                (
+                        this,
+                        android.R.layout.simple_spinner_item,
+                        arr1
+                );
 
 
         mEdtChangeDistrict = changeAddressDialog.findViewById(R.id.edtChangeDistrict);
