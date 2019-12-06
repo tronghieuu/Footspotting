@@ -98,6 +98,9 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
                             android.R.layout.simple_spinner_item,
                             arr3
                     );
+        adapter1.setDropDownViewResource
+                (android.R.layout.simple_list_item_single_choice);
+        mEdtDistrict.setAdapter(adapter1);
     }
 
     @Override

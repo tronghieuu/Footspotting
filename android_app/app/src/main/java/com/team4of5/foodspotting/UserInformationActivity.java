@@ -245,6 +245,9 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
                             android.R.layout.simple_spinner_item,
                             arr3
                     );
+        adapter1.setDropDownViewResource
+                (android.R.layout.simple_list_item_single_choice);
+        mEdtChangeDistrict.setAdapter(adapter1);
     }
 
     @Override
