@@ -99,10 +99,10 @@
                 android:textColor="@color/color_newWhite"
                 android:paddingHorizontal="5dp" />
 
-            <EditText
+            <Spinner
                 android:id="@+id/edtOwnerResProvinceDangKy"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/color_newWhite"
                 android:textSize="30dp"
@@ -119,10 +119,10 @@
                 android:textColor="@color/color_newWhite"
                 android:paddingHorizontal="5dp" />
 
-            <EditText
+            <Spinner
                 android:id="@+id/edtOwnerResDistrictDangKy"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="40dp"
                 android:layout_marginTop="10dp"
                 android:background="@color/color_newWhite"
                 android:textSize="30dp"
