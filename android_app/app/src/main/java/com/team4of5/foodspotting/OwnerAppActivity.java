@@ -43,7 +43,7 @@ import java.util.Map;
 public class OwnerAppActivity extends AppCompatActivity implements View.OnClickListener {
 
     private RelativeLayout mBtnThongTinQuan, mBtnThucDon, mBtnDanhSachOrder, mBtnDongQuan,
-            mBtnDanhGiaCuaKhachHang;
+            mBtnDanhGiaCuaKhachHang, mBtnDangtin;
     private Button mBtnBack;
     private ImageView mImageView;
     private static int RQ_UPDATE = 234, PICK_IMAGE_REQUEST =11;
@@ -66,6 +66,8 @@ public class OwnerAppActivity extends AppCompatActivity implements View.OnClickL
         mBtnDanhGiaCuaKhachHang = findViewById(R.id.btnDanhGiaCuaKhanhHang);
         mBtnBack = findViewById(R.id.btnBackOwner);
         mBtnDongQuan = findViewById(R.id.btnDongQuan);
+        mBtnDangtin = findViewById(R.id.btnDangtin);
+        mBtnDangtin.setOnClickListener(this);
         mImageView = findViewById(R.id.imageOwnerRes);
         mImageView.setOnClickListener(this);
         setImage();
@@ -170,6 +172,11 @@ public class OwnerAppActivity extends AppCompatActivity implements View.OnClickL
                                 });
                             }
                         });
+                break;
+            case R.id.btnDangtin:
+                Intent intentNews = new Intent(this,PostNewsActivity.class);
+                intentNews.putExtra("res_id", id_res);
+                startActivity(intentNews);
                 break;
             case R.id.btnBackOwner:
                 finish();
