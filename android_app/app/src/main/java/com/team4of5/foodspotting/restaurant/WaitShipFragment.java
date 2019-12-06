@@ -126,7 +126,7 @@ public class WaitShipFragment extends Fragment {
                             Integer.parseInt(doc.getString("amount")),
                             Integer.parseInt(doc.getString("status")),
                             doc.getLong("timestamp"),
-                            doc.getId()));
+                            doc.getId(),doc.getString("shipper_id"), doc.getString("area")));
                     Toast.makeText(getContext(), "Done ", Toast.LENGTH_SHORT).show();
 
                     waitConfirmAdapter.notifyDataSetChanged();
