@@ -68,9 +68,8 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
             "Hải Châu",
             "Liên Chiểu",
             "Hòa Khánh"};
-    private CircleImageView profileImage;
-    private static int PICK_IMAGE_REQUEST = 23,PICK_IMAGE_REQUEST1 = 11;
-    private Uri filePath, filePath1;
+    private static int PICK_IMAGE_REQUEST1 = 11;
+    private Uri filePath1;
     private ImageView mBackground;
 
     @Override
@@ -141,7 +140,7 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
         mEdtChangeDistrict = changeAddressDialog.findViewById(R.id.edtChangeDistrict);
         adapter1.setDropDownViewResource
                 (android.R.layout.simple_list_item_single_choice);
-        mEdtChangeDistrict.setAdapter(adapter);
+        mEdtChangeDistrict.setAdapter(adapter1);
 
         mEdtChangeStreet = changeAddressDialog.findViewById(R.id.edtChangeStreet);
         mBtnChangeAddress_diff = changeAddressDialog.findViewById(R.id.btnUpdateAddress);
