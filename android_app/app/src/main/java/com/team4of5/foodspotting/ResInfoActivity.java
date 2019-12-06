@@ -124,6 +124,18 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
         adapter.setDropDownViewResource
                 (android.R.layout.simple_list_item_single_choice);
         mEdtProvince.setAdapter(adapter);
+        mEdtProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                setAddress();adapter1.notifyDataSetChanged();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+
+
+            }
+        });
 
 
         adapter1.setDropDownViewResource
