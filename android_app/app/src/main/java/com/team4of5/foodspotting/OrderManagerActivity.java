@@ -15,6 +15,7 @@ import android.widget.Button;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.team4of5.foodspotting.restaurant.WaitConfirmFragment;
+import com.team4of5.foodspotting.restaurant.WaitShipFragment;
 
 public class OrderManagerActivity extends AppCompatActivity {
 
@@ -51,15 +52,13 @@ public class OrderManagerActivity extends AppCompatActivity {
                 case R.id.wait_confirm:
                     loadFragment(new WaitConfirmFragment());
                     break;
-                case R.id.wait_delivery:
-
-                    break;
                 case R.id.wait_ship:
-
+                    loadFragment(new WaitShipFragment());
                     break;
-                case R.id.history:
-
+                case R.id.wait_get:
                     break;
+                case R.id.wait_history:
+
             }
             return true;
         }

@@ -2,14 +2,14 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item
         android:id="@+id/wait_confirm"
-        android:title="Chờ"></item>
+        android:title="Chờ xác nhận"></item>
     <item
         android:id="@+id/wait_ship"
-        android:title="Chờ"></item>
+        android:title="Chờ Shipper"></item>
     <item
-        android:id="@+id/wait_delivery"
-        android:title="Chờ"></item>
+        android:id="@+id/wait_get"
+        android:title="Chờ lấy"></item>
     <item
-        android:id="@+id/history"
-        android:title="xong"></item>
+        android:id="@+id/wait_history"
+        android:title="Lịch sử"></item>
 </menu>
