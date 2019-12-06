@@ -198,7 +198,8 @@ public class ListFragmentOngoing extends Fragment {
                             Integer.parseInt(doc.getString("amount")),
                             Integer.parseInt(doc.getString("status")),
                             doc.getLong("timestamp"),
-                            doc.getId()));
+                            doc.getId(), doc.getString("shipper_id"),
+                            doc.getString("area")));
                     mOngoingAdapter.notifyDataSetChanged();
                 }
             }

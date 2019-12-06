@@ -3,6 +3,7 @@ package com.team4of5.foodspotting.shipper;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -22,18 +23,15 @@ public class ShipperAppActivity extends AppCompatActivity implements View.OnClic
         window.clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
         window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.color_green));
-
+        findViewById(R.id.btnBackShipper).setOnClickListener(this);
+        findViewById(R.id.btnDanhSachOrderShipper).setOnClickListener(this);
     }
 
     @Override
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.btnDanhSachOrderShipper:
-                break;
-            case R.id.btnDanhSachOrderAccepted:
-                break;
-            case R.id.btnDanhSachOrderCompleted:
-                break;
+                startActivity(new Intent(this, OrderListShipperActivity.class));
             case R.id.btnBackShipper:
                 finish();
         }

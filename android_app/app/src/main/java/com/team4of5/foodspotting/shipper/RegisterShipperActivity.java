@@ -14,7 +14,13 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.team4of5.foodspotting.R;
+import com.team4of5.foodspotting.object.User;
+
+import java.util.HashMap;
+import java.util.Map;
 
 public class RegisterShipperActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -53,10 +59,23 @@ public class RegisterShipperActivity extends AppCompatActivity implements View.O
                 finish();
                 break;
             case R.id.btnShipperDangKy:
+                register();
+                break;
+        }
+    }
+
+    private void register() {
+        Map<String, Object> data = new HashMap<>();
+        data.put("type", "2");
+        FirebaseFirestore.getInstance().collection("user").document(User.getCurrentUser().getId())
+                .update(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                User.getCurrentUser().setType(2);
                 Intent intent = new Intent(getApplicationContext(), ShipperAppActivity.class);
                 startActivity(intent);
                 finish();
-                break;
-        }
+            }
+        });
     }
 }
