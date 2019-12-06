@@ -13,7 +13,6 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -27,7 +26,7 @@ import com.team4of5.foodspotting.object.Order;
 import java.io.InputStream;
 import java.util.List;
 
-public class WaitConfirmAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class WaitShipAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private List<Order> mOrders;
     private Context mContext;
@@ -47,9 +46,7 @@ public class WaitConfirmAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     private int lastVisibleItem, totalItemCount;
 
     public interface BtnOngoingListener{
-        void onCancelButtonClick(View v, int position);
         void onContactButtonClick(View v, int position);
-        void onConfirmButtonClick(View v, int position);
     }
 
     public interface OnItemClickListener {
@@ -72,8 +69,8 @@ public class WaitConfirmAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public WaitConfirmAdapter(Context context, List<Order> orders, RecyclerView recyclerView,
-                              BtnOngoingListener btnOngoingListener) {
+    public WaitShipAdapter(Context context, List<Order> orders, RecyclerView recyclerView,
+                           BtnOngoingListener btnOngoingListener) {
         this.btnOngoingListener = btnOngoingListener;
         mContext = context;
         mActivity = (Activity)context;
@@ -151,15 +148,7 @@ public class WaitConfirmAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 }
             });
 
-            userViewHolder.btnConfirm.setVisibility(View.VISIBLE);
-            userViewHolder.btnCancel.setVisibility(View.VISIBLE);
 
-            userViewHolder.btnCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    btnOngoingListener.onCancelButtonClick(view, position);
-                }
-            });
 
             userViewHolder.btnContact.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -168,12 +157,7 @@ public class WaitConfirmAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                 }
             });
 
-            userViewHolder.btnConfirm.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    btnOngoingListener.onConfirmButtonClick(view , position);
-                }
-            });
+
 
             // binding item click listner
             userViewHolder.bind(mOrders.get(position), mListener);
@@ -251,7 +235,7 @@ public class WaitConfirmAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     public class ViewHolderRow extends RecyclerView.ViewHolder {
         public TextView tvFoodName, tvUserAddress, tvOrderAmount, tvFoodPrice, tvTotalPrice;
         public ImageView imageViewFood;
-        public Button btnCancel, btnContact, btnConfirm;
+        public Button  btnContact;
 
         public ViewHolderRow(View v) {
             super(v);
@@ -261,9 +245,7 @@ public class WaitConfirmAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             tvFoodPrice = v.findViewById(R.id.tvFoodPrice);
             tvTotalPrice = v.findViewById(R.id.tvTotalPrice);
             imageViewFood = v.findViewById(R.id.imageViewFoodOrder);
-            btnCancel = v.findViewById(R.id.btnCancel);
             btnContact = v.findViewById(R.id.btnContact);
-            btnConfirm = v.findViewById(R.id.btnConfirm);
         }
 
         public void bind(final Order item, final OnItemClickListener listener) {
