@@ -209,6 +209,8 @@ public class HomeFragment extends Fragment {
                         res.setType(doc.getString("type"));
                         res.setUser_id(doc.getString("user_id"));
                         mRestaurents.add(res);
+                        mRestaurents.add(res);
+                        mRestaurents.add(res);
                         mAdapter.notifyDataSetChanged();
                     }
                 }
