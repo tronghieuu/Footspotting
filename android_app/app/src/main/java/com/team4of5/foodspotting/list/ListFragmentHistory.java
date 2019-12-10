@@ -11,6 +11,7 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -118,7 +119,7 @@ public class ListFragmentHistory extends Fragment {
 
     public void getHistory(){
         FirebaseFirestore.getInstance().collection("history")
-                .whereEqualTo("user_id", User.getCurrentUser())
+                .whereEqualTo("user_id", User.getCurrentUser().getId())
                 .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
@@ -132,7 +133,7 @@ public class ListFragmentHistory extends Fragment {
                             doc.getString("food_image"),
                             doc.getString("food_name"),
                             Integer.parseInt(doc.getString("food_price")),
-                            Integer.parseInt(doc.getString("food_amount")),
+                            Integer.parseInt(doc.getString("amount")),
                             Integer.parseInt(doc.getString("status")),
                             doc.getLong("timestamp")));
                     mOrderHistoryAdapter.notifyDataSetChanged();
