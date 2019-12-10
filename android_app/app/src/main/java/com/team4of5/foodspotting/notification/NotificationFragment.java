@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -37,13 +38,15 @@ public class NotificationFragment extends Fragment {
     private RecyclerView mRVNotification;
     private List<News> list;
     private NotificationAdapter adapter;
+    private boolean isLoading = false;
+    private SwipeRefreshLayout mSwipe;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_notification, container, false);
         linearLayoutLogin = view.findViewById(R.id.notification_login);
         relativeLayoutLogout = view.findViewById(R.id.notification_no_login);
-
+        mSwipe = view.findViewById(R.id.swipeNotification);
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
             login();
             setProperties(view);
@@ -69,9 +72,21 @@ public class NotificationFragment extends Fragment {
                 startActivity(intent);
             }
         });
+        mSwipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if(!isLoading) {
+                    list.clear();
+                    adapter.notifyDataSetChanged();
+                    queryNews();
+                } else mSwipe.setRefreshing(false);
+            }
+        });
+
     }
 
     private void queryNews() {
+        isLoading = true;
         FirebaseFirestore.getInstance().collection("news")
                 .orderBy("dateCreated", Query.Direction.DESCENDING)
                 .get()
@@ -91,6 +106,8 @@ public class NotificationFragment extends Fragment {
                         list.add(news);
                         adapter.notifyDataSetChanged();
                     }
+                isLoading = false;
+                mSwipe.setRefreshing(false);
             }
         });
     }

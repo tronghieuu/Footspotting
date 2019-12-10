@@ -32,11 +32,16 @@
         style="@style/linearParent"
         android:layout_gravity="center"
         android:padding="1dp">
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/rvNews"
-            style="@style/clickableTextParentforNotification"
+        <androidx.swiperefreshlayout.widget.SwipeRefreshLayout
+            android:id="@+id/swipeNotification"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"/>
+            android:layout_height="match_parent">
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rvNews"
+                style="@style/clickableTextParentforNotification"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </androidx.swiperefreshlayout.widget.SwipeRefreshLayout>
 
     </LinearLayout>
     <LinearLayout
