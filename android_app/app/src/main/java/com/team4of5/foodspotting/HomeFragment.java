@@ -24,6 +24,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.team4of5.foodspotting.home.SlidingImage_Adapter;
 import com.team4of5.foodspotting.object.ImageModel;
 import com.team4of5.foodspotting.object.Restaurant;
+import com.team4of5.foodspotting.object.User;
 import com.team4of5.foodspotting.restaurant.NearRestaurantReccyclerViewAdapter;
 import com.team4of5.foodspotting.restaurant.Restaurent;
 import com.team4of5.foodspotting.search.SearchRecycleAdapter;
@@ -72,7 +73,6 @@ public class HomeFragment extends Fragment {
         mRecylerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
         mAdapter = new NearRestaurantReccyclerViewAdapter(getActivity() , mRestaurents, mRecylerView, "All");
         mRecylerView.setAdapter(mAdapter);
-        queryRestaurant();
 
         // set RecyclerView on item click listner
         mAdapter.setOnItemListener(new NearRestaurantReccyclerViewAdapter.OnItemClickListener() {
@@ -123,11 +123,7 @@ public class HomeFragment extends Fragment {
         sp_city.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                if(mEdtSearch.getQuery()==null || mEdtSearch.getQuery().length()<1) mRecylerView2.setVisibility(View.GONE);
-                else {
-                    search();
-                    mRecylerView2.setVisibility(View.VISIBLE);
-                }
+                queryRestaurantFromProvince();
             }
 
             @Override
@@ -135,6 +131,9 @@ public class HomeFragment extends Fragment {
 
             }
         });
+        if (User.getCurrentUser().getProvince()!=null) {
+            sp_city.setSelection(getIndex(sp_city, User.getCurrentUser().getProvince()));
+        }
         return view;
     }
 
@@ -189,33 +188,44 @@ public class HomeFragment extends Fragment {
         });
     }
 
-    public void queryRestaurant(){
-        db.collection("restaurants")
-                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if(!queryDocumentSnapshots.isEmpty()){
-                    for(DocumentSnapshot doc : queryDocumentSnapshots){
-                        Restaurant res = new Restaurant();
-                        res.setId(doc.getId());
-                        res.setDistrict(doc.getString("district"));
-                        res.setImage(doc.getString("image"));
-                        res.setName(doc.getString("name"));
-                        res.setOpening_time(doc.getString("opening_time"));
-                        res.setPhone(doc.getString("phone"));
-                        res.setProvince(doc.getString("province"));
-                        res.setRate(Float.parseFloat(doc.getString("rate")));
-                        res.setStreet(doc.getString("street"));
-                        res.setType(doc.getString("type"));
-                        res.setUser_id(doc.getString("user_id"));
-                        mRestaurents.add(res);
-                        mRestaurents.add(res);
-                        mRestaurents.add(res);
-                        mAdapter.notifyDataSetChanged();
+    private int getIndex(Spinner spinner, String myString){
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
+                return i;
+            }
+        }
+        return 0;
+    }
+
+
+    public void queryRestaurantFromProvince(){
+            mRestaurents.clear();
+            mAdapter.notifyDataSetChanged();
+            db.collection("restaurants")
+                    .whereEqualTo("province",sp_city.getSelectedItem().toString()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    if(!queryDocumentSnapshots.isEmpty()){
+                        for(DocumentSnapshot doc : queryDocumentSnapshots){
+                            Restaurant res = new Restaurant();
+                            res.setId(doc.getId());
+                            res.setDistrict(doc.getString("district"));
+                            res.setImage(doc.getString("image"));
+                            res.setName(doc.getString("name"));
+                            res.setOpening_time(doc.getString("opening_time"));
+                            res.setPhone(doc.getString("phone"));
+                            res.setProvince(doc.getString("province"));
+                            res.setRate(Float.parseFloat(doc.getString("rate")));
+                            res.setStreet(doc.getString("street"));
+                            res.setType(doc.getString("type"));
+                            res.setUser_id(doc.getString("user_id"));
+                            mRestaurents.add(res);
+                            mAdapter.notifyDataSetChanged();
+                        }
+
                     }
                 }
-            }
-        });
+            });
     }
     public void search()
     {
