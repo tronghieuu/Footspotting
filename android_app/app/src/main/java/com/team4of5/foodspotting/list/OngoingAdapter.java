@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -48,7 +49,6 @@ public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public interface BtnOngoingListener{
         void onDetailButtonClick(View v, int position);
         void onContactButtonClick(View v, int position);
-        void onConfirmButtonClick(View v, int position);
     }
 
     public interface OnItemClickListener {
@@ -168,28 +168,15 @@ public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
                 }
             });
 
-            userViewHolder.btnConfirm.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    btnOngoingListener.onConfirmButtonClick(view , position);
-                }
-            });
 
             if(order.getStatus() == 1){
-                userViewHolder.btnConfirm.setVisibility(View.INVISIBLE);
                 userViewHolder.tvStatus.setText("Chờ xác nhận");
             } else if(order.getStatus() == 2){
-                userViewHolder.btnConfirm.setVisibility(View.INVISIBLE);
+                userViewHolder.btnDetail.setBackgroundColor(Color.parseColor("#AA9E9E"));
                 userViewHolder.tvStatus.setText("Đã xác nhận");
             } else if(order.getStatus() == 4) {
-                userViewHolder.btnConfirm.setVisibility(View.INVISIBLE);
+                userViewHolder.btnDetail.setBackgroundColor(Color.parseColor("#AA9E9E"));
                 userViewHolder.tvStatus.setText("Đang giao");
-            } else if(order.getStatus() == 5) {
-                userViewHolder.tvStatus.setText("Đã giao");
-                userViewHolder.btnConfirm.setVisibility(View.VISIBLE);
-            } else if(order.getStatus() == 0) {
-                userViewHolder.tvStatus.setText("Từ chối");
-                userViewHolder.btnConfirm.setVisibility(View.VISIBLE);
             }
 
             // binding item click listner
@@ -268,7 +255,7 @@ public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
     public class ViewHolderRow extends RecyclerView.ViewHolder {
         public TextView tvResName, tvStatus, tvFoodName, tvResAddress, tvOrderAmount, tvFoodPrice, tvTotalPrice;
         public ImageView imageViewRes, imageViewFood;
-        public Button btnDetail, btnContact, btnConfirm;
+        public Button btnDetail, btnContact;
 
         public ViewHolderRow(View v) {
             super(v);
@@ -283,8 +270,6 @@ public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             imageViewFood = v.findViewById(R.id.imageViewFoodOrder);
             btnDetail = v.findViewById(R.id.btnDetail);
             btnContact = v.findViewById(R.id.btnContact);
-            btnConfirm = v.findViewById(R.id.btnConfirm);
-            btnConfirm.setVisibility(View.INVISIBLE);
         }
 
         public void bind(final Order item, final OnItemClickListener listener) {

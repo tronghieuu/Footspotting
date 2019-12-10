@@ -84,19 +84,8 @@
         android:layout_marginTop="40dp"
         android:orientation="horizontal"
         android:layout_gravity="center_horizontal">
-
-        <Button
-            android:id="@+id/btnDraft"
-            android:layout_width="100dp"
-            android:layout_height="wrap_content"
-            android:text="Add"
-            android:textSize="20dp"
-            android:textColor="@color/whiteTextColor"
-            android:background="@color/color_red" />
-
         <Button
             android:id="@+id/btnOrder"
-            android:layout_marginStart="40dp"
             android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:text="Order"

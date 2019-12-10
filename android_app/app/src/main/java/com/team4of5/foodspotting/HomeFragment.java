@@ -222,6 +222,7 @@ public class HomeFragment extends Fragment {
                             mRestaurents.add(res);
                             mAdapter.notifyDataSetChanged();
                         }
+
                     }
                 }
             });

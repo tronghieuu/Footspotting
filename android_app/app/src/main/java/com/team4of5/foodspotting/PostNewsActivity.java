@@ -62,7 +62,7 @@ public class PostNewsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post_news);
         getSupportActionBar().hide();
-        id_res = getIntent().getStringExtra("res_id");
+        id_res = getIntent().getStringExtra("id_restaurent");
         mBtnBackDangtin = findViewById(R.id.btnBackDangtin);
         mEdtTitle = findViewById(R.id.edit_title);
         mEdtContent = findViewById(R.id.edit_content);
@@ -147,10 +147,11 @@ public class PostNewsActivity extends AppCompatActivity {
                                 map.put("title", title);
                                 map.put("tenquan", tenquan);
                                 map.put("address", address);
-                                map.put("dateCreated",new Date().toString());
+                                map.put("dateCreated",new Date());
+                                map.put("id_res",id_res);
 
                                 FirebaseFirestore db1 = FirebaseFirestore.getInstance();
-                                db1.collection("restaurants").document(id_res).collection("news")
+                                db1.collection("news")
                                         .add(map).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                     @Override
                                     public void onSuccess(final DocumentReference documentReference) {
@@ -167,9 +168,7 @@ public class PostNewsActivity extends AppCompatActivity {
                                                                 final String imageLink = uri.toString();
                                                                 Map<String, Object> data = new HashMap<>();
                                                                 data.put("image", imageLink);
-                                                                FirebaseFirestore.getInstance().collection("restaurants")
-                                                                        .document(id_res)
-                                                                        .collection("news")
+                                                                FirebaseFirestore.getInstance().collection("news")
                                                                         .document(id).update(data)
                                                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                                                             @Override
