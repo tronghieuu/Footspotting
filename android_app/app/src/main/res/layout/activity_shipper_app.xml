@@ -69,7 +69,7 @@
 
     </RelativeLayout>
     <RelativeLayout
-        android:id="@+id/btnDanhSachOrderAccepted"
+        android:id="@+id/btnOrderAcceptedShipper"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
@@ -81,7 +81,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="10dp"
-            android:text="Danh sách order đã chấp nhận"
+            android:text="Danh sách order đã nhận giao"
             android:textSize="20dp"
             android:textStyle="bold"
             android:layout_centerVertical="true" />
@@ -96,7 +96,7 @@
 
     </RelativeLayout>
     <RelativeLayout
-        android:id="@+id/btnDanhSachOrderCompleted"
+        android:id="@+id/btnOrderReceivedShipper"
         android:layout_width="match_parent"
         android:layout_height="40dp"
         android:layout_marginTop="10dp"
@@ -108,7 +108,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentStart="true"
             android:layout_marginLeft="10dp"
-            android:text="Danh sách order đã hoàn tất"
+            android:text="Danh sách order đã nhận hàng"
             android:textSize="20dp"
             android:textStyle="bold"
             android:layout_centerVertical="true" />
@@ -122,5 +122,31 @@
             android:layout_centerVertical="true"/>
 
     </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/btnHistoryShipper"
+        android:layout_width="match_parent"
+        android:layout_height="40dp"
+        android:layout_marginTop="10dp"
+        android:background="@drawable/round_background"
+        android:clickable="true" >
 
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentStart="true"
+            android:layout_marginLeft="10dp"
+            android:text="Lịch sử"
+            android:textSize="20dp"
+            android:textStyle="bold"
+            android:layout_centerVertical="true" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/ic_navigate_next_grey"
+            android:layout_alignParentEnd="true"
+            android:layout_marginRight="10dp"
+            android:layout_centerVertical="true"/>
+
+    </RelativeLayout>
 </LinearLayout>
