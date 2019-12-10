@@ -53,19 +53,29 @@ public class RegisterOwnerActivity extends AppCompatActivity implements View.OnC
     ArrayAdapter<String> adapter1 = null;
     String arr[]={
             "Hà Nội",
-            "TT Huế",
-            "Đà Nẵng"};
+            "Đà Nẵng",
+            "Hồ Chí Minh"};
     String arr1[]={
+            "Ba Đình",
+            "Bắc Từ Liêm",
+            "Cầu Giấy",
+            "Đống Đa",
+            "Hà Đông"};
+    String arr2[]={
+            "Hải Châu",
+            "Cẩm Lệ",
+            "Thanh Khê",
+            "Liên Chiểu",
+            "Ngũ Hành Sơn",
+            "Sơn Trà",
+            "Hòa Vang"};
+    String arr3[]={
             "Quận 1",
             "Quận 2",
-            "Quận 3"};
-    String arr2[]={
-            "Phú Vang",
-            "Phú Thượng"};
-    String arr3[]={
-            "Hải Châu",
-            "Liên Chiểu",
-            "Hòa Khánh"};
+            "Quận 3",
+            "Quận 4",
+            "Quận 5"};
+
     public void setAddress()
     {
         if(mEdtProvince.getSelectedItem().toString().equals("Hà Nội"))
@@ -75,14 +85,14 @@ public class RegisterOwnerActivity extends AppCompatActivity implements View.OnC
                             android.R.layout.simple_spinner_item,
                             arr1
                     );
-        if(mEdtProvince.getSelectedItem().toString().equals("TT Huế"))
+        if(mEdtProvince.getSelectedItem().toString().equals("Đà Nẵng"))
             adapter1=new ArrayAdapter<String>
                     (
                             this,
                             android.R.layout.simple_spinner_item,
                             arr2
                     );
-        if(mEdtProvince.getSelectedItem().toString().equals("Đà Nẵng"))
+        if(mEdtProvince.getSelectedItem().toString().equals("Hồ Chí Minh"))
             adapter1=new ArrayAdapter<String>
                     (
                             this,
