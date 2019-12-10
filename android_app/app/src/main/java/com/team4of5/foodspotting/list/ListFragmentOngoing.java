@@ -92,61 +92,6 @@ public class ListFragmentOngoing extends Fragment {
                         }
                     });
                 }
-
-                @Override
-                public void onConfirmButtonClick(View v, final int position) {
-                    dialog.show();
-                    FirebaseFirestore.getInstance().collection("restaurants")
-                            .document(mOrders.get(position).getRestaurant_id())
-                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                        @Override
-                        public void onSuccess(DocumentSnapshot documentSnapshot) {
-                            if(documentSnapshot.exists()){
-                                final Map<String, Object> data = new HashMap<>();
-                                data.put("status", mOrders.get(position).getStatus()+"");
-                                data.put("restaurant_id", documentSnapshot.getId());
-                                data.put("restaurant_name", documentSnapshot.getString("name"));
-                                data.put("restaurant_image", documentSnapshot.getString("image"));
-                                data.put("food_amount", mOrders.get(position).getOrder_amount()+"");
-                                data.put("timestamp", new Date().getTime());
-                                data.put("restaurant_address", documentSnapshot.getString("street")+" "+
-                                        documentSnapshot.getString("district")+" "+
-                                        documentSnapshot.getString("province"));
-                                FirebaseFirestore.getInstance().collection("restaurants")
-                                        .document(mOrders.get(position).getRestaurant_id()).collection("food")
-                                        .document(mOrders.get(position).getFood_id()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                                    @Override
-                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
-                                        if(documentSnapshot.exists()){
-                                            data.put("food_name", documentSnapshot.getString("name"));
-                                            data.put("food_price", documentSnapshot.getString("price"));
-                                            data.put("food_image", documentSnapshot.getString("image"));
-                                            FirebaseFirestore.getInstance().collection("user")
-                                                    .document(User.getCurrentUser().getId())
-                                                    .collection("history").add(data)
-                                                    .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
-                                                        @Override
-                                                        public void onSuccess(DocumentReference documentReference) {
-                                                            FirebaseFirestore.getInstance().collection("order")
-                                                                    .document(mOrders.get(position).getId())
-                                                                    .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                                @Override
-                                                                public void onSuccess(Void aVoid) {
-                                                                    mOrders.remove(position);
-                                                                    User.getCurrentUser().setHistoryUpdate(true);
-                                                                    mOngoingAdapter.notifyDataSetChanged();
-                                                                    dialog.dismiss();
-                                                                }
-                                                            });
-                                                        }
-                                                    });
-                                        }
-                                    }
-                                });
-                            }
-                        }
-                    });
-                }
             });
             mOngoingAdapter.setOnItemListener(new OngoingAdapter.OnItemClickListener() {
                 @Override

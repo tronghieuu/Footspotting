@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.team4of5.foodspotting.R;
 import com.team4of5.foodspotting.object.User;
@@ -29,7 +30,9 @@ import com.team4of5.foodspotting.object.UserHistory;
 import com.team4of5.foodspotting.restaurant.Restaurent;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class ListFragmentHistory extends Fragment {
 
@@ -57,10 +60,11 @@ public class ListFragmentHistory extends Fragment {
                 @Override
                 public void onDeleteButtonClick(View v, final int position) {
                     dialog.show();
-                    FirebaseFirestore.getInstance().collection("user")
-                            .document(User.getCurrentUser().getId())
+                    Map<String, Object> data = new HashMap<>();
+                    data.put("user_id", User.getCurrentUser().getId());
+                    FirebaseFirestore.getInstance()
                             .collection("history").document(mUserHistories.get(position).getId())
-                            .delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            .update(data).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void aVoid) {
                             mUserHistories.remove(position);
@@ -113,9 +117,10 @@ public class ListFragmentHistory extends Fragment {
     }
 
     public void getHistory(){
-        FirebaseFirestore.getInstance().collection("user")
-                .document(User.getCurrentUser().getId())
-                .collection("history").get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+        FirebaseFirestore.getInstance().collection("history")
+                .whereEqualTo("user_id", User.getCurrentUser())
+                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(DocumentSnapshot doc : queryDocumentSnapshots){

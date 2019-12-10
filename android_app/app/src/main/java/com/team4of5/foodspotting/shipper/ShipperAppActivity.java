@@ -25,6 +25,9 @@ public class ShipperAppActivity extends AppCompatActivity implements View.OnClic
         window.setStatusBarColor(ContextCompat.getColor(this, R.color.color_green));
         findViewById(R.id.btnBackShipper).setOnClickListener(this);
         findViewById(R.id.btnDanhSachOrderShipper).setOnClickListener(this);
+        findViewById(R.id.btnHistoryShipper).setOnClickListener(this);
+        findViewById(R.id.btnOrderAcceptedShipper).setOnClickListener(this);
+        findViewById(R.id.btnOrderReceivedShipper).setOnClickListener(this);
     }
 
     @Override
@@ -32,8 +35,18 @@ public class ShipperAppActivity extends AppCompatActivity implements View.OnClic
         switch (view.getId()) {
             case R.id.btnDanhSachOrderShipper:
                 startActivity(new Intent(this, OrderListShipperActivity.class));
+                break;
             case R.id.btnBackShipper:
                 finish();
+                break;
+            case R.id.btnHistoryShipper:
+                break;
+            case R.id.btnOrderAcceptedShipper:
+                startActivity(new Intent(this, OrderAcceptedShipperActivity.class));
+                break;
+            case R.id.btnOrderReceivedShipper:
+                startActivity(new Intent(this, OrderReceivedShipperActivity.class));
+                break;
         }
     }
 }

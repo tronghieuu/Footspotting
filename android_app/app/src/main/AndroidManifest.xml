@@ -14,7 +14,10 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".shipper.OrderListShipperActivity"></activity>
+        <activity android:name=".shipper.HistoryShipperActivity"></activity>
+        <activity android:name=".shipper.OrderReceivedShipperActivity" />
+        <activity android:name=".shipper.OrderAcceptedShipperActivity" />
+        <activity android:name=".shipper.OrderListShipperActivity" />
         <activity android:name=".NewsDetailActivity" />
         <activity android:name=".PostNewsActivity" />
         <activity android:name=".OrderManagerActivity" />

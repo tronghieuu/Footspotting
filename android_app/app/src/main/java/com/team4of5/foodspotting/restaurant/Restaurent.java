@@ -207,7 +207,7 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
                                 Toast.makeText(getApplicationContext(),"Order complete!",Toast.LENGTH_SHORT).show();
                             }
                         });
-                    }
+                    } else Toast.makeText(this, "Không thể đặt món ở đây", Toast.LENGTH_SHORT).show();
                 } else Toast.makeText(this, "Hãy cập nhật thông tin cá nhân!", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.btnBackResDetail:
