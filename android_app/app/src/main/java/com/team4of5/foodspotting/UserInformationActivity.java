@@ -56,19 +56,28 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
             mEdtChangeDistrict;
     String arr[]={
             "Hà Nội",
-            "TT Huế",
-            "Đà Nẵng"};
+            "Đà Nẵng",
+            "Hồ Chí Minh"};
     String arr1[]={
+            "Ba Đình",
+            "Bắc Từ Liêm",
+            "Cầu Giấy",
+            "Đống Đa",
+            "Hà Đông"};
+    String arr2[]={
+            "Hải Châu",
+            "Cẩm Lệ",
+            "Thanh Khê",
+            "Liên Chiểu",
+            "Ngũ Hành Sơn",
+            "Sơn Trà",
+            "Hòa Vang"};
+    String arr3[]={
             "Quận 1",
             "Quận 2",
-            "Quận 3"};
-    String arr2[]={
-            "Phú Vang",
-            "Phú Thượng"};
-    String arr3[]={
-            "Hải Châu",
-            "Liên Chiểu",
-            "Hòa Khánh"};
+            "Quận 3",
+            "Quận 4",
+            "Quận 5"};
 
     ArrayAdapter<String> adapter1 = null;
     private static int PICK_IMAGE_REQUEST1 = 11;
@@ -122,7 +131,8 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
         mEdtChangeProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                setAddress();adapter1.notifyDataSetChanged();
+                setAddress();
+                adapter1.notifyDataSetChanged();
             }
 
             @Override
@@ -148,12 +158,11 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
         mEdtChangeStreet = changeAddressDialog.findViewById(R.id.edtChangeStreet);
         mBtnChangeAddress_diff = changeAddressDialog.findViewById(R.id.btnUpdateAddress);
         mBtnChangeAddress_diff.setOnClickListener(this);
-        changeAddressDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+        changeAddressDialog.setOnShowListener(new DialogInterface.OnShowListener() {
             @Override
-            public void onDismiss(DialogInterface dialogInterface) {
-                mEdtChangeStreet.setText("");
-                mEdtChangeDistrict.setSelection(0);
-                mEdtChangeProvince.setSelection(0);
+            public void onShow(DialogInterface dialogInterface) {
+                mEdtChangeStreet.setText(User.getCurrentUser().getStreet());
+                mEdtChangeProvince.setSelection(getIndex(mEdtChangeProvince,User.getCurrentUser().getProvince()));
             }
         });
 
@@ -212,8 +221,10 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
         mBtnChangePayment.setOnClickListener(this);
 
         // data
+        if (User.getCurrentUser().getBackground()!=null)
         new DownloadImageFromInternet(mBackground)
                 .execute(User.getCurrentUser().getBackground());
+        if (User.getCurrentUser().getImage()!=null)
         new DownloadImageFromInternet(profileImage)
                 .execute(User.getCurrentUser().getImage());
         mTvUsername.setText(User.getCurrentUser().getName());
@@ -221,6 +232,14 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
         mTvPhone.setText(User.getCurrentUser().getPhone());
         FirebaseAuth auth = FirebaseAuth.getInstance();
         mTvEmailInfo.setText(auth.getCurrentUser().getEmail());
+    }
+    private int getIndex(Spinner spinner, String myString){
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
+                return i;
+            }
+        }
+        return 0;
     }
     public void setAddress()
     {
@@ -231,14 +250,14 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
                             android.R.layout.simple_spinner_item,
                             arr1
                     );
-        if(mEdtChangeProvince.getSelectedItem().toString().equals("TT Huế"))
+        if(mEdtChangeProvince.getSelectedItem().toString().equals("Đà Nẵng"))
             adapter1=new ArrayAdapter<String>
                     (
                             this,
                             android.R.layout.simple_spinner_item,
                             arr2
                     );
-        if(mEdtChangeProvince.getSelectedItem().toString().equals("Đà Nẵng"))
+        if(mEdtChangeProvince.getSelectedItem().toString().equals("Hồ Chí Minh"))
             adapter1=new ArrayAdapter<String>
                     (
                             this,
@@ -248,6 +267,7 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
         adapter1.setDropDownViewResource
                 (android.R.layout.simple_list_item_single_choice);
         mEdtChangeDistrict.setAdapter(adapter1);
+        mEdtChangeDistrict.setSelection(getIndex(mEdtChangeDistrict,User.getCurrentUser().getDistrict()));
     }
 
     @Override

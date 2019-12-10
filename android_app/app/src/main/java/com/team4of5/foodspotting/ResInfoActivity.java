@@ -54,19 +54,29 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
     ArrayAdapter<String> adapter1 = null;
     String arr[]={
             "Hà Nội",
-            "TT Huế",
-            "Đà Nẵng"};
+            "Đà Nẵng",
+            "Hồ Chí Minh"};
     String arr1[]={
+            "Ba Đình",
+            "Bắc Từ Liêm",
+            "Cầu Giấy",
+            "Đống Đa",
+            "Hà Đông"};
+    String arr2[]={
+            "Hải Châu",
+            "Cẩm Lệ",
+            "Thanh Khê",
+            "Liên Chiểu",
+            "Ngũ Hành Sơn",
+            "Sơn Trà",
+            "Hòa Vang"};
+    String arr3[]={
             "Quận 1",
             "Quận 2",
-            "Quận 3"};
-    String arr2[]={
-            "Phú Vang",
-            "Phú Thượng"};
-    String arr3[]={
-            "Hải Châu",
-            "Liên Chiểu",
-            "Hòa Khánh"};
+            "Quận 3",
+            "Quận 4",
+            "Quận 5"};
+
     private Button mBtnBack, mBtnUpdate, mBtnPickPhoto, mBtnOpenning, mBtnClosing;
     private String id_res;
     private ImageView mImageView;
@@ -74,7 +84,7 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
     private static int PICK_IMAGE_REQUEST = 2341;
     private Dialog dialog;
     private int mHour, mMinute;
-
+    private boolean isLoaded = false;
     public void setAddress()
     {
         if(mEdtProvince.getSelectedItem().toString().equals("Hà Nội"))
@@ -84,14 +94,14 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
                             android.R.layout.simple_spinner_item,
                             arr1
                     );
-        if(mEdtProvince.getSelectedItem().toString().equals("TT Huế"))
+        if(mEdtProvince.getSelectedItem().toString().equals("Đà Nẵng"))
             adapter1=new ArrayAdapter<String>
                     (
                             this,
                             android.R.layout.simple_spinner_item,
                             arr2
                     );
-        if(mEdtProvince.getSelectedItem().toString().equals("Đà Nẵng"))
+        if(mEdtProvince.getSelectedItem().toString().equals("Hồ Chí Minh"))
             adapter1=new ArrayAdapter<String>
                     (
                             this,
@@ -131,7 +141,9 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
         mEdtProvince.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-                setAddress();adapter1.notifyDataSetChanged();
+                    setAddress();
+                    adapter1.notifyDataSetChanged();
+                    mEdtDistrict.setSelection(getIndex(mEdtDistrict,sTamDistrict));
             }
 
             @Override
@@ -235,6 +247,15 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
         });
     }
 
+    private int getIndex(Spinner spinner, String myString){
+        for (int i=0;i<spinner.getCount();i++){
+            if (spinner.getItemAtPosition(i).toString().equalsIgnoreCase(myString)){
+                return i;
+            }
+        }
+        return 0;
+    }
+    private String sTamDistrict = "";
     public void loadCurrentData() {
         dialog.show();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
@@ -248,7 +269,10 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
                     mEdtName.setHint(doc.getString("name"));
                     mEdtType.setHint(doc.getString("type"));
 
+                    mEdtProvince.setSelection(getIndex(mEdtProvince,doc.getString("province")));
+                    sTamDistrict = doc.getString("district");
                     mEdtAddress.setHint(doc.getString("street"));
+
                     mEdtPhone.setHint(doc.getString("phone"));
                     mBtnOpenning.setHint(doc.getString("opening_time"));
                     mBtnClosing.setHint(doc.getString("closing_time"));
@@ -258,6 +282,7 @@ public class ResInfoActivity extends AppCompatActivity implements View.OnClickLi
                 }
             }
         });
+
     }
 
     public void pickPhoto(){
