@@ -62,7 +62,7 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
     private FoodAdapter mAdapter;
     private Dialog dialog, mOrderDialog;
     private TextView mTvOrderAmount, mTvOrderPrice;
-    private Button mBtnDecrease, mBtnIncrease, mBtnDraft, mBtnOrder;
+    private Button mBtnDecrease, mBtnIncrease, mBtnOrder;
     private int mAmountOrder, mOrderPrice;
     private Food mFood;
     private TextView mTvResName;
@@ -111,8 +111,6 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
         mBtnDecrease.setOnClickListener(this);
         mBtnIncrease = mOrderDialog.findViewById(R.id.btnIncrease);
         mBtnIncrease.setOnClickListener(this);
-        mBtnDraft = mOrderDialog.findViewById(R.id.btnDraft);
-        mBtnDraft.setOnClickListener(this);
         mBtnOrder = mOrderDialog.findViewById(R.id.btnOrder);
         mBtnOrder.setOnClickListener(this);
         mOrderDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
@@ -177,17 +175,9 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
             case R.id.btnDecrease:
                 if(mAmountOrder>1){
                     mAmountOrder--;
-                    mTvOrderAmount.setText(mAmountOrder);
+                    mTvOrderAmount.setText(mAmountOrder+"");
                     mTvOrderPrice.setText("đ"+String.valueOf(mOrderPrice*mAmountOrder));
                 }
-                break;
-            case R.id.btnDraft:
-                User.getCurrentUser().setListUpdate(true);
-                User.getCurrentUser().setCartUpdate(true);
-                User.getCurrentUser().setHistoryUpdate(true);
-                User.getCurrentUser().setOrderUpdate(true);
-                Toast.makeText(getApplicationContext(), "Coming soon!", Toast.LENGTH_SHORT).show();
-                mOrderDialog.dismiss();
                 break;
             case R.id.btnOrder:
                 mOrderDialog.dismiss();
@@ -214,6 +204,7 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
                                 User.getCurrentUser().setHistoryUpdate(true);
                                 User.getCurrentUser().setOrderUpdate(true);
                                 dialog.dismiss();
+                                Toast.makeText(getApplicationContext(),"Order complete!",Toast.LENGTH_SHORT).show();
                             }
                         });
                     }

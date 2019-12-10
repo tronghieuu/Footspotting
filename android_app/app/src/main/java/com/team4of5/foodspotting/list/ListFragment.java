@@ -29,8 +29,6 @@ public class ListFragment extends Fragment {
             bottomNav.setSelectedItemId(R.id.nav_ongoing);
         } else if(type == 1){
             bottomNav.setSelectedItemId(R.id.nav_history);
-        } else if(type == 2){
-            bottomNav.setSelectedItemId(R.id.nav_cart);
         }
         //getFragmentManager().beginTransaction().replace(R.id.list_fragment_container, new ListFragmentOngoing()).commit();
         return view;
@@ -50,10 +48,6 @@ public class ListFragment extends Fragment {
                         //if the other fragment is visible, hide it.
                         t.beginTransaction().hide(t.findFragmentByTag("History")).commit();
                     }
-                    if(t.findFragmentByTag("Draft") != null){
-                        //if the other fragment is visible, hide it.
-                        t.beginTransaction().hide(t.findFragmentByTag("Draft")).commit();
-                    }
 
                     switch (menuItem.getItemId()){
                         case R.id.nav_ongoing:
@@ -65,11 +59,6 @@ public class ListFragment extends Fragment {
                             selectedFragment = new ListFragmentHistory();
                             fragTag="History";
                             User.getCurrentUser().setOrderTab(1);
-                            break;
-                        case R.id.nav_cart:
-                            selectedFragment = new ListFragmentDraft();
-                            fragTag="Draft";
-                            User.getCurrentUser().setOrderTab(2);
                             break;
                     }
 
@@ -84,13 +73,6 @@ public class ListFragment extends Fragment {
                             ft.commit();
                         } else if(User.getCurrentUser().isHistoryUpdate() && fragTag.contentEquals("History")){
                             User.getCurrentUser().setHistoryUpdate(false);
-                            Fragment frg = getActivity().getSupportFragmentManager().findFragmentByTag(fragTag);
-                            FragmentTransaction ft = t.beginTransaction();
-                            ft.detach(frg);
-                            ft.attach(frg);
-                            ft.commit();
-                        } else if(User.getCurrentUser().isCartUpdate() && fragTag.contentEquals("Draft")){
-                            User.getCurrentUser().setCartUpdate(false);
                             Fragment frg = getActivity().getSupportFragmentManager().findFragmentByTag(fragTag);
                             FragmentTransaction ft = t.beginTransaction();
                             ft.detach(frg);

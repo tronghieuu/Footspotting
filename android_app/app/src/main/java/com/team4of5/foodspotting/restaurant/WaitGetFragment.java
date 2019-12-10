@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,6 +44,8 @@ public class WaitGetFragment extends Fragment {
     private RecyclerView mRecyclerView;
     private Dialog dialog;
     String res_id;
+    private boolean isLoading = false;
+    private SwipeRefreshLayout mSwipe;
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -50,7 +53,7 @@ public class WaitGetFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_wait_confirm, container, false);
         linearLayoutLogin = view.findViewById(R.id.ongoing_login);
         relativeLayoutLogout = view.findViewById(R.id.ongoing_no_login);
-
+        mSwipe = view.findViewById(R.id.swipeWaitConfirm);
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
             login();
             mOrders = new ArrayList<>();
@@ -95,6 +98,17 @@ public class WaitGetFragment extends Fragment {
             });
 
             getListOrder();
+            //load lai page
+            mSwipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    if(!isLoading) {
+                        mOrders.clear();
+                        waitGetAdapter.notifyDataSetChanged();
+                        getListOrder();
+                    } else mSwipe.setRefreshing(false);
+                }
+            });
         } else logout();
 
 
@@ -112,6 +126,7 @@ public class WaitGetFragment extends Fragment {
     }
 
     public void getListOrder(){
+        isLoading = true;
         res_id = getActivity().getIntent().getStringExtra("res_id");
         FirebaseFirestore.getInstance().collection("order")
                 .whereEqualTo("restaurant_id", res_id)
@@ -132,6 +147,8 @@ public class WaitGetFragment extends Fragment {
 
                     waitGetAdapter.notifyDataSetChanged();
                 }
+                isLoading = false;
+                mSwipe.setRefreshing(false);
             }
         });
     }
