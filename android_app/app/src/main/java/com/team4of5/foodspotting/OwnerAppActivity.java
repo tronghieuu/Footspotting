@@ -175,7 +175,7 @@ public class OwnerAppActivity extends AppCompatActivity implements View.OnClickL
                 break;
             case R.id.btnDangtin:
                 Intent intentNews = new Intent(this,PostNewsActivity.class);
-                intentNews.putExtra("res_id", id_res);
+                intentNews.putExtra("id_restaurent", id_res);
                 startActivity(intentNews);
                 break;
             case R.id.btnBackOwner:

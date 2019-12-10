@@ -1,9 +1,107 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".NewsDetailActivity">
+    <RelativeLayout
+        android:id="@+id/layout_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+        <androidx.appcompat.widget.Toolbar
+            android:background="@color/color_red"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/toolbar"
+            android:minHeight="?android:attr/actionBarSize"
+            android:layout_centerHorizontal="true">
+
+            <TextView
+                android:id="@+id/tenquanDetail"
+                android:gravity="center"
+                android:textSize="20dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:maxLines="2"
+                style="@style/headerText"
+                android:text="Tên quán" />
+
+        </androidx.appcompat.widget.Toolbar>
+
+        <Button
+            android:id="@+id/btnBackNewsDetail"
+            android:layout_centerVertical="true"
+            android:paddingStart="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:drawableStart="@drawable/ic_navigate_before"
+            android:background="?android:attr/selectableItemBackground"/>
+        <Button
+            android:text="visit to"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:id="@+id/btnGotoRes"
+            android:layout_width="wrap_content"
+            android:layout_height="42dp"
+            android:layout_marginBottom="10dp"
+            android:background="@drawable/gotores"
+            android:drawableStart="@drawable/gotores1"
+            android:drawableEnd="@drawable/gotores2"
+            android:paddingStart="20dp"
+            android:textAlignment="viewStart"
+            android:textColor="#D8D4D4"
+            android:textStyle="bold" />
+
+    </RelativeLayout>
+    <ScrollView
+        android:layout_below="@+id/layout_toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <RelativeLayout
+            android:layout_margin="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_marginTop="0dp"
+                android:orientation="vertical">
+                <ImageView
+                    android:scaleType="fitXY"
+                    android:id="@+id/imageNewsDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="200dp"
+                    android:layout_gravity="center"></ImageView>
+                    <TextView
+                        android:id="@+id/addressNewsDetail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="Địa chỉ: 123 vũ miên, cẩm lệ, đà nẵng"
+                        android:textColor="@color/color_black"
+                        android:textSize="20sp"></TextView>
+                    <TextView
+                        android:textStyle="bold"
+                        android:layout_gravity="center"
+                        android:layout_marginTop="10dp"
+                        android:id="@+id/titleNewsDetail"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="tiêu đề is here!"
+                        android:textColor="@color/color_red"
+                        android:textSize="30sp"></TextView>
+
+                <TextView
+                    android:id="@+id/noidungNewsDetail"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="nội dung is here"
+                    android:textColor="@color/color_black"
+                    android:textSize="20sp"></TextView>
+            </LinearLayout>
+        </RelativeLayout>
+    </ScrollView>
+</RelativeLayout>

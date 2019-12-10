@@ -9,6 +9,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -18,8 +19,11 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.team4of5.foodspotting.R;
+import com.team4of5.foodspotting.notification.NotificationAdapter;
 
 import java.io.InputStream;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 
 public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -131,13 +135,12 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
         if (holder instanceof ViewHolderRow) {
             News tin = mNews.get(position);
-
             ViewHolderRow userViewHolder = (ViewHolderRow) holder;
 
             userViewHolder.tvRestName.setText(tin.getTenquan());
             userViewHolder.tvTitle.setText(tin.getTitle());
             userViewHolder.tvRestAddress.setText(tin.getAddress());
-            userViewHolder.dateCreated.setText(tin.getDateCreated());
+            userViewHolder.dateCreated.setText(getDateTime(tin.getDateCreated()));
             new DownloadImageFromInternet(userViewHolder.imageView)
                     .execute(tin.getImage());
 
@@ -147,6 +150,13 @@ public class NotificationAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             ViewHolderLoading loadingViewHolder = (ViewHolderLoading) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
         }
+    }
+    public String getDateTime(Date a) {
+        Date date = a;
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        return c.get(Calendar.MONTH)+"/"+c.get(Calendar.DAY_OF_MONTH)
+                +"/"+c.get(Calendar.YEAR)+" "+c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
     }
     private class DownloadImageFromInternet extends AsyncTask<String, Void, Bitmap> {
 

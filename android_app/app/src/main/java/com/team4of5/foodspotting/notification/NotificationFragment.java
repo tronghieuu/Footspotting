@@ -5,6 +5,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Adapter;
+import android.widget.AdapterView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 
@@ -20,6 +22,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.team4of5.foodspotting.NewsDetailActivity;
@@ -56,40 +59,38 @@ public class NotificationFragment extends Fragment {
         adapter =new NotificationAdapter(getContext(),list,mRVNotification);
         mRVNotification.setAdapter(adapter);
         queryNews();
-//        adapter.setOnItemListener(new NotificationAdapter.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(News item) {
-//                Intent intent = new Intent(getContext(), NewsDetailActivity.class);
-//            }
-//        });
+        adapter.setOnItemListener(new NotificationAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(News item) {
+                Intent intent = new Intent(getActivity(),NewsDetailActivity.class);
+                Bundle bundle = new Bundle();
+                bundle.putSerializable("news", item);
+                intent.putExtra("package", bundle);
+                startActivity(intent);
+            }
+        });
     }
 
     private void queryNews() {
-        FirebaseFirestore.getInstance().collection("restaurants")
-                .get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+        FirebaseFirestore.getInstance().collection("news")
+                .orderBy("dateCreated", Query.Direction.DESCENDING)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                for (DocumentSnapshot doc :task.getResult() ){
-                    FirebaseFirestore.getInstance().collection("restaurants")
-                            .document(doc.getId())
-                            .collection("news").get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-                        @Override
-                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                            if (!task.getResult().isEmpty())
-                                for (DocumentSnapshot doc1 : task.getResult()){
-                                    News news = new News();
-                                    news.setTenquan(doc1.getString("tenquan"));
-                                    news.setTitle(doc1.getString("title"));
-                                    news.setContent(doc1.getString("content"));
-                                    news.setAddress(doc1.getString("address"));
-                                    news.setImage(doc1.getString("image"));
-                                    news.setDateCreated(doc1.getString("dateCreated"));
-                                    list.add(news);
-                                    adapter.notifyDataSetChanged();
-                                }
-                        }
-                    });
-                }
+                if (!task.getResult().isEmpty())
+                    for (DocumentSnapshot doc : task.getResult()){
+                        News news = new News();
+                        news.setTenquan(doc.getString("tenquan"));
+                        news.setTitle(doc.getString("title"));
+                        news.setContent(doc.getString("content"));
+                        news.setAddress("Địa chỉ:"+doc.getString("address"));
+                        news.setImage(doc.getString("image"));
+                        news.setDateCreated(doc.getDate("dateCreated"));
+                        news.setId_res(doc.getString("id_res"));
+                        list.add(news);
+                        adapter.notifyDataSetChanged();
+                    }
             }
         });
     }

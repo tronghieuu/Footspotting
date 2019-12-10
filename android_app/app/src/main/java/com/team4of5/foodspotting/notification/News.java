@@ -1,14 +1,16 @@
 package com.team4of5.foodspotting.notification;
 
 import java.io.Serializable;
+import java.util.Date;
 
 public class News implements Serializable {
-    public News(String tenquan, String image, String title, String content, String address) {
+    public News(String tenquan, String image, String title, String content, String address, String id_res) {
         this.tenquan = tenquan;
         this.image = image;
         this.title = title;
         this.content = content;
         this.address = address;
+        this.id_res = id_res;
     }
     public News(){
         this.tenquan = "";
@@ -16,6 +18,7 @@ public class News implements Serializable {
         this.title = "";
         this.content = "";
         this.address = "";
+        this.id_res = "";
     };
 
     public String getTenquan() {
@@ -64,13 +67,22 @@ public class News implements Serializable {
     private String content;
     private String address;
 
-    public String getDateCreated() {
+    public String getId_res() {
+        return id_res;
+    }
+
+    public void setId_res(String id_res) {
+        this.id_res = id_res;
+    }
+
+    private String id_res;
+    public Date getDateCreated() {
         return dateCreated;
     }
 
-    public void setDateCreated(String dateCreated) {
+    public void setDateCreated(Date dateCreated) {
         this.dateCreated = dateCreated;
     }
 
-    private String dateCreated;
+    private Date dateCreated;
 }

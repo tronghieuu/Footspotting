@@ -79,6 +79,13 @@
         <item name="android:orientation">vertical</item>
         <item name="android:background">@drawable/border</item>
     </style>
+    <style name="clickableTextParentforNotification" parent="parent">
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:layout_gravity">center</item>
+        <item name="android:orientation">vertical</item>
+        <item name="android:background">@drawable/border</item>
+    </style>
 
     <style name="clickableText">
         <item name="android:layout_width">match_parent</item>
