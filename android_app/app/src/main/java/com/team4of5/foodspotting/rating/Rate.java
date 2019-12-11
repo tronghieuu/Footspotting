@@ -26,6 +26,7 @@ import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.team4of5.foodspotting.R;
 import com.team4of5.foodspotting.object.Rating;
@@ -279,6 +280,7 @@ public class Rate extends AppCompatActivity {
         db.collection("restaurants")
                 .document(id_restaurent)
                 .collection("rating")
+                .orderBy("time", Query.Direction.DESCENDING)
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
