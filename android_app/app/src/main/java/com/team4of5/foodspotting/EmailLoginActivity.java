@@ -153,6 +153,7 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                                             user.setDistrict(doc.getString("district"));
                                             user.setProvince(doc.getString("province"));
                                             user.setPhone(doc.getString("phone"));
+                                            user.setBackground(doc.getString("background"));
                                         }
                                         User.getCurrentUser().setListUpdate(true);
                                         User.getCurrentUser().setHistoryUpdate(true);
