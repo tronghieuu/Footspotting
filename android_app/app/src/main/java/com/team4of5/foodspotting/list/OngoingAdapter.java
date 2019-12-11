@@ -177,8 +177,10 @@ public class OngoingAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             } else if(order.getStatus() == 4) {
                 userViewHolder.btnDetail.setBackgroundColor(Color.parseColor("#AA9E9E"));
                 userViewHolder.tvStatus.setText("Đang giao");
+            } else if(order.getStatus() == 3) {
+                userViewHolder.btnDetail.setBackgroundColor(Color.parseColor("#AA9E9E"));
+                userViewHolder.tvStatus.setText("Chờ giao");
             }
-
             // binding item click listner
             userViewHolder.bind(mOrders.get(position), mListener);
         } else if (holder instanceof ViewHolderLoading) {
