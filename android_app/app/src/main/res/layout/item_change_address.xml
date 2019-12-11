@@ -3,7 +3,6 @@
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginHorizontal="20dp"
     android:padding="20dp"
     android:background="@color/color_white">
 
@@ -29,7 +28,6 @@
         android:id="@+id/edtChangeStreet"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textSize="30dp"
         android:hint="địa chỉ"
         android:paddingHorizontal="10dp"
         android:maxLines="1" />
@@ -38,6 +36,7 @@
         android:id="@+id/btnUpdateAddress"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_marginTop="10dp"
         android:text="cập nhật"
         android:textSize="30dp" />

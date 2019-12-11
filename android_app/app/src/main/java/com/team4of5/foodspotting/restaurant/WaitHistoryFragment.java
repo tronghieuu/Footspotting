@@ -28,6 +28,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.team4of5.foodspotting.R;
 import com.team4of5.foodspotting.object.Order;
+import com.team4of5.foodspotting.object.UserHistory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class WaitHistoryFragment extends Fragment {
     private LinearLayout linearLayoutLogin;
     private RelativeLayout relativeLayoutLogout;
     private WaitHistoryAdapter waitHistoryAdapter;
-    private List<Order> mOrders;
+    private List<UserHistory> mOrders;
     private RecyclerView mRecyclerView;
     private Dialog dialog;
     String res_id;
@@ -92,24 +93,30 @@ public class WaitHistoryFragment extends Fragment {
     }
 
     public void getListOrder(){
+
         res_id = getActivity().getIntent().getStringExtra("res_id");
-        FirebaseFirestore.getInstance().collection("restaurants")
-                .document(res_id)
-                .collection("history")
-                .orderBy("timestamp", Query.Direction.ASCENDING)
+        FirebaseFirestore.getInstance().collection("history")
+                .whereEqualTo("restaurant_id", res_id)
+                .whereEqualTo("status","5")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(DocumentSnapshot doc : queryDocumentSnapshots){
-                    mOrders.add(new Order(doc.getString("restaurant_id"),
-                            doc.getString("food_id"),
-                            doc.getString("user_id"),
+                    mOrders.add(new UserHistory(doc.getId(),
+                            doc.getString("restaurant_id"),
+                            doc.getString("restaurant_name"),
+                            doc.getString("restaurant_image"),
+                            doc.getString("restaurant_address"),
+                            doc.getString("food_image"),
+                            doc.getString("food_name"),
+                            Integer.parseInt(doc.getString("food_price")),
                             Integer.parseInt(doc.getString("amount")),
                             Integer.parseInt(doc.getString("status")),
                             doc.getLong("timestamp"),
-                            doc.getId(),doc.getString("shipper_id"), doc.getString("area")));
-                    Toast.makeText(getContext(), "Done ", Toast.LENGTH_SHORT).show();
-
+                            doc.getString("user_id"),
+                            doc.getString("user_address"),
+                            doc.getString("shipper_id")));
                     waitHistoryAdapter.notifyDataSetChanged();
                 }
             }
