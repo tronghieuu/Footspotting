@@ -257,6 +257,7 @@ public class SignUpActivity extends AppCompatActivity implements View.OnClickLis
                         data.put("province", "");
                         data.put("phone","");
                         data.put("image", "");
+                        data.put("background","");
                         db.collection("user")
                                 .add(data)
                                 .addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
