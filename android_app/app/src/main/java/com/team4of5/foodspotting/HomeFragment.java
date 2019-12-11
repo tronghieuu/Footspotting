@@ -15,6 +15,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 import androidx.viewpager.widget.ViewPager;
 
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -51,7 +52,8 @@ public class HomeFragment extends Fragment {
     private SearchRecycleAdapter searchAdapter;
     private FirebaseFirestore db;
     private Spinner sp_city;
-
+    private boolean isLoading = false;
+    private SwipeRefreshLayout mSwipe;
     private int[] myImageList = new int[]{R.drawable.slide1, R.drawable.slide2,
             R.drawable.slide3};
     @Override
@@ -81,6 +83,16 @@ public class HomeFragment extends Fragment {
                 Intent intent = new Intent(getActivity(), Restaurent.class);
                 intent.putExtra("id_restaurent", item.getId());
                 startActivity(intent);
+            }
+        });
+
+        mSwipe = view.findViewById(R.id.swipeHome);
+        mSwipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                if(!isLoading) {
+                    queryRestaurantFromProvince();
+                } else mSwipe.setRefreshing(false);
             }
         });
 
@@ -200,6 +212,7 @@ public class HomeFragment extends Fragment {
 
     public void queryRestaurantFromProvince(){
             mRestaurents.clear();
+            isLoading = true;
             mAdapter.notifyDataSetChanged();
             db.collection("restaurants")
                     .whereEqualTo("province",sp_city.getSelectedItem().toString()).get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
@@ -222,7 +235,8 @@ public class HomeFragment extends Fragment {
                             mRestaurents.add(res);
                             mAdapter.notifyDataSetChanged();
                         }
-
+                        isLoading = false;
+                        mSwipe.setRefreshing(false);
                     }
                 }
             });
