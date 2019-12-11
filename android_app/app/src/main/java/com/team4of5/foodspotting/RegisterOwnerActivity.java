@@ -222,7 +222,7 @@ public class RegisterOwnerActivity extends AppCompatActivity implements View.OnC
             toast.show();
             return;
         }
-        final String type = mEdtProvince.getSelectedItem().toString();
+        final String type = mEdtType.toString();
         if(type.length() == 0){
             toast.setText("Chưa nhập đủ thông tin!");
             toast.show();
