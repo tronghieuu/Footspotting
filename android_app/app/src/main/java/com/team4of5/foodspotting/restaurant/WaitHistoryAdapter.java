@@ -112,39 +112,18 @@ public class WaitHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             final UserHistory order = mOrders.get(position);
 
             final ViewHolderRow userViewHolder = (ViewHolderRow) holder;
-            FirebaseFirestore.getInstance().collection("user")
-                    .document(order.getUser_id())
-                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if(documentSnapshot.exists()){
-                        userViewHolder.tvUserAddress.setText(
-                                documentSnapshot.getString("street")
-                                        + " " + documentSnapshot.getString("district")
-                                        + " " + documentSnapshot.getString("province")
-                        );
-                    }
-                }
-            });
 
-            FirebaseFirestore.getInstance().collection("restaurants")
-                    .document(order.getRestaurant_id()).collection("food")
-                    .document(order.getFood_id()).get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
-                @Override
-                public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    if(documentSnapshot.exists()){
-                        userViewHolder.tvFoodName.setText(documentSnapshot.getString("name"));
-                        userViewHolder.tvFoodPrice.setText("đ"+documentSnapshot.getString("price"));
-                        userViewHolder.tvOrderAmount.setText("x"+order.getOrder_amount());
-                        userViewHolder.tvTotalPrice.setText("đ"+Integer.parseInt(documentSnapshot.getString("price"))*order.getOrder_amount());
+            userViewHolder.tvUserAddress.setText(order.getUser_address());
+
+            userViewHolder.tvFoodName.setText(order.getFood_name());
+            userViewHolder.tvFoodPrice.setText("đ"+order.getFood_price());
+            userViewHolder.tvOrderAmount.setText("x"+order.getFood_amount());
+            userViewHolder.tvTotalPrice.setText("đ"+order.getFood_price()*order.getFood_amount());
                         new DownloadImageFromInternet(userViewHolder.imageViewFood)
-                                .execute(documentSnapshot.getString("image"));
-                    }
-                }
-            });
-            userViewHolder.tvDateTime.setText(order.getDateTime());
-            // binding item click listener
-            userViewHolder.bind(mOrders.get(position), mListener);
+                                .execute(order.getFood_image());
+
+            userViewHolder.tvDateTime.setText("  "+order.getDateTime());
+
         } else if (holder instanceof ViewHolderLoading) {
             ViewHolderLoading loadingViewHolder = (ViewHolderLoading) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);

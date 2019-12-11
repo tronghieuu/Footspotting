@@ -103,15 +103,20 @@ public class WaitHistoryFragment extends Fragment {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
                 for(DocumentSnapshot doc : queryDocumentSnapshots){
-                    mOrders.add(new Order(doc.getString("restaurant_id"),
-                            doc.getString("food_id"),
-                            doc.getString("user_id"),
+                    mOrders.add(new UserHistory(doc.getId(),
+                            doc.getString("restaurant_id"),
+                            doc.getString("restaurant_name"),
+                            doc.getString("restaurant_image"),
+                            doc.getString("restaurant_address"),
+                            doc.getString("food_image"),
+                            doc.getString("food_name"),
+                            Integer.parseInt(doc.getString("food_price")),
                             Integer.parseInt(doc.getString("amount")),
                             Integer.parseInt(doc.getString("status")),
                             doc.getLong("timestamp"),
-                            doc.getId(),doc.getString("shipper_id"), doc.getString("area")));
-                    Toast.makeText(getContext(), "Done ", Toast.LENGTH_SHORT).show();
-
+                            doc.getString("user_id"),
+                            doc.getString("user_address"),
+                            doc.getString("shipper_id")));
                     waitHistoryAdapter.notifyDataSetChanged();
                 }
             }
