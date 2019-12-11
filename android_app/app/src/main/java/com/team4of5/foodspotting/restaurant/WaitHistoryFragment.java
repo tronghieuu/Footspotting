@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -41,6 +42,9 @@ public class WaitHistoryFragment extends Fragment {
     private List<UserHistory> mOrders;
     private RecyclerView mRecyclerView;
     private Dialog dialog;
+
+    private boolean isLoading = false;
+    private SwipeRefreshLayout mSwipe;
     String res_id;
     @Nullable
     @Override
@@ -49,7 +53,7 @@ public class WaitHistoryFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_wait_confirm, container, false);
         linearLayoutLogin = view.findViewById(R.id.ongoing_login);
         relativeLayoutLogout = view.findViewById(R.id.ongoing_no_login);
-
+        mSwipe = view.findViewById(R.id.swipeWaitConfirm);
         if(FirebaseAuth.getInstance().getCurrentUser() != null){
             login();
             mOrders = new ArrayList<>();
@@ -76,6 +80,17 @@ public class WaitHistoryFragment extends Fragment {
             });
 
             getListOrder();
+            //load lai page
+            mSwipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    if(!isLoading) {
+                        mOrders.clear();
+                        waitHistoryAdapter.notifyDataSetChanged();
+                        getListOrder();
+                    } else mSwipe.setRefreshing(false);
+                }
+            });
         } else logout();
 
 
@@ -119,6 +134,8 @@ public class WaitHistoryFragment extends Fragment {
                             doc.getString("shipper_id")));
                     waitHistoryAdapter.notifyDataSetChanged();
                 }
+                isLoading = false;
+                mSwipe.setRefreshing(false);
             }
         });
     }

@@ -68,17 +68,66 @@ public class WaitConfirmFragment extends Fragment {
             waitConfirmAdapter = new WaitConfirmAdapter(getActivity(), mOrders, mRecyclerView, new WaitConfirmAdapter.BtnOngoingListener(){
                 @Override
                 public void onCancelButtonClick(View v, final int position) {
-                        dialog.show();
-                        Map<String, Object> data = new HashMap<>();
-                        data.put("status", "0");
-                        FirebaseFirestore.getInstance().collection("order")
-                            .document(mOrders.get(position).getId()).update(data)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    mOrders.remove(position);
-                                    waitConfirmAdapter.notifyDataSetChanged();
-                                    dialog.dismiss();
+                    dialog.show();
+                    final Map<String, Object> data = new HashMap<>();
+                    data.put("restaurant_id", mOrders.get(position).getRestaurant_id());
+                    data.put("user_id", mOrders.get(position).getUser_id());
+                    data.put("status", "0");
+                    data.put("timestamp", mOrders.get(position).getTimestamp());
+                    data.put("amount", mOrders.get(position).getOrder_amount()+"");
+                    data.put("shipper_id", mOrders.get(position).getShipper_id());
+                    FirebaseFirestore.getInstance().collection("restaurants")
+                            .document(mOrders.get(position).getRestaurant_id())
+                            .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                        @Override
+                        public void onSuccess(DocumentSnapshot documentSnapshot) {
+                            if(documentSnapshot.exists()) {
+                                data.put("restaurant_address", documentSnapshot.getString("street")+
+                                        ", "+documentSnapshot.getString("district")+", "+documentSnapshot.getString("province"));
+                                data.put("restaurant_name", documentSnapshot.getString("name"));
+                                data.put("restaurant_image", documentSnapshot.getString("image"));
+                                FirebaseFirestore.getInstance().collection("restaurants")
+                                        .document(mOrders.get(position).getRestaurant_id())
+                                        .collection("food").document(mOrders.get(position).getFood_id())
+                                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                        if (documentSnapshot.exists()) {
+                                            data.put("food_name", documentSnapshot.getString("name"));
+                                            data.put("food_price", documentSnapshot.getString("price"));
+                                            data.put("food_image", documentSnapshot.getString("image"));
+                                            FirebaseFirestore.getInstance().collection("user")
+                                                    .document(mOrders.get(position).getUser_id())
+                                                    .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                                                @Override
+                                                public void onSuccess(DocumentSnapshot documentSnapshot) {
+                                                    if(documentSnapshot.exists()) {
+                                                        data.put("user_address", documentSnapshot.getString("street")+
+                                                                ", "+documentSnapshot.getString("district")+", "+
+                                                                documentSnapshot.getString("province"));
+                                                    }
+                                                    FirebaseFirestore.getInstance().collection("history")
+                                                            .add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
+                                                        @Override
+                                                        public void onSuccess(DocumentReference documentReference) {
+                                                            FirebaseFirestore.getInstance().collection("order")
+                                                                    .document(mOrders.get(position).getId()).delete()
+                                                                    .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                                        @Override
+                                                                        public void onSuccess(Void aVoid) {
+                                                                            mOrders.remove(position);
+                                                                            waitConfirmAdapter.notifyDataSetChanged();
+                                                                            dialog.dismiss();
+                                                                        }
+                                                                    });
+                                                        }
+                                                    });
+                                                }
+                                            });
+                                        }
+                                    }
+                                });
+                            }
                                 }
                             });
                 }
