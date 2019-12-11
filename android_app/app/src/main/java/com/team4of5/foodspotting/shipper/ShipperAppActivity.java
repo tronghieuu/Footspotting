@@ -40,6 +40,7 @@ public class ShipperAppActivity extends AppCompatActivity implements View.OnClic
                 finish();
                 break;
             case R.id.btnHistoryShipper:
+                startActivity(new Intent(this, HistoryShipperActivity.class));
                 break;
             case R.id.btnOrderAcceptedShipper:
                 startActivity(new Intent(this, OrderAcceptedShipperActivity.class));

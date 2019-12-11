@@ -19,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -44,6 +45,8 @@ public class ListFragmentOngoing extends Fragment {
     private List<Order> mOrders;
     private RecyclerView mRecyclerView;
     private Dialog dialog;
+    private boolean isLoading = false;
+    private SwipeRefreshLayout mSwipe;
 
     @Nullable
     @Override
@@ -112,6 +115,18 @@ public class ListFragmentOngoing extends Fragment {
                 }
             });
 
+            mSwipe = view.findViewById(R.id.swipeOngoing);
+            mSwipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    if(!isLoading) {
+                        mOrders.clear();
+                        mOngoingAdapter.notifyDataSetChanged();
+                        getListOrder();
+                    } else mSwipe.setRefreshing(false);
+                }
+            });
+
             getListOrder();
         } else logout();
 
@@ -130,6 +145,7 @@ public class ListFragmentOngoing extends Fragment {
     }
 
     public void getListOrder(){
+        isLoading = true;
         FirebaseFirestore.getInstance().collection("order")
                 .whereEqualTo("user_id", User.getCurrentUser().getId())
                 .orderBy("timestamp", Query.Direction.DESCENDING)
@@ -147,6 +163,8 @@ public class ListFragmentOngoing extends Fragment {
                             doc.getString("area")));
                     mOngoingAdapter.notifyDataSetChanged();
                 }
+                isLoading = false;
+                mSwipe.setRefreshing(false);
             }
         });
     }

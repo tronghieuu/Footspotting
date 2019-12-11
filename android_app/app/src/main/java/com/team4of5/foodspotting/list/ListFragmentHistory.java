@@ -18,6 +18,7 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -43,6 +44,8 @@ public class ListFragmentHistory extends Fragment {
     private List<UserHistory> mUserHistories;
     private RecyclerView mRecyclerView;
     private Dialog dialog;
+    private boolean isLoading = false;
+    private SwipeRefreshLayout mSwipe;
 
     @Nullable
     @Override
@@ -58,22 +61,6 @@ public class ListFragmentHistory extends Fragment {
             mRecyclerView = view.findViewById(R.id.recycleViewHistory);
             mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity(), LinearLayoutManager.VERTICAL, false));
             mOrderHistoryAdapter = new OrderHistoryAdapter(getActivity(), mUserHistories, mRecyclerView, new OrderHistoryAdapter.BtnHistoryListener() {
-                @Override
-                public void onDeleteButtonClick(View v, final int position) {
-                    dialog.show();
-                    Map<String, Object> data = new HashMap<>();
-                    data.put("user_id", User.getCurrentUser().getId());
-                    FirebaseFirestore.getInstance()
-                            .collection("history").document(mUserHistories.get(position).getId())
-                            .update(data).addOnSuccessListener(new OnSuccessListener<Void>() {
-                        @Override
-                        public void onSuccess(Void aVoid) {
-                            mUserHistories.remove(position);
-                            mOrderHistoryAdapter.notifyDataSetChanged();
-                            dialog.dismiss();
-                        }
-                    });
-                }
 
                 @Override
                 public void onVisitButtonClick(View v, int position) {
@@ -89,6 +76,18 @@ public class ListFragmentHistory extends Fragment {
                 }
             });
             mRecyclerView.setAdapter(mOrderHistoryAdapter);
+
+            mSwipe = view.findViewById(R.id.swipeHistory);
+            mSwipe.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+                @Override
+                public void onRefresh() {
+                    if(!isLoading) {
+                        mUserHistories.clear();
+                        mOrderHistoryAdapter.notifyDataSetChanged();
+                        getHistory();
+                    } else mSwipe.setRefreshing(false);
+                }
+            });
 
             dialog = new Dialog(getActivity());
             dialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
@@ -118,6 +117,7 @@ public class ListFragmentHistory extends Fragment {
     }
 
     public void getHistory(){
+        isLoading = true;
         FirebaseFirestore.getInstance().collection("history")
                 .whereEqualTo("user_id", User.getCurrentUser().getId())
                 .orderBy("timestamp", Query.Direction.DESCENDING)
@@ -135,9 +135,14 @@ public class ListFragmentHistory extends Fragment {
                             Integer.parseInt(doc.getString("food_price")),
                             Integer.parseInt(doc.getString("amount")),
                             Integer.parseInt(doc.getString("status")),
-                            doc.getLong("timestamp")));
+                            doc.getLong("timestamp"),
+                            doc.getString("user_id"),
+                            doc.getString("user_address"),
+                            doc.getString("shipper_id")));
                     mOrderHistoryAdapter.notifyDataSetChanged();
                 }
+                isLoading = false;
+                mSwipe.setRefreshing(false);
             }
         });
     }

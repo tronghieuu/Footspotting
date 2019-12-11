@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout;
 
 import android.app.Dialog;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
@@ -114,9 +116,9 @@ public class OrderReceivedShipperActivity extends AppCompatActivity {
                                             @Override
                                             public void onSuccess(DocumentSnapshot documentSnapshot) {
                                                 if(documentSnapshot.exists()) {
-                                                    data.put("user_address", documentSnapshot.getString("street"+
+                                                    data.put("user_address", documentSnapshot.getString("street")+
                                                             ", "+documentSnapshot.getString("district")+", "+
-                                                            documentSnapshot.getString("province")));
+                                                            documentSnapshot.getString("province"));
                                                 }
                                                 FirebaseFirestore.getInstance().collection("history")
                                                         .add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
@@ -145,8 +147,20 @@ public class OrderReceivedShipperActivity extends AppCompatActivity {
             }
 
             @Override
-            public void onContactButtonClick(View v, final int position) {
-
+            public void onContactButtonClick(View v, int position) {
+                FirebaseFirestore.getInstance().collection("user")
+                        .document(mOrders.get(position).getUser_id())
+                        .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+                    @Override
+                    public void onSuccess(DocumentSnapshot documentSnapshot) {
+                        if(documentSnapshot.exists()) {
+                            Intent intent = new Intent(Intent.ACTION_DIAL);
+                            intent.setData(Uri.parse("tel:" +documentSnapshot.getString("phone")));
+                            dialog.dismiss();
+                            startActivity(intent);
+                        }
+                    }
+                });
             }
         });
         mRecyclerView.setAdapter(receivedAdapter);

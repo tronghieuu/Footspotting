@@ -1,4 +1,4 @@
-package com.team4of5.foodspotting.list;
+package com.team4of5.foodspotting.shipper;
 
 import android.app.Activity;
 import android.content.Context;
@@ -17,34 +17,33 @@ import android.widget.TextView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.team4of5.foodspotting.R;
+import com.team4of5.foodspotting.object.Order;
 import com.team4of5.foodspotting.object.UserHistory;
 
 import java.io.InputStream;
 import java.util.List;
 
-public class OrderHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
+public class HistoryShipperAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
     private List<UserHistory> mUserHistories;
     private Context mContext;
     private Activity mActivity;
-    private OnItemClickListener mListener;
-    private BtnHistoryListener btnHistoryListener;
+    private HistoryShipperAdapter.OnItemClickListener mListener;
 
     // for load more
     private final int VIEW_TYPE_ITEM = 0;
     private final int VIEW_TYPE_LOADING = 1;
-    private OnLoadMoreListener onLoadMoreListener;
+    private HistoryShipperAdapter.OnLoadMoreListener onLoadMoreListener;
 
     // The minimum amount of items to have below your current scroll position
     // before loading more.
     private boolean isLoading;
     private int visibleThreshold = 6;
     private int lastVisibleItem, totalItemCount;
-
-    public interface BtnHistoryListener{
-        void onVisitButtonClick(View v, int position);
-    }
 
     public interface OnItemClickListener {
         void onItemClick(UserHistory item);
@@ -66,9 +65,7 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public OrderHistoryAdapter(Context context, List<UserHistory> userHistories, RecyclerView recyclerView,
-                          BtnHistoryListener btnHistoryListener) {
-        this.btnHistoryListener = btnHistoryListener;
+    public HistoryShipperAdapter(Context context, List<UserHistory> userHistories, RecyclerView recyclerView) {
         mContext = context;
         mActivity = (Activity)context;
         mUserHistories = userHistories;
@@ -95,11 +92,11 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
-            View view = LayoutInflater.from(mActivity).inflate(R.layout.history_item, parent, false);
-            return new ViewHolderRow(view);
+            View view = LayoutInflater.from(mActivity).inflate(R.layout.item_history_shipper, parent, false);
+            return new HistoryShipperAdapter.ViewHolderRow(view);
         } else if (viewType == VIEW_TYPE_LOADING) {
             View view = LayoutInflater.from(mActivity).inflate(R.layout.item_loading, parent, false);
-            return new ViewHolderLoading(view);
+            return new HistoryShipperAdapter.ViewHolderLoading(view);
         }
         return null;
     }
@@ -110,44 +107,28 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         // - get element from your dataset at this position
         // - replace the contents of the view with that element
 
-        if (holder instanceof ViewHolderRow) {
-            UserHistory userHistory = mUserHistories.get(position);
+        if (holder instanceof HistoryShipperAdapter.ViewHolderRow) {
+            final UserHistory userHistory = mUserHistories.get(position);
 
-            ViewHolderRow userViewHolder = (ViewHolderRow) holder;
+            final HistoryShipperAdapter.ViewHolderRow userViewHolder = (HistoryShipperAdapter.ViewHolderRow) holder;
 
             userViewHolder.tvResName.setText(userHistory.getRestaurant_name());
             userViewHolder.tvResAddress.setText(userHistory.getRestaurant_address());
+                    new HistoryShipperAdapter.DownloadImageFromInternet(userViewHolder.imageViewRes)
+                            .execute(userHistory.getRestaurant_image());
             userViewHolder.tvFoodName.setText(userHistory.getFood_name());
-            userViewHolder.tvOrderAmount.setText("x"+userHistory.getFood_amount());
             userViewHolder.tvFoodPrice.setText("đ"+userHistory.getFood_price());
-            userViewHolder.tvTotalPrice.setText(userHistory.getTotalPrice());
-
-            userViewHolder.tvDateTime.setText(userHistory.getDateTime());
-
-            if(userHistory.getStatus() == 0){
-                userViewHolder.tvStatus.setText("Từ chối");
-            } else if(userHistory.getStatus() == 5){
-                userViewHolder.tvStatus.setText("Đã giao");
-            }
-
-            new OrderHistoryAdapter.DownloadImageFromInternet(userViewHolder.imageViewFood)
+            userViewHolder.tvOrderAmount.setText("x"+userHistory.getFood_amount());
+            userViewHolder.tvTotalPrice.setText("đ"+userHistory.getFood_price()*userHistory.getFood_amount());
+            new HistoryShipperAdapter.DownloadImageFromInternet(userViewHolder.imageViewFood)
                     .execute(userHistory.getFood_image());
-
-            new OrderHistoryAdapter.DownloadImageFromInternet(userViewHolder.imageViewRes)
-                    .execute(userHistory.getRestaurant_image());
-
-
-            userViewHolder.btnVisit.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    btnHistoryListener.onVisitButtonClick(view , position);
-                }
-            });
+            userViewHolder.tvDestination.setText(userHistory.getUser_address());
+            userViewHolder.tvDateTime.setText(userHistory.getDateTime());
 
             // binding item click listner
             userViewHolder.bind(mUserHistories.get(position), mListener);
-        } else if (holder instanceof ViewHolderLoading) {
-            ViewHolderLoading loadingViewHolder = (ViewHolderLoading) holder;
+        } else if (holder instanceof HistoryShipperAdapter.ViewHolderLoading) {
+            HistoryShipperAdapter.ViewHolderLoading loadingViewHolder = (HistoryShipperAdapter.ViewHolderLoading) holder;
             loadingViewHolder.progressBar.setIndeterminate(true);
         }
 
@@ -159,11 +140,11 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         return mUserHistories == null ? 0 : mUserHistories.size();
     }
 
-    public void setOnLoadMoreListener(OnLoadMoreListener mOnLoadMoreListener) {
+    public void setOnLoadMoreListener(HistoryShipperAdapter.OnLoadMoreListener mOnLoadMoreListener) {
         this.onLoadMoreListener = mOnLoadMoreListener;
     }
 
-    public void setOnItemListener(OnItemClickListener listener) {
+    public void setOnItemListener(HistoryShipperAdapter.OnItemClickListener listener) {
         this.mListener = listener;
     }
 
@@ -218,26 +199,24 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public class ViewHolderRow extends RecyclerView.ViewHolder {
-        public TextView tvResName, tvStatus, tvFoodName, tvResAddress, tvOrderAmount, tvFoodPrice, tvTotalPrice, tvDateTime;
+        public TextView tvResName, tvDateTime, tvFoodName, tvResAddress, tvOrderAmount, tvFoodPrice, tvTotalPrice, tvDestination;
         public ImageView imageViewRes, imageViewFood;
-        public Button btnVisit;
 
         public ViewHolderRow(View v) {
             super(v);
-            tvResName = v.findViewById(R.id.tvResNameHistory);
-            tvStatus = v.findViewById(R.id.tvStatusHistory);
-            tvFoodName = v.findViewById(R.id.tvFoodNameHistory);
-            tvResAddress = v.findViewById(R.id.tvResAddressHistory);
-            tvOrderAmount = v.findViewById(R.id.tvAmountOrderHistory);
-            tvFoodPrice = v.findViewById(R.id.tvFoodPriceHistory);
-            tvTotalPrice = v.findViewById(R.id.tvTotalPriceHistory);
-            imageViewRes = v.findViewById(R.id.imageViewResHistory);
-            imageViewFood = v.findViewById(R.id.imageViewFoodOrderHistory);
-            btnVisit = v.findViewById(R.id.btnVisit);
+            tvResName = v.findViewById(R.id.tvResNameOrderShipper);
             tvDateTime = v.findViewById(R.id.tvDateTimeOrderShipper);
+            tvFoodName = v.findViewById(R.id.tvFoodNameOrderShipper);
+            tvResAddress = v.findViewById(R.id.tvResAddressOrderShipper);
+            tvOrderAmount = v.findViewById(R.id.tvAmountOrderOrderShipper);
+            tvFoodPrice = v.findViewById(R.id.tvFoodPriceOrderShipper);
+            tvDestination = v.findViewById(R.id.tvDestinationOrderShipper);
+            tvTotalPrice = v.findViewById(R.id.tvTotalPriceOrderShipper);
+            imageViewRes = v.findViewById(R.id.imageViewResOrderShipper);
+            imageViewFood = v.findViewById(R.id.imageViewFoodOrderShipper);
         }
 
-        public void bind(final UserHistory item, final OnItemClickListener listener) {
+        public void bind(final UserHistory item, final HistoryShipperAdapter.OnItemClickListener listener) {
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -246,5 +225,4 @@ public class OrderHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
             });
         }
     }
-
 }
