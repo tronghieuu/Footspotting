@@ -28,6 +28,7 @@ import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.team4of5.foodspotting.R;
 import com.team4of5.foodspotting.object.Order;
+import com.team4of5.foodspotting.object.UserHistory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -37,7 +38,7 @@ public class WaitHistoryFragment extends Fragment {
     private LinearLayout linearLayoutLogin;
     private RelativeLayout relativeLayoutLogout;
     private WaitHistoryAdapter waitHistoryAdapter;
-    private List<Order> mOrders;
+    private List<UserHistory> mOrders;
     private RecyclerView mRecyclerView;
     private Dialog dialog;
     String res_id;
@@ -92,11 +93,12 @@ public class WaitHistoryFragment extends Fragment {
     }
 
     public void getListOrder(){
+
         res_id = getActivity().getIntent().getStringExtra("res_id");
-        FirebaseFirestore.getInstance().collection("restaurants")
-                .document(res_id)
-                .collection("history")
-                .orderBy("timestamp", Query.Direction.ASCENDING)
+        FirebaseFirestore.getInstance().collection("history")
+                .whereEqualTo("restaurant_id", res_id)
+                .whereEqualTo("status","5")
+                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot queryDocumentSnapshots) {

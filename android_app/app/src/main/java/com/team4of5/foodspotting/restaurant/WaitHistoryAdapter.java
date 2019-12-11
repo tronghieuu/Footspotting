@@ -22,13 +22,14 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.team4of5.foodspotting.R;
 import com.team4of5.foodspotting.object.Order;
+import com.team4of5.foodspotting.object.UserHistory;
 
 import java.io.InputStream;
 import java.util.List;
 
 public class WaitHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>{
 
-    private List<Order> mOrders;
+    private List<UserHistory> mOrders;
     private Context mContext;
     private Activity mActivity;
     private OnItemClickListener mListener;
@@ -53,7 +54,7 @@ public class WaitHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         void onLoadMore();
     }
 
-    public void add(int position, Order item) {
+    public void add(int position, UserHistory item) {
         mOrders.add(position, item);
         notifyItemInserted(position);
     }
@@ -65,7 +66,7 @@ public class WaitHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     }
 
     // Provide a suitable constructor (depends on the kind of dataset)
-    public WaitHistoryAdapter(Context context, List<Order> orders, RecyclerView recyclerView) {
+    public WaitHistoryAdapter(Context context, List<UserHistory> orders, RecyclerView recyclerView) {
         mContext = context;
         mActivity = (Activity)context;
         mOrders = orders;
@@ -92,7 +93,7 @@ public class WaitHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     @Override
     public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         if (viewType == VIEW_TYPE_ITEM) {
-            View view = LayoutInflater.from(mActivity).inflate(R.layout.fragment_order_manager_item, parent, false);
+            View view = LayoutInflater.from(mActivity).inflate(R.layout.fragment_order_history_item, parent, false);
             return new ViewHolderRow(view);
         } else if (viewType == VIEW_TYPE_LOADING) {
             View view = LayoutInflater.from(mActivity).inflate(R.layout.item_loading, parent, false);
@@ -108,7 +109,7 @@ public class WaitHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
         // - replace the contents of the view with that element
 
         if (holder instanceof ViewHolderRow) {
-            final Order order = mOrders.get(position);
+            final UserHistory order = mOrders.get(position);
 
             final ViewHolderRow userViewHolder = (ViewHolderRow) holder;
             FirebaseFirestore.getInstance().collection("user")
@@ -141,9 +142,7 @@ public class WaitHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
                     }
                 }
             });
-
-
-
+            userViewHolder.tvDateTime.setText(order.getDateTime());
             // binding item click listener
             userViewHolder.bind(mOrders.get(position), mListener);
         } else if (holder instanceof ViewHolderLoading) {
@@ -218,7 +217,7 @@ public class WaitHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
     // Complex data items may need more than one view per item, and
     // you provide access to all the views for a data item in a view holder
     public class ViewHolderRow extends RecyclerView.ViewHolder {
-        public TextView tvFoodName, tvUserAddress, tvOrderAmount, tvFoodPrice, tvTotalPrice;
+        public TextView tvFoodName, tvUserAddress, tvOrderAmount, tvFoodPrice, tvTotalPrice, tvDateTime;
         public ImageView imageViewFood;
 
         public ViewHolderRow(View v) {
@@ -229,6 +228,7 @@ public class WaitHistoryAdapter extends RecyclerView.Adapter<RecyclerView.ViewHo
             tvFoodPrice = v.findViewById(R.id.tvFoodPrice);
             tvTotalPrice = v.findViewById(R.id.tvTotalPrice);
             imageViewFood = v.findViewById(R.id.imageViewFoodOrder);
+            tvDateTime = v.findViewById(R.id.tvDateTime);
         }
 
         public void bind(final Order item, final OnItemClickListener listener) {
