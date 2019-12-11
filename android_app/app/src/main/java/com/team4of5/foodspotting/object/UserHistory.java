@@ -1,13 +1,17 @@
 package com.team4of5.foodspotting.object;
 
+import java.util.Calendar;
+import java.util.Date;
+
 public class UserHistory {
 
-    private String id, restaurant_id, restaurant_name, restaurant_image, restaurant_address, food_image, food_name;
+    private String id, restaurant_id, restaurant_name, restaurant_image, restaurant_address, food_image, food_name, user_id, user_address, shipper_id;
     private int food_price, food_amount, status;
     private long timestamp;
 
     public UserHistory(String id, String restaurant_id, String restaurant_name, String restaurant_image, String restaurant_address,
-                       String food_image, String food_name, int food_price, int food_amount, int status, long timestamp){
+                       String food_image, String food_name, int food_price, int food_amount, int status, long timestamp,
+                       String user_id, String user_address, String shipper_id){
         this.id = id;
         this.restaurant_id = restaurant_id;
         this.restaurant_name = restaurant_name;
@@ -19,6 +23,9 @@ public class UserHistory {
         this.food_amount = food_amount;
         this.status = status;
         this.timestamp = timestamp;
+        this.user_id = user_id;
+        this.user_address = user_address;
+        this.shipper_id = shipper_id;
     }
 
     public String getId() {
@@ -111,5 +118,37 @@ public class UserHistory {
 
     public String getTotalPrice(){
         return "đ"+(food_price*food_amount);
+    }
+
+    public String getUser_id() {
+        return user_id;
+    }
+
+    public void setUser_id(String user_id) {
+        this.user_id = user_id;
+    }
+
+    public String getUser_address() {
+        return user_address;
+    }
+
+    public void setUser_address(String user_address) {
+        this.user_address = user_address;
+    }
+
+    public String getShipper_id() {
+        return shipper_id;
+    }
+
+    public void setShipper_id(String shipper_id) {
+        this.shipper_id = shipper_id;
+    }
+
+    public String getDateTime() {
+        Date date = new Date(timestamp);
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        return c.get(Calendar.MONTH)+"/"+c.get(Calendar.DAY_OF_MONTH)
+                +"/"+c.get(Calendar.YEAR)+" "+c.get(Calendar.HOUR_OF_DAY)+":"+c.get(Calendar.MINUTE);
     }
 }

@@ -53,8 +53,8 @@
 
             <ImageView
                 android:id="@+id/imageViewFoodOrderHistory"
-                android:layout_width="60dp"
-                android:layout_height="60dp"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
                 android:layout_margin="10dp"
                 android:src="@drawable/avatar" />
 
@@ -85,7 +85,7 @@
                         android:layout_height="wrap_content"
                         android:textSize="20dp"
                         android:text="Địa chỉ"
-                        android:maxLines="1"
+                        android:maxLines="2"
                         android:layout_weight="1" />
 
                     <TextView
@@ -149,26 +149,34 @@
             android:background="@color/whiteTextColor">
 
             <Button
-                android:id="@+id/btnDelete"
+                android:id="@+id/btnVisit"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
                 android:layout_marginEnd="10dp"
-                android:text="     Xóa     "
-                android:textSize="20dp"
-                android:textColor="@color/whiteTextColor"
-                android:background="@color/color_red" />
-
-            <Button
-                android:id="@+id/btnVisit"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentStart="true"
-                android:layout_marginStart="10dp"
                 android:text="     Ghé quán     "
                 android:textSize="20dp"
                 android:textColor="@color/whiteTextColor"
                 android:background="@color/color_red" />
         </RelativeLayout>
+
+        <LinearLayout
+            android:layout_marginTop="1dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:background="@color/color_white">
+
+            <TextView
+                android:id="@+id/tvDateTimeOrderShipper"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:background="@color/color_white"
+                android:textSize="20dp"
+                android:layout_gravity="end"
+                android:textStyle="italic"
+                android:layout_marginHorizontal="10dp"
+                android:text="date/time" />
+        </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

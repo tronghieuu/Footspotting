@@ -72,8 +72,8 @@ app:cardCornerRadius="10dp">
 
         <ImageView
             android:id="@+id/imageViewFoodOrderShipper"
-            android:layout_width="60dp"
-            android:layout_height="60dp"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
             android:layout_margin="10dp"
             android:src="@drawable/avatar" />
 
@@ -102,10 +102,10 @@ app:cardCornerRadius="10dp">
                     android:id="@+id/tvResAddressOrderShipper"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:textSize="20dp"
+                    android:layout_weight="1"
+                    android:maxLines="2"
                     android:text="Địa chỉ"
-                    android:maxLines="1"
-                    android:layout_weight="1" />
+                    android:textSize="20dp" />
 
                 <TextView
                     android:id="@+id/tvAmountOrderOrderShipper"
