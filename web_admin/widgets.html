@@ -101,7 +101,7 @@
 		<ul class="nav menu">
 			<li><a href="index.html"><em class="fa fa-dashboard">&nbsp;</em> Dashboard</a></li>
 			<li class="active"><a href="widgets.html"><em class="fa fa-calendar">&nbsp;</em> Widgets</a></li>
-			<li><a href="charts.html"><em class="fa fa-bar-chart">&nbsp;</em> Charts</a></li>
+			<!-- <li><a href="charts.html"><em class="fa fa-bar-chart">&nbsp;</em> Charts</a></li> -->
 			<li><a href="login.html"><em class="fa fa-power-off">&nbsp;</em> Logout</a></li>
 		</ul>
 	</div><!--/.sidebar-->
@@ -114,7 +114,8 @@
 				</a></li>
 				<li class="active">Widgets</li>
 			</ol>
-		</div><!--/.row-->
+		</div>
+		<!--/.row-->
 		
 		<div class="row">
 			<div class="col-lg-12">
@@ -152,7 +153,10 @@
 						</ul>
 						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
 					<div class="panel-body articles-container">
-						<div class="article border-bottom">
+						<ul class='news'>
+
+						</ul>
+						<!-- <div class="article border-bottom">
 							<div class="col-xs-12">
 								<div class="row">
 									<div class="col-xs-2 col-md-2 date">
@@ -166,9 +170,10 @@
 								</div>
 							</div>
 							<div class="clear"></div>
-						</div><!--End .article-->
+						</div> -->
+						<!--End .article-->
 						
-						<div class="article border-bottom">
+						<!-- <div class="article border-bottom">
 							<div class="col-xs-12">
 								<div class="row">
 									<div class="col-xs-2 col-md-2 date">
@@ -182,9 +187,10 @@
 								</div>
 							</div>
 							<div class="clear"></div>
-						</div><!--End .article-->
+						</div> -->
+						<!--End .article-->
 						
-						<div class="article">
+						<!-- <div class="article">
 							<div class="col-xs-12">
 								<div class="row">
 									<div class="col-xs-2 col-md-2 date">
@@ -198,11 +204,12 @@
 								</div>
 							</div>
 							<div class="clear"></div>
-						</div><!--End .article-->
+						</div> -->
+						<!--End .article-->
 					</div>
 				</div><!--End .articles-->
 				
-				<div class="panel panel-default ">
+				<!-- <div class="panel panel-default ">
 					<div class="panel-heading">
 						Progress bars
 						<ul class="pull-right panel-settings panel-button-tab-right">
@@ -404,9 +411,9 @@
 						</span></div>
 					</div>
 				</div>
-			</div><!--/.col-->
+			</div> -->
 			
-			<div class="col-md-6">
+			<!-- <div class="col-md-6">
 				<div class="panel panel-default">
 					<div class="panel-heading">
 						Calendar
@@ -512,9 +519,9 @@
 								</div>
 							</li>
 						</ul>
-					</div>
-				</div>
-				<div class="panel panel-default">
+					</div> -->
+				<!-- </div> -->
+				<!-- <div class="panel panel-default">
 					<div class="panel-heading">
 						Contact Form
 						<ul class="pull-right panel-settings panel-button-tab-right">
@@ -540,51 +547,60 @@
 								</ul>
 							</li>
 						</ul>
-						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
-					<div class="panel-body">
+						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div> -->
+					<!-- <div class="panel-body">
 						<form class="form-horizontal" action="" method="post">
-							<fieldset>
+							<fieldset> -->
 								<!-- Name input-->
-								<div class="form-group">
+								<!-- <div class="form-group">
 									<label class="col-md-3 control-label" for="name">Name</label>
 									<div class="col-md-9">
 										<input id="name" name="name" type="text" placeholder="Your name" class="form-control">
 									</div>
-								</div>
+								</div> -->
 							
 								<!-- Email input-->
-								<div class="form-group">
+								<!-- <div class="form-group">
 									<label class="col-md-3 control-label" for="email">Your E-mail</label>
 									<div class="col-md-9">
 										<input id="email" name="email" type="text" placeholder="Your email" class="form-control">
 									</div>
-								</div>
+								</div> -->
 								
 								<!-- Message body -->
-								<div class="form-group">
+								<!-- <div class="form-group">
 									<label class="col-md-3 control-label" for="message">Your message</label>
 									<div class="col-md-9">
 										<textarea class="form-control" id="message" name="message" placeholder="Please enter your message here..." rows="5"></textarea>
 									</div>
 								</div>
-								
+								 -->
 								<!-- Form actions -->
-								<div class="form-group">
+								<!-- <div class="form-group">
 									<div class="col-md-12 widget-right">
 										<button type="submit" class="btn btn-default btn-md pull-right">Submit</button>
 									</div>
-								</div>
-							</fieldset>
-						</form>
+								</div> -->
+							<!-- </fieldset>
+						</form> -->
 					</div>
 				</div>
 			</div><!--/.col-->
 			<div class="col-sm-12">
-				<p class="back-link">FoodSpotting Theme by <a href="https://www.medialoot.com">Team4</a></p>
+				<p class="back-link">FoodSpotting Theme by <a href="#">Team4</a></p>
 			</div>
-		</div><!--/.row-->
+		</div>
+		<!--/.row-->
 	</div>	<!--/.main-->
 	  
+	<script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-app.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-auth.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-firestore.js"></script>
+	<script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-functions.js"></script>
+	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+	<script
+		src= 'js/firebase-config.js'
+	></script>
 
 <script src="js/jquery-1.11.1.min.js"></script>
 	<script src="js/bootstrap.min.js"></script>
