@@ -74,13 +74,13 @@ document.addEventListener('DOMContentLoaded', function () {
         <div class="header"><strong class="primary-font">${res.name}</strong> <small
         class="text-muted">${res.closing_time}</small></div>
         <button onclick=deleteBtnRes(this.id) type="button" class="btn btn-primary" style="font-size : 10px; float:right; " id=${id} >Delete</button>
-        <p> Phone: ${res.phone} <br />Stre  et: ${res.street + res.district + res.type}</p>
+        <p> Phone: ${res.phone} <br />Street: ${res.street + res.district + res.type}</p>
       </div>
       `;
-    const node = document.createElement('li');
-    node.setAttribute('class', 'left clearfix');
-    node.setAttribute('id', id);
-    node.innerHTML = htmlData;
+      const node = document.createElement('li');
+      node.setAttribute('class', 'left clearfix');
+      node.setAttribute('id', id);
+      node.innerHTML = htmlData;
       resDOM.appendChild(node);
     });
   }).finally(() => {
@@ -90,13 +90,17 @@ document.addEventListener('DOMContentLoaded', function () {
   db.collection("user").get().then(function (querySnapshot) {
     const resDOM = document.querySelector('.user');
     let res;
+    let pow;
     querySnapshot.forEach(function (doc) {
       res = doc.data();
+      if (res.type ==='1') pow = 'User'
+      else if(res.type ==='2') pow = 'Shipper'
+      else pow = 'Owner'
       id = doc.id
       console.log(res)
       let htmlData = ''
-      if(res.provice){
-          htmlData = `
+      if (res.province) {
+        htmlData = `
           <span class="chat-img pull-left">
             <img class="img-circle"  src= ${res.image}  width='100' height='100' />
           </span>
@@ -104,13 +108,13 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="header"><strong class="primary-font">${res.name}</strong> <small
             class="text-muted">${id}</small></div>
             <button onclick=deleteBtn(this.id, res.type) type="button" class="btn btn-primary" style="font-size : 10px; float:right; " id=${id} >Delete</button>
-            <p>Phone: ${res.phone} <br /> Street: ${res.street +'-'+ res.district +'-'+ res.provice}</p>
+            <p>Phone: ${res.phone} <br /> Street: ${res.street + '-' + res.district + '-' + res.province}<br />${pow}</p>
           </div>
           `;
-      
+
       }
       else {
-          htmlData = `
+        htmlData = `
           <span class="chat-img pull-left">
             <img src= ${res.image} alt="User Avatar" width='100' height=100 />
           </span>
@@ -118,17 +122,17 @@ document.addEventListener('DOMContentLoaded', function () {
             <div class="header"><strong class="primary-font">${res.name}</strong> <small
             class="text-muted">${res.email}</small></div>
             <button onclick=deleteBtn(this.id) type="button" class="btn btn-primary" style="font-size : 10px; float:right; " id=${id} >Delete</button>
-            <p>Phone: ${res.phone} <br /> Street: ${res.street +'-'+ res.district}</p>
+            <p>Phone: ${res.phone} <br /> Street: ${res.street + '-' + res.district}<br />${pow}</p>
           </div>
           <br />
-          `;      
-       
+          `;
+
       }
-    const node = document.createElement('li');
-    node.setAttribute('class', 'left clearfix');
-    node.setAttribute('style', ' list-style-type:none'); 
-    node.setAttribute('id', id);
-    node.innerHTML = htmlData;
+      const node = document.createElement('li');
+      node.setAttribute('class', 'left clearfix');
+      node.setAttribute('style', ' list-style-type:none');
+      node.setAttribute('id', id);
+      node.innerHTML = htmlData;
       resDOM.appendChild(node);
     });
   }).finally(() => {
@@ -139,41 +143,74 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-const deleteBtn = (id,type =1) =>{
-  if(type == 3){
-    db.collection(".restaurants").where("user_id","==", id)
-    .get()
-    .then(function(querySnapshot) {
-        querySnapshot.forEach(function(doc) {
+const deleteBtn = (id, type = 1) => {
+  if (type == '3') {
+    db.collection(".restaurants").where("user_id", "==", id)
+      .get()
+      .then(function (querySnapshot) {
+        querySnapshot.forEach(function (doc) {
           console.log(doc);
-            doc.delete();
-           
+          doc.delete();
         });
-    })
-    .catch(function(error) {
+      })
+      .catch(function (error) {
         console.log("Error getting documents: ", error);
-    });
+      });
 
   }
- 
-  db.collection("user").doc(id).delete().then(function() {
-  console.log("Document successfully deleted!");
-  document.getElementById(id).remove();
-}).catch(function(error) {
+
+  db.collection("user").doc(id).delete().then(function () {
+    console.log("Document successfully deleted!");
+    document.getElementById(id).remove();
+  }).catch(function (error) {
     console.error("Error removing document: ", error);
-});
+  });
 }
 
-const deleteBtnRes = (id,) =>{
+const deleteBtnRes = (id ) => {
   db.collection("restaurants").doc(id).get().then(function (querySnapshot) {
     document.getElementById(id).remove();
 
     querySnapshot.forEach(function (doc) {
-    res =doc.data();
-    document.getElementById(res.user_id).remove();
-    db.collection("user").doc(res.user_id).delete()
+      res = doc.data();
+      document.getElementById(res.user_id).remove();
+      db.collection("user").doc(res.user_id).delete()
     });
   });
 
   db.collection("restaurants").doc(id).delete();
 }
+
+// lấy thẻ input
+// định nghĩa hàm xử lý myFunction
+const myFunction = () => {
+  var input = document.getElementById("btn-input");
+  console.log("input=",input)
+  var filter, ul, li, a, i;
+  // lấy giá trị người dùng nhập
+  filter = input.value.toUpperCase();
+  ul = document.getElementsByClassName("restaurants")[0];
+  li = ul.getElementsByTagName("li");
+  // Nếu filter không có giá trị thị ẩn phần kết quare\
+  if (!filter) {
+    ul.style.display = "block";
+  } else {
+    // lặp qua tất cả các thẻ li chứa kết quả
+    for (i = 0; i < li.length; i++) {
+      // lấy thẻ a trong các thẻ li
+      a = li[i].getElementsByTagName("div")[0];
+      // kiểm tra giá trị nhập có tôn tại trong nội dung thẻ a
+      if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        //nếu có hiển thị phàn tử ul và các thẻ li đó
+        ul.style.display = "block";
+        li[i].style.display = "";
+      } else {
+        // nếu không ẩn các thẻ li
+        li[i].style.display = "none";
+
+      }
+    }
+  }
+}
+//gán sự kiện cho thẻ input
+// input.addEventListener("keyup", myFunction);
