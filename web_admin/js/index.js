@@ -93,6 +93,8 @@ document.addEventListener('DOMContentLoaded', function () {
     let pow;
     querySnapshot.forEach(function (doc) {
       res = doc.data();
+      if(res.image === '') image = '../avatar.jpeg'
+      else image = res.image
       if (res.type ==='1') pow = 'User'
       else if(res.type ==='2') pow = 'Shipper'
       else pow = 'Owner'
@@ -102,7 +104,7 @@ document.addEventListener('DOMContentLoaded', function () {
       if (res.province) {
         htmlData = `
           <span class="chat-img pull-left">
-            <img class="img-circle"  src= ${res.image}  width='100' height='100' />
+            <img class="img-circle"  src= ${image}  width='100' height='100' />
           </span>
           <div class="chat-body clearfix">
             <div class="header"><strong class="primary-font">${res.name}</strong> <small
@@ -116,7 +118,7 @@ document.addEventListener('DOMContentLoaded', function () {
       else {
         htmlData = `
           <span class="chat-img pull-left">
-            <img src= ${res.image} alt="User Avatar" width='100' height=100 />
+            <img src= ${image} alt="User Avatar" width='100' height=100 />
           </span>
           <div class="chat-body clearfix">
             <div class="header"><strong class="primary-font">${res.name}</strong> <small
@@ -144,6 +146,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 const deleteBtn = (id, type = 1) => {
+  console.log(type)
   if (type == '3') {
     db.collection(".restaurants").where("user_id", "==", id)
       .get()
