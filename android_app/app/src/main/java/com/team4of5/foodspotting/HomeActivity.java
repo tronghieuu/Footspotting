@@ -87,6 +87,13 @@ public class HomeActivity extends AppCompatActivity {
                             ft.detach(frg);
                             ft.attach(frg);
                             ft.commit();
+                        } else if(fragTag.contentEquals("Noti") && User.getCurrentUser().isNotiUpdate()){
+                            User.getCurrentUser().setNotiUpdate(false);
+                            Fragment frg = getSupportFragmentManager().findFragmentByTag(fragTag);
+                            FragmentTransaction ft = t.beginTransaction();
+                            ft.detach(frg);
+                            ft.attach(frg);
+                            ft.commit();
                         }
                     }
                     else

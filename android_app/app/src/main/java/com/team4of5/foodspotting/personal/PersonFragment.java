@@ -136,6 +136,7 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
                 User.getCurrentUser().setHistoryUpdate(true);
                 User.getCurrentUser().setCartUpdate(true);
                 User.getCurrentUser().setOrderUpdate(true);
+                User.getCurrentUser().setNotiUpdate(true);
                 User.getCurrentUser().reset();
                 logout();
         }

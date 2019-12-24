@@ -21,7 +21,7 @@ public class User {
     }
 
     private String background;
-    private boolean ownerUpdate, listUpdate, orderUpdate, historyUpdate, cartUpdate;
+    private boolean ownerUpdate, listUpdate, orderUpdate, historyUpdate, cartUpdate, NotiUpdate;
 
     private User(){
         id = "";
@@ -35,6 +35,7 @@ public class User {
         background ="";
         ownerUpdate = false;
         listUpdate = false;
+        NotiUpdate = false;
         orderTab = 0;
     }
 
@@ -171,5 +172,13 @@ public class User {
 
     public void setCartUpdate(boolean cartUpdate) {
         this.cartUpdate = cartUpdate;
+    }
+
+    public boolean isNotiUpdate() {
+        return NotiUpdate;
+    }
+
+    public void setNotiUpdate(boolean notiUpdate) {
+        NotiUpdate = notiUpdate;
     }
 }
