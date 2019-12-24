@@ -159,6 +159,7 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                                         User.getCurrentUser().setHistoryUpdate(true);
                                         User.getCurrentUser().setCartUpdate(true);
                                         User.getCurrentUser().setOrderUpdate(true);
+                                        User.getCurrentUser().setNotiUpdate(true);
                                         dialog.dismiss();
                                         setResult(Activity.RESULT_CANCELED, new Intent());
                                         finish();
@@ -222,6 +223,7 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                                         User.getCurrentUser().setHistoryUpdate(true);
                                         User.getCurrentUser().setCartUpdate(true);
                                         User.getCurrentUser().setOrderUpdate(true);
+                                        User.getCurrentUser().setNotiUpdate(true);
                                         setResult(Activity.RESULT_CANCELED, new Intent());
                                         finish();
                                     }
@@ -241,6 +243,7 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                                 User.getCurrentUser().setHistoryUpdate(true);
                                 User.getCurrentUser().setCartUpdate(true);
                                 User.getCurrentUser().setOrderUpdate(true);
+                                User.getCurrentUser().setNotiUpdate(true);
                                 setResult(Activity.RESULT_CANCELED, new Intent());
                                 finish();
                             }
