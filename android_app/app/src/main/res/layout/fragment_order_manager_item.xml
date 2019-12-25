@@ -109,48 +109,63 @@
                 android:text="đ99999" />
         </RelativeLayout>
 
-        <RelativeLayout
-            android:layout_marginTop="1dp"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:orientation="horizontal"
             android:background="@color/whiteTextColor">
-
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" >
+            </Space>
             <Button
                 android:id="@+id/btnConfirm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="10dp"
-                android:text="     Xác nhận     "
+                android:text="Xác nhận"
                 android:textSize="20dp"
+                android:layout_weight="1"
                 android:visibility="invisible"
                 android:textColor="@color/whiteTextColor"
                 android:background="@color/color_green" />
-
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" >
+            </Space>
             <Button
                 android:id="@+id/btnCancel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentStart="true"
-                android:layout_marginStart="170dp"
-                android:text="     Hủy     "
+                android:text="Hủy"
                 android:textSize="20dp"
+                android:layout_weight="1"
                 android:visibility="invisible"
                 android:textColor="@color/whiteTextColor"
                 android:background="@color/color_red" />
-
-
-
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" >
+            </Space>
             <Button
                 android:id="@+id/btnContact"
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_marginEnd="10dp"
-                android:text="     Liên hệ     "
+                android:text="Liên hệ"
                 android:textSize="20dp"
+                android:layout_weight="1"
                 android:textColor="@color/whiteTextColor"
                 android:background="@color/color_owner" />
-        </RelativeLayout>
+            <Space
+                android:layout_width="0dp"
+                android:layout_height="1dp"
+                android:layout_weight="1" >
+            </Space>
+        </LinearLayout>
     </LinearLayout>
 </androidx.cardview.widget.CardView>

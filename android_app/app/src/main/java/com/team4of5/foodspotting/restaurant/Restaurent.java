@@ -68,7 +68,7 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
     private TextView mTvResName;
     private Button mBtnBack;
     private String province;
-
+    private static final int REQUEST_CODE = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -159,9 +159,26 @@ public class Restaurent extends AppCompatActivity implements View.OnClickListene
                 Intent intent = new Intent(view.getContext(), Rate.class);
                 intent.putExtra("id_restaurent", id_restaurent);
                 intent.putExtra("button_show", true);
-                startActivity(intent);
+                startActivityForResult(intent,REQUEST_CODE);
+
             }
         });
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+                db.collection("restaurants")
+                        .document(id_restaurent)
+                        .get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        DocumentSnapshot doc = task.getResult();
+                        mRatingShopOverall.setText(doc.getString("rate"));
+                        mRatingShopOverallStar.setRating(Float.parseFloat(doc.getString("rate")));
+                    }
+                });
+
     }
 
     @Override

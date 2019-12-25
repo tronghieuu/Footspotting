@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
@@ -241,7 +242,7 @@ public class Rate extends AppCompatActivity {
             else if (rating.getRate()==5) r5++;
         }
         average = (float)total/mRates.size();
-        average=Math.round(average*10)/10;
+        average = (float)(Math.round(average*10)/10.0);
         mTextTotalRating.setText(String.valueOf(average));
         mRatingShopOverall.setRating(average);
         db.collection("restaurants")
