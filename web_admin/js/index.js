@@ -89,42 +89,46 @@ document.addEventListener('DOMContentLoaded', function () {
 
   db.collection("user").get().then(function (querySnapshot) {
     const resDOM = document.querySelector('.user');
+    const resDOM_shippers = document.querySelector('.shippers');
+    const resDOM_owner = document.querySelector('.restaurant-ownwers');
+
+
     let res;
     let pow;
     querySnapshot.forEach(function (doc) {
       res = doc.data();
       if(res.image === '') image = '../avatar.jpeg'
       else image = res.image
-      if (res.type ==='1') pow = 'User'
-      else if(res.type ==='2') pow = 'Shipper'
-      else pow = 'Owner'
+      // if (res.type ==='1') pow = 'User'
+      // else if(res.type ==='2') pow = 'Shipper'
+      // else pow = 'Owner'
       id = doc.id
       console.log(res)
       let htmlData = ''
       if (res.province) {
         htmlData = `
-          <span class="chat-img pull-left">
+          <span class="chat-img pull-left" style="margin:8px">
             <img class="img-circle"  src= ${image}  width='100' height='100' />
           </span>
           <div class="chat-body clearfix">
             <div class="header"><strong class="primary-font">${res.name}</strong> <small
             class="text-muted">${id}</small></div>
             <button onclick=deleteBtn(this.id, res.type) type="button" class="btn btn-primary" style="font-size : 10px; float:right; " id=${id} >Delete</button>
-            <p>Phone: ${res.phone} <br /> Street: ${res.street + '-' + res.district + '-' + res.province}<br />${pow}</p>
+            <p>Phone: ${res.phone} <br /> Street: ${res.street + '-' + res.district + '-' + res.province}<br /></p>
           </div>
           `;
 
       }
       else {
         htmlData = `
-          <span class="chat-img pull-left">
-            <img src= ${image} alt="User Avatar" width='100' height=100 />
+          <span class="chat-img pull-left mr-5">
+            <img src= ${image} alt="User Avatar" width='100' height=100 style="margin:8px" />
           </span>
           <div class="chat-body clearfix">
             <div class="header"><strong class="primary-font">${res.name}</strong> <small
             class="text-muted">${res.email}</small></div>
             <button onclick=deleteBtn(this.id) type="button" class="btn btn-primary" style="font-size : 10px; float:right; " id=${id} >Delete</button>
-            <p>Phone: ${res.phone} <br /> Street: ${res.street + '-' + res.district}<br />${pow}</p>
+            <p>Phone: ${res.phone} <br /> Street: ${res.street + '-' + res.district}<br /></p>
           </div>
           <br />
           `;
@@ -135,7 +139,10 @@ document.addEventListener('DOMContentLoaded', function () {
       node.setAttribute('style', ' list-style-type:none');
       node.setAttribute('id', id);
       node.innerHTML = htmlData;
-      resDOM.appendChild(node);
+      if (res.type ==='1') resDOM.appendChild(node);
+      else if(res.type ==='2') resDOM_shippers.appendChild(node);
+      else resDOM_owner.appendChild(node);
+      
     });
   }).finally(() => {
     document.querySelector('#loading-data').remove();
@@ -215,5 +222,93 @@ const myFunction = () => {
     }
   }
 }
+const myFunction_1 = () => {
+  var input = document.getElementById("btn-input_1");
+  console.log("input=",input)
+  var filter, ul, li, a, i;
+  // lấy giá trị người dùng nhập
+  filter = input.value.toUpperCase();
+  ul = document.getElementsByClassName("user")[0];
+  li = ul.getElementsByTagName("li");
+  // Nếu filter không có giá trị thị ẩn phần kết quare\
+  if (!filter) {
+    ul.style.display = "block";
+  } else {
+    // lặp qua tất cả các thẻ li chứa kết quả
+    for (i = 0; i < li.length; i++) {
+      // lấy thẻ a trong các thẻ li
+      a = li[i].getElementsByTagName("div")[0];
+      // kiểm tra giá trị nhập có tôn tại trong nội dung thẻ a
+      if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        //nếu có hiển thị phàn tử ul và các thẻ li đó
+        ul.style.display = "block";
+        li[i].style.display = "";
+      } else {
+        // nếu không ẩn các thẻ li
+        li[i].style.display = "none";
+
+      }
+    }
+  }
+}
+const myFunction_2 = () => {
+  var input = document.getElementById("btn-input_2");
+  console.log("input=",input)
+  var filter, ul, li, a, i;
+  // lấy giá trị người dùng nhập
+  filter = input.value.toUpperCase();
+  ul = document.getElementsByClassName("restaurant-ownwers")[0];
+  li = ul.getElementsByTagName("li");
+  // Nếu filter không có giá trị thị ẩn phần kết quare\
+  if (!filter) {
+    ul.style.display = "block";
+  } else {
+    // lặp qua tất cả các thẻ li chứa kết quả
+    for (i = 0; i < li.length; i++) {
+      // lấy thẻ a trong các thẻ li
+      a = li[i].getElementsByTagName("div")[0];
+      // kiểm tra giá trị nhập có tôn tại trong nội dung thẻ a
+      if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        //nếu có hiển thị phàn tử ul và các thẻ li đó
+        ul.style.display = "block";
+        li[i].style.display = "";
+      } else {
+        // nếu không ẩn các thẻ li
+        li[i].style.display = "none";
+
+      }
+    }
+  }
+}
+const myFunction_3 = () => {
+  var input = document.getElementById("btn-input_3");
+  console.log("input=",input)
+  var filter, ul, li, a, i;
+  // lấy giá trị người dùng nhập
+  filter = input.value.toUpperCase();
+  ul = document.getElementsByClassName("shippers")[0];
+  li = ul.getElementsByTagName("li");
+  // Nếu filter không có giá trị thị ẩn phần kết quare\
+  if (!filter) {
+    ul.style.display = "block";
+  } else {
+    // lặp qua tất cả các thẻ li chứa kết quả
+    for (i = 0; i < li.length; i++) {
+      // lấy thẻ a trong các thẻ li
+      a = li[i].getElementsByTagName("div")[0];
+      // kiểm tra giá trị nhập có tôn tại trong nội dung thẻ a
+      if (a.innerHTML.toUpperCase().indexOf(filter) > -1) {
+        //nếu có hiển thị phàn tử ul và các thẻ li đó
+        ul.style.display = "block";
+        li[i].style.display = "";
+      } else {
+        // nếu không ẩn các thẻ li
+        li[i].style.display = "none";
+
+      }
+    }
+  }
+}
+
 //gán sự kiện cho thẻ input
 // input.addEventListener("keyup", myFunction);

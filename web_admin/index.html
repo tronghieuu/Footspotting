@@ -128,345 +128,122 @@
 			</div>
 		</div>
 		<!--/.row-->
-
-		<!-- <div class="panel panel-container">
-			<div class="row">
-				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
-					<div class="panel panel-teal panel-widget border-right">
-						<div class="row no-padding"><em class="fa fa-xl fa-shopping-cart color-blue"></em>
-							<div class="large">12</div>
-							<div class="text-muted">New Orders</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
-					<div class="panel panel-blue panel-widget border-right">
-						<div class="row no-padding"><em class="fa fa-xl fa-comments color-orange"></em>
-							<div class="large">2</div>
-							<div class="text-muted">Comments</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
-					<div class="panel panel-orange panel-widget border-right">
-						<div class="row no-padding"><em class="fa fa-xl fa-users color-teal"></em>
-							<div class="large">1</div>
-							<div class="text-muted">New Users</div>
-						</div>
-					</div>
-				</div>
-				<div class="col-xs-6 col-md-3 col-lg-3 no-padding">
-					<div class="panel panel-red panel-widget ">
-						<div class="row no-padding"><em class="fa fa-xl fa-search color-red"></em>
-							<div class="large">52</div>
-							<div class="text-muted">Page Views</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div> -->
-		<!-- <div class="row">
-			<div class="col-md-12">
-				<div class="panel panel-default">
-					<div class="panel-heading">
-						Site Traffic Overview
-						<ul class="pull-right panel-settings panel-button-tab-right">
-							<li class="dropdown"><a class="pull-right dropdown-toggle" data-toggle="dropdown" href="#">
-									<em class="fa fa-cogs"></em>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-right">
-									<li>
-										<ul class="dropdown-settings">
-											<li><a href="#">
-													<em class="fa fa-cog"></em> Delete
-												</a></li>
-											<li class="divider"></li>
-											<li><a href="#">
-													<em class="fa fa-cog"></em> Add
-												</a></li>
-											<li class="divider"></li>
-											<li><a href="#">
-													<em class="fa fa-cog"></em> Delete
-												</a></li>
-										</ul>
-									</li>
-								</ul>
-							</li>
-						</ul>
-						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em
-								class="fa fa-toggle-up"></em></span></div>
-					<div class="panel-body">
-						<div class="canvas-wrapper">
-							<canvas class="main-chart" id="line-chart" height="200" width="600"></canvas>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div> -->
-		<!--/.row-->
-
-		<!-- <div class="row">
-			<div class="col-xs-6 col-md-3">
-				<div class="panel panel-default">
-					<div class="panel-body easypiechart-panel">
-						<h4>New Orders</h4>
-						<div class="easypiechart" id="easypiechart-blue" data-percent="92"><span
-								class="percent">92%</span></div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xs-6 col-md-3">
-				<div class="panel panel-default">
-					<div class="panel-body easypiechart-panel">
-						<h4>Comments</h4>
-						<div class="easypiechart" id="easypiechart-orange" data-percent="65"><span
-								class="percent">65%</span></div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xs-6 col-md-3">
-				<div class="panel panel-default">
-					<div class="panel-body easypiechart-panel">
-						<h4>New Users</h4>
-						<div class="easypiechart" id="easypiechart-teal" data-percent="56"><span
-								class="percent">56%</span></div>
-					</div>
-				</div>
-			</div>
-			<div class="col-xs-6 col-md-3">
-				<div class="panel panel-default">
-					<div class="panel-body easypiechart-panel">
-						<h4>Visitors</h4>
-						<div class="easypiechart" id="easypiechart-red" data-percent="27"><span
-								class="percent">27%</span></div>
-					</div>
-				</div>
-			</div>
-		</div> -->
-		<!--/.row-->
-
-		<div class="column">
-			<div class="col-md-6">
-				<div class="panel panel-default chat">
-					<div class="panel-heading">
-						Restaurants
-						<!-- <ul class="pull-right panel-settings panel-button-tab-right">
-							<li class="dropdown"><a class="pull-right dropdown-toggle" data-toggle="dropdown" href="#">
-									<em class="fa fa-cogs"></em>
-								</a>
-								<ul class="dropdown-menu dropdown-menu-right">
-									<li>
-										<ul class="dropdown-settings">
-											<li><a href="#">
-													<em class="fa fa-cog"></em> Delete
-												</a></li>
-											<li class="divider"></li>
-											<li><a href="#">
-													<em class="fa fa-cog"></em> Add
-												</a></li>
-											<li class="divider"></li>
-											<li><a href="#">
-													<em class="fa fa-cog"></em> Sort
-												</a></li>
-										</ul>
-									</li>
-								</ul>
-							</li>
-						</ul> -->
-						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em
-								class="fa fa-toggle-up"></em></span></div>
-					<div class="panel-body">
-						<img
-							src="https://ogqmarket.naver.com/images/img_spinner_green.gif"
-							id="loading-data"
-							style="width: 50px; height: 50px; margin: auto;"
-						/>
-						<ul class="restaurants">
-						</ul>
-					</div>
-					<div class="panel-footer">
-						<div class="input-group">
-							<input id="btn-input" type="text" class="form-control input-md" onchange="myFunction()"
-								placeholder="Search restaurant here..." /><span class="input-group-btn">
-								<button class="btn btn-primary btn-md" id="btn-chat">Search</button>
-							</span></div>
-					</div>
-				</div>
-				<!-- <div class="panel panel-default">
-					<div class="panel-heading">
-						To-do List
-						<ul class="pull-right panel-settings panel-button-tab-right">
-							<li class="dropdown"><a class="pull-right dropdown-toggle" data-toggle="dropdown" href="#">
-								<em class="fa fa-cogs"></em>
-							</a>
-								<ul class="dropdown-menu dropdown-menu-right">
-									<li>
-										<ul class="dropdown-settings">
-											<li><a href="#">
-												<em class="fa fa-cog"></em> Settings 1
-											</a></li>
-											<li class="divider"></li>
-											<li><a href="#">
-												<em class="fa fa-cog"></em> Settings 2
-											</a></li>
-											<li class="divider"></li>
-											<li><a href="#">
-												<em class="fa fa-cog"></em> Settings 3
-											</a></li>
-										</ul>
-									</li>
-								</ul>
-							</li>
-						</ul>
-						<span class="pull-right clickable panel-toggle panel-button-tab-left"><em class="fa fa-toggle-up"></em></span></div>
-					<div class="panel-body">
-						<ul class="todo-list">
-							<li class="todo-list-item">
-								<div class="checkbox">
-									<input type="checkbox" id="checkbox-1" />
-									<label for="checkbox-1">Make coffee</label>
-								</div>
-								<div class="pull-right action-buttons"><a href="#" class="trash">
-									<em class="fa fa-trash"></em>
-								</a></div>
-							</li>
-							<li class="todo-list-item">
-								<div class="checkbox">
-									<input type="checkbox" id="checkbox-2" />
-									<label for="checkbox-2">Check emails</label>
-								</div>
-								<div class="pull-right action-buttons"><a href="#" class="trash">
-									<em class="fa fa-trash"></em>
-								</a></div>
-							</li>
-							<li class="todo-list-item">
-								<div class="checkbox">
-									<input type="checkbox" id="checkbox-3" />
-									<label for="checkbox-3">Reply to Jane</label>
-								</div>
-								<div class="pull-right action-buttons"><a href="#" class="trash">
-									<em class="fa fa-trash"></em>
-								</a></div>
-							</li>
-							<li class="todo-list-item">
-								<div class="checkbox">
-									<input type="checkbox" id="checkbox-4" />
-									<label for="checkbox-4">Make more coffee</label>
-								</div>
-								<div class="pull-right action-buttons"><a href="#" class="trash">
-									<em class="fa fa-trash"></em>
-								</a></div>
-							</li>
-							<li class="todo-list-item">
-								<div class="checkbox">
-									<input type="checkbox" id="checkbox-5" />
-									<label for="checkbox-5">Work on the new design</label>
-								</div>
-								<div class="pull-right action-buttons"><a href="#" class="trash">
-									<em class="fa fa-trash"></em>
-								</a></div>
-							</li>
-							<li class="todo-list-item">
-								<div class="checkbox">
-									<input type="checkbox" id="checkbox-6" />
-									<label for="checkbox-6">Get feedback on design</label>
-								</div>
-								<div class="pull-right action-buttons"><a href="#" class="trash">
-									<em class="fa fa-trash"></em>
-								</a></div>
-							</li>
-						</ul>
-					</div>
-					<div class="panel-footer">
-						<div class="input-group">
-							<input id="btn-input" type="text" class="form-control input-md" placeholder="Add new task" /><span class="input-group-btn">
-								<button class="btn btn-primary btn-md" id="btn-todo">Add</button>
-						</span></div>
-					</div> -->
-			</div>
-		</div>
-		<!--/.col-->
-
-
-		<div class="col-md-6">
-			<div class="panel panel-default ">
-				<div class="panel-heading">
-					Users
-					<!-- <ul class="pull-right panel-settings panel-button-tab-right">
-						<li class="dropdown"><a class="pull-right dropdown-toggle" data-toggle="dropdown" href="#">
-								<em class="fa fa-cogs"></em>
-							</a>
-							<ul class="dropdown-menu dropdown-menu-right">
-								<li>
-									<ul class="dropdown-settings">
-										<li><a href="#">
-												<em class="fa fa-cog"></em> Delete
-											</a></li>
-										<li class="divider"></li>
-										<li><a href="#">
-												<em class="fa fa-cog"></em> Add
-											</a></li>
-										<li class="divider"></li>
-										<li><a href="#">
-												<em class="fa fa-cog"></em> Sort
-											</a></li>
-									</ul>
-								</li>
+		<div class="row">
+			<div class="column">
+				<div class="col-md-6">
+					<div class="panel panel-default chat">
+						<div class="panel-heading">
+							Restaurants
+							
+							<span class="pull-right clickable panel-toggle panel-button-tab-left"><em
+									class="fa fa-toggle-up"></em></span></div>
+						<div class="panel-body">
+							<img
+								src="https://ogqmarket.naver.com/images/img_spinner_green.gif"
+								id="loading-data"
+								style="width: 50px; height: 50px; margin: auto;"
+							/>
+							<ul class="restaurants">
 							</ul>
-						</li>
-					</ul> -->
-					<span class="pull-right clickable panel-toggle panel-button-tab-left"><em
-							class="fa fa-toggle-up"></em></span></div>
-				<div class="panel-body timeline-container">
-					<ul class="user">
-						<!-- <li>
-							<div class="timeline-badge"><em class="glyphicon glyphicon-pushpin"></em></div>
-							<div class="timeline-panel">
-								<div class="timeline-heading">
-									<h4 class="timeline-title">urururriririririr</h4>
-								</div>
-								<div class="timeline-body">
-									<p>Phone:37374737373.Email: son@team4.com. Provice: uurr</p>
-								</div>
+						</div>
+						<div class="panel-footer">
+							<div class="input-group">
+								<input id="btn-input" type="text" class="form-control input-md" onchange="myFunction()"
+									placeholder="Search restaurant here..." /><span class="input-group-btn">
+									<button class="btn btn-primary btn-md" id="btn-chat">Search</button>
+								</span></div>
+						</div>
+					</div>
+				
+				</div>
+				<div class="col-md-6">
+					<div class="panel panel-default chat ">
+						<div class="panel-heading">
+							Users
+							<span class="pull-right clickable panel-toggle panel-button-tab-left"><em
+									class="fa fa-toggle-up"></em></span></div>
+							
+							</ul>
+							<div class="panel-body">
+								<img
+									src="https://ogqmarket.naver.com/images/img_spinner_green.gif"
+									id="loading-data"
+									style="width: 50px; height: 50px; margin: auto;"
+								/>
+								<ul class="user">
+								</ul>
 							</div>
-						</li>
-						<li>
-							<div class="timeline-badge primary"><em class="glyphicon glyphicon-link"></em></div>
-							<div class="timeline-panel">
-								<div class="timeline-heading">
-									<h4 class="timeline-title">hieu</h4>
-								</div>
-								<div class="timeline-body">
-									<p>Phone: .Email: tronghieu8531@gmail.com. Provice: </p>
-								</div>
+							<div class="panel-footer">
+								<div class="input-group">
+									<input id="btn-input_1" type="text" class="form-control input-md" onchange="myFunction_1()"
+										placeholder="Search user here..." /><span class="input-group-btn">
+										<button class="btn btn-primary btn-md" id="btn-chat">Search</button>
+									</span></div>
 							</div>
-						</li>
-						<li>
-							<div class="timeline-badge"><em class="glyphicon glyphicon-camera"></em></div>
-							<div class="timeline-panel">
-								<div class="timeline-heading">
-									<h4 class="timeline-title">lam</h4>
-								</div>
-								<div class="timeline-body">
-									<p>Phone: .Email: lam@team4.com. Provice: </p>
-								</div>
-							</div>
-						</li>
-						<li>
-							<div class="timeline-badge"><em class="glyphicon glyphicon-paperclip"></em></div>
-							<div class="timeline-panel">
-								<div class="timeline-heading">
-									<h4 class="timeline-title">phong</h4>
-								</div>
-								<div class="timeline-body">
-									<p>Phone:.Email: phong@team4.com. Provice: </p>
-								</div>
-							</div>
-						</li> -->
-					</ul>
+						</div>
+					</div>
 				</div>
 			</div>
+			<!--/.col-->
+			
+			<div class="column">
+				<div class="col-md-6">
+					<div class="panel panel-default chat">
+						<div class="panel-heading">
+							Restaurants Owners
+							
+							<span class="pull-right clickable panel-toggle panel-button-tab-left"><em
+									class="fa fa-toggle-up"></em></span></div>
+						<div class="panel-body">
+							<img
+								src="https://ogqmarket.naver.com/images/img_spinner_green.gif"
+								id="loading-data"
+								style="width: 50px; height: 50px; margin: auto;"
+							/>
+							<ul class="restaurant-ownwers">
+							</ul>
+						</div>
+						<div class="panel-footer">
+							<div class="input-group">
+								<input id="btn-input_2" type="text" class="form-control input-md" onchange="myFunction_2()"
+									placeholder="Search restaurant here..." /><span class="input-group-btn">
+									<button class="btn btn-primary btn-md" id="btn-chat">Search</button>
+								</span></div>
+						</div>
+					</div>
+				
+				</div>
+				<div class="col-md-6">
+					<div class="panel panel-default chat ">
+						<div class="panel-heading">
+							Shipper
+							<span class="pull-right clickable panel-toggle panel-button-tab-left"><em
+									class="fa fa-toggle-up"></em></span></div>
+							
+							</ul>
+							<div class="panel-body">
+								
+								<ul class="shippers">
+								</ul>
+							</div>
+							<div class="panel-footer">
+								<div class="input-group">
+									<input id="btn-input_3" type="text" class="form-control input-md" onchange="myFunction_3()"
+										placeholder="Search user here..." /><span class="input-group-btn">
+										<button class="btn btn-primary btn-md" id="btn-chat">Search</button>
+									</span></div>
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+
 		</div>
+
+		
+		
+
+	
 		<!--/.col-->
 		<div class="col-sm-12">
 			<p class="back-link">FoodSpotting Theme by <a href="https://www.medialoot.com">Team4</a></p>
@@ -499,35 +276,7 @@
 	<script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-auth.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-firestore.js"></script>
 	<script src="https://www.gstatic.com/firebasejs/5.6.0/firebase-functions.js"></script>
-	<script>
-		// Initialize Firebase
-		// var config = {
-		//   apiKey: "AIzaSyDlDUJhsP0_uh-YpaRfTOhWZsyY_hLukTw",
-		//   authDomain: "net-ninja-sandbox.firebaseapp.com",
-		//   databaseURL: "https://net-ninja-sandbox.firebaseio.com",
-		//   projectId: "net-ninja-sandbox"
-		// };
-		// const firebaseConfig = {
-		// 	apiKey: "AIzaSyA6PG2O-YPFDQwBgVhXijnIIAs9SO3vtY4",
-		// 	authDomain: "foodspotting-11369.firebaseapp.com",
-		// 	databaseURL: "https://foodspotting-11369.firebaseio.com",
-		// 	projectId: "foodspotting-11369",
-		// 	storageBucket: "foodspotting-11369.appspot.com",
-		// 	messagingSenderId: "863159936668",
-		// 	appId: "1:863159936668:web:6b002c336e5ed6c4daef59",
-		// 	measurementId: "G-6QJ312FVNV"
-		// };
-		// firebase.initializeApp(firebaseConfig);
-
-		// // make auth and firestore references
-		// const auth = firebase.auth();
-		// const db = firebase.firestore();
-		// const functions = firebase.functions();
-		// // update firestore settings
-		// db.settings({
-		// 	timestampsInSnapshots: true
-		// });
-	</script>
+	
 	<!-- Compiled and minified JavaScript -->
 	<script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
 	<!-- <script src="js/auth.js"></script> -->
