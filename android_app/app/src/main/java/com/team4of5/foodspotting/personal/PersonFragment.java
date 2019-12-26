@@ -198,6 +198,9 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
         if(FirebaseAuth.getInstance().getCurrentUser() == null){
             Toast.makeText(getActivity(), "Hãy đăng nhập trước!", Toast.LENGTH_SHORT).show();
         }
+        else if(User.getCurrentUser().getPhone().length() == 0){
+            Toast.makeText(getActivity(), "Hãy cập nhật số điện thoại trước!", Toast.LENGTH_SHORT).show();
+        }
         else if(User.getCurrentUser().getType() == 3){
             Toast.makeText(getActivity(), "Chủ quán không thể sử dụng chức năng này", Toast.LENGTH_SHORT).show();
         }
@@ -212,6 +215,9 @@ public class PersonFragment extends Fragment implements View.OnClickListener {
     public void ownerApp(){
         if(FirebaseAuth.getInstance().getCurrentUser() == null){
             Toast.makeText(getActivity(), "Hãy đăng nhập trước!", Toast.LENGTH_SHORT).show();
+        }
+        else if(User.getCurrentUser().getPhone().length() == 0){
+            Toast.makeText(getActivity(), "Hãy cập nhật số điện thoại trước!", Toast.LENGTH_SHORT).show();
         }
         else if(User.getCurrentUser().getType() == 2){
             Toast.makeText(getActivity(), "Shipper không thể sử dụng chức năng này", Toast.LENGTH_SHORT).show();

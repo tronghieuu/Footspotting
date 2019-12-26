@@ -279,7 +279,7 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
             @Override
             public void onVerificationFailed(@NonNull FirebaseException e) {
                 verifyDialog.dismiss();
-                Toast.makeText(getApplicationContext(), "Số điện thoại không tồn tại!", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getApplicationContext(), "Gửi mã xác thực thất bại!", Toast.LENGTH_SHORT).show();
             }
 
             @Override

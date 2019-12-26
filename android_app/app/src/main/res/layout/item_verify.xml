@@ -7,12 +7,21 @@
     android:padding="20dp"
     android:background="@color/color_white">
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20dp"
+        android:text="Vui lòng nhập mã xác thực được gửi đến điện thoại."
+        android:textStyle="bold"
+        android:layout_marginBottom="20dp" />
+
     <EditText
         android:id="@+id/edtVerify"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="30dp"
         android:hint="mã xác thực"
+        android:maxLength="10"
         android:paddingHorizontal="10dp"
         android:maxLines="1" />
 

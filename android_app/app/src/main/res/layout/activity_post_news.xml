@@ -49,6 +49,7 @@
         android:textSize="23dp"
         android:id="@+id/tvTitle"/>
     <EditText
+        android:maxLength="20"
         android:layout_marginLeft="10dp"
         android:layout_below="@id/tvTitle"
         android:layout_width="match_parent"
@@ -67,6 +68,7 @@
         android:textSize="23dp"
         android:id="@+id/content_label"/>
     <EditText
+        android:maxLength="100"
         android:layout_marginLeft="10dp"
         android:layout_below="@+id/content_label"
         android:layout_width="match_parent"

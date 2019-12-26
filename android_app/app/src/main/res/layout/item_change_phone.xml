@@ -12,6 +12,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="30dp"
+        android:inputType="numberDecimal"
+        android:maxLength="11"
         android:hint="số điện thoại"
         android:paddingHorizontal="10dp"
         android:maxLines="1" />
