@@ -71,7 +71,7 @@ document.addEventListener('DOMContentLoaded', function () {
 	  node.setAttribute('style', 'border: 1px; list-style-type:none'); 
 	//   node.setAttribute('style', 'boder: 1px');
 	  node.innerHTML = htmlData;
-		resDOM.appendChild(node);
+	  	resDOM &&resDOM.appendChild(node);
 	  });
 	}).finally(() => {
 	  document.querySelector('#loading-data').remove();

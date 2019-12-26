@@ -73,7 +73,7 @@ document.addEventListener('DOMContentLoaded', function () {
       <div class="chat-body clearfix">
         <div class="header"><strong class="primary-font">${res.name}</strong> <small
         class="text-muted">${res.closing_time}</small></div>
-        <button onclick=deleteBtnRes(this.id) type="button" class="btn btn-primary" style="font-size : 10px; float:right; " id=${id} >Delete</button>
+        <button onclick=deleteBtnRes(${id}) type="button" class="btn btn-primary" style="font-size : 10px; float:right; " id=${id} >Delete</button>
         <p> Phone: ${res.phone} <br />Street: ${res.street + res.district + res.type}</p>
       </div>
       `;
@@ -94,14 +94,15 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
     let res;
-    let pow;
+    let image;
     querySnapshot.forEach(function (doc) {
       res = doc.data();
-      if(res.image === '') image = '../avatar.jpeg'
+      if(res.image === '') {
+        console.log("Hha");
+        image = 'avatar.jpeg';
+      }
       else image = res.image
-      // if (res.type ==='1') pow = 'User'
-      // else if(res.type ==='2') pow = 'Shipper'
-      // else pow = 'Owner'
+     
       id = doc.id
       console.log(res)
       let htmlData = ''
@@ -113,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
           <div class="chat-body clearfix">
             <div class="header"><strong class="primary-font">${res.name}</strong> <small
             class="text-muted">${res.email}</small></div>
-            <button onclick=deleteBtn(this.id, res.type) type="button" class="btn btn-primary" style="font-size : 10px; float:right; " id=${id} >Delete</button>
+            <button onClick="deleteBtn('${this.id}','${res.type}')" type="button" class="btn btn-primary" style="font-size : 10px; float:right; " id=${id} >Delete</button>
             <p>Phone: ${res.phone} <br /> Street: ${res.street + '-' + res.district + '-' + res.province}<br /></p>
           </div>
           `;
@@ -127,7 +128,7 @@ document.addEventListener('DOMContentLoaded', function () {
           <div class="chat-body clearfix">
             <div class="header"><strong class="primary-font">${res.name}</strong> <small
             class="text-muted">${res.email}</small></div>
-            <button onclick=deleteBtn(this.id) type="button" class="btn btn-primary" style="font-size : 10px; float:right; " id=${id} >Delete</button>
+            <button onclick="deleteBtn('${this.id}','${res.type}')" type="button" class="btn btn-primary" style="font-size : 10px; float:right; " id=${id} >Delete</button>
             <p>Phone: ${res.phone} <br /> Street: ${res.street + '-' + res.district}<br /></p>
           </div>
           <br />
@@ -150,37 +151,44 @@ document.addEventListener('DOMContentLoaded', function () {
 
 });
 
-
-
 const deleteBtn = (id, type) => {
-  console.log(type)
-  if (type == '3') {
-    db.collection(".restaurants").where("user_id", "==", id)
-      .get()
-      .then(function (querySnapshot) {
-        querySnapshot.forEach(function (doc) {
-          console.log(doc);
-          doc.delete();
+  var getConfirm = confirm('Do you want delete ???');
+  if (getConfirm) {
+    if (type == '3') {
+      console.log('id', id);
+      
+      db.collection("restaurants").where("user_id", "==", id)
+        .get()
+        .then(     
+          (querySnapshot) => {
+            console.log(querySnapshot.empty);
+            
+            querySnapshot.forEach(
+               (doc) => {
+                document.getElementById(doc.id).remove();
+                doc.delete();
+              }
+            );
+          }
+        )
+        .catch(function (error) {
+          console.log("Error getting documents: ", error);
         });
-      })
-      .catch(function (error) {
-        console.log("Error getting documents: ", error);
-      });
-
+  
+    }
+    console.log("type = "+type)
+    db.collection("user").doc(id).delete().then(function () {
+      console.log("Document successfully deleted!");
+      document.getElementById(id).remove();
+    }).catch(function (error) {
+      console.error("Error removing document: ", error);
+    });
   }
-  console.log("type = "+type)
-  db.collection("user").doc(id).delete().then(function () {
-    console.log("Document successfully deleted!");
-    document.getElementById(id).remove();
-  }).catch(function (error) {
-    console.error("Error removing document: ", error);
-  });
 }
 
 const deleteBtnRes = (id ) => {
   db.collection("restaurants").doc(id).get().then(function (querySnapshot) {
     document.getElementById(id).remove();
-
     querySnapshot.forEach(function (doc) {
       res = doc.data();
       document.getElementById(res.user_id).remove();
