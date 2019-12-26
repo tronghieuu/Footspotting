@@ -112,7 +112,7 @@ document.addEventListener('DOMContentLoaded', function () {
           </span>
           <div class="chat-body clearfix">
             <div class="header"><strong class="primary-font">${res.name}</strong> <small
-            class="text-muted">${id}</small></div>
+            class="text-muted">${res.email}</small></div>
             <button onclick=deleteBtn(this.id, res.type) type="button" class="btn btn-primary" style="font-size : 10px; float:right; " id=${id} >Delete</button>
             <p>Phone: ${res.phone} <br /> Street: ${res.street + '-' + res.district + '-' + res.province}<br /></p>
           </div>
@@ -152,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
 
-const deleteBtn = (id, type = 1) => {
+const deleteBtn = (id, type) => {
   console.log(type)
   if (type == '3') {
     db.collection(".restaurants").where("user_id", "==", id)
@@ -168,7 +168,7 @@ const deleteBtn = (id, type = 1) => {
       });
 
   }
-
+  console.log("type = "+type)
   db.collection("user").doc(id).delete().then(function () {
     console.log("Document successfully deleted!");
     document.getElementById(id).remove();
@@ -202,7 +202,10 @@ const myFunction = () => {
   ul = document.getElementsByClassName("restaurants")[0];
   li = ul.getElementsByTagName("li");
   // Nếu filter không có giá trị thị ẩn phần kết quare\
-  if (!filter) {
+  if (!filter.length) {
+    for (i = 0; i < li.length; i++) {
+      li[i].style.display = "";
+    }
     ul.style.display = "block";
   } else {
     // lặp qua tất cả các thẻ li chứa kết quả
@@ -231,7 +234,12 @@ const myFunction_1 = () => {
   ul = document.getElementsByClassName("user")[0];
   li = ul.getElementsByTagName("li");
   // Nếu filter không có giá trị thị ẩn phần kết quare\
-  if (!filter) {
+  console.log(filter);
+  if (!filter.length) {
+    console.log("HAHHAHAH");
+    for (i = 0; i < li.length; i++) {
+      li[i].style.display = "";
+    }
     ul.style.display = "block";
   } else {
     // lặp qua tất cả các thẻ li chứa kết quả
@@ -260,7 +268,10 @@ const myFunction_2 = () => {
   ul = document.getElementsByClassName("restaurant-ownwers")[0];
   li = ul.getElementsByTagName("li");
   // Nếu filter không có giá trị thị ẩn phần kết quare\
-  if (!filter) {
+  if (!filter.length) {
+    for (i = 0; i < li.length; i++) {
+      li[i].style.display = "";
+    }
     ul.style.display = "block";
   } else {
     // lặp qua tất cả các thẻ li chứa kết quả
@@ -289,7 +300,10 @@ const myFunction_3 = () => {
   ul = document.getElementsByClassName("shippers")[0];
   li = ul.getElementsByTagName("li");
   // Nếu filter không có giá trị thị ẩn phần kết quare\
-  if (!filter) {
+  if (!filter.length) {
+    for (i = 0; i < li.length; i++) {
+      li[i].style.display = "";
+    }
     ul.style.display = "block";
   } else {
     // lặp qua tất cả các thẻ li chứa kết quả
