@@ -89,7 +89,7 @@ public class OrderAcceptedShipperActivity extends AppCompatActivity {
                         dialog.dismiss();
                         mOrders.remove(position);
                         mAcceptedShipperAdapter.notifyDataSetChanged();
-                        Toast.makeText(getApplicationContext(), "Đơn hàng đã giao!", Toast.LENGTH_LONG).show();
+                        Toast.makeText(getApplicationContext(), "Đã nhận hàng để giao!", Toast.LENGTH_LONG).show();
                     }
                 });
             }

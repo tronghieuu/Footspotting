@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginHorizontal="50dp"
+    android:padding="20dp"
+    android:background="@color/color_white">
+
+    <EditText
+        android:id="@+id/edtVerify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textSize="30dp"
+        android:hint="mã xác thực"
+        android:paddingHorizontal="10dp"
+        android:maxLines="1" />
+
+    <Button
+        android:id="@+id/btnVerify"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="xác thực"
+        android:textSize="30dp" />
+
+</LinearLayout>

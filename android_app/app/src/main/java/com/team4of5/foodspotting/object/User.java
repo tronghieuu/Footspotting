@@ -11,6 +11,7 @@ public class User {
     private String phone;
     private String id;
     private String image;
+    private String email;
 
     public String getBackground() {
         return background;
@@ -37,6 +38,7 @@ public class User {
         listUpdate = false;
         NotiUpdate = false;
         orderTab = 0;
+        email = "";
     }
 
     public static User getCurrentUser(){
@@ -124,6 +126,7 @@ public class User {
         phone = "";
         image = "";
         background = "";
+        email = "";
     }
 
     public boolean getOwnerUpdate(){
@@ -180,5 +183,13 @@ public class User {
 
     public void setNotiUpdate(boolean notiUpdate) {
         NotiUpdate = notiUpdate;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 }
