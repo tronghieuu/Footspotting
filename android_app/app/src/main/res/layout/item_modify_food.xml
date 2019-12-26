@@ -7,6 +7,7 @@
     android:background="@color/whiteCardColor">
 
     <EditText
+        android:maxLength="20"
         android:maxLines="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -15,6 +16,7 @@
         android:id="@+id/edtChangeNameFood" />
 
     <EditText
+        android:maxLength="9"
         android:inputType="numberDecimal"
         android:maxLines="1"
         android:layout_width="match_parent"
@@ -25,6 +27,7 @@
         android:id="@+id/edtChangePriceFood" />
 
     <EditText
+        android:maxLength="20"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="20dp"

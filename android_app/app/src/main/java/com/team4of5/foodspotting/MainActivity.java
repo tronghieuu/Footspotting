@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
+import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
@@ -51,27 +52,55 @@ public class MainActivity extends AppCompatActivity {
 
     public void getEmailAccount(){
         FirebaseFirestore db = FirebaseFirestore.getInstance();
-        db.collection("user")
-                .whereEqualTo("email", mAuth.getCurrentUser().getEmail())
-                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-            @Override
-            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                if(queryDocumentSnapshots.size() != 0){
-                    DocumentSnapshot doc = queryDocumentSnapshots.getDocuments().get(0);
-                    User.getCurrentUser().setId(doc.getId());
-                    User.getCurrentUser().setType(Integer.parseInt(doc.getString("type")));
-                    User.getCurrentUser().setStreet(doc.getString("street"));
-                    User.getCurrentUser().setName(doc.getString("name"));
-                    User.getCurrentUser().setImage(doc.getString("image"));
-                    User.getCurrentUser().setBackground(doc.getString("background"));
-                    User.getCurrentUser().setDistrict(doc.getString("district"));
-                    User.getCurrentUser().setProvince(doc.getString("province"));
-                    User.getCurrentUser().setPhone(doc.getString("phone"));
-                    startActivity(new Intent(getApplicationContext(), HomeActivity.class));
-                    finish();
+        if(mAuth.getCurrentUser().getPhoneNumber().length() != 0) {
+            String phone = mAuth.getCurrentUser().getPhoneNumber();
+            db.collection("user")
+                    .whereEqualTo("phone", "0"+phone.substring(3, phone.length()))
+                    .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    if(queryDocumentSnapshots.size() != 0){
+                        DocumentSnapshot doc = queryDocumentSnapshots.getDocuments().get(0);
+                        User.getCurrentUser().setId(doc.getId());
+                        User.getCurrentUser().setType(Integer.parseInt(doc.getString("type")));
+                        User.getCurrentUser().setStreet(doc.getString("street"));
+                        User.getCurrentUser().setName(doc.getString("name"));
+                        User.getCurrentUser().setImage(doc.getString("image"));
+                        User.getCurrentUser().setBackground(doc.getString("background"));
+                        User.getCurrentUser().setDistrict(doc.getString("district"));
+                        User.getCurrentUser().setProvince(doc.getString("province"));
+                        User.getCurrentUser().setPhone(doc.getString("phone"));
+                        User.getCurrentUser().setEmail(doc.getString("email"));
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                        finish();
+                    }
                 }
-            }
-        });
+            });
+        }
+        else {
+            db.collection("user")
+                    .whereEqualTo("email", mAuth.getCurrentUser().getEmail())
+                    .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    if(queryDocumentSnapshots.size() != 0){
+                        DocumentSnapshot doc = queryDocumentSnapshots.getDocuments().get(0);
+                        User.getCurrentUser().setId(doc.getId());
+                        User.getCurrentUser().setType(Integer.parseInt(doc.getString("type")));
+                        User.getCurrentUser().setStreet(doc.getString("street"));
+                        User.getCurrentUser().setName(doc.getString("name"));
+                        User.getCurrentUser().setImage(doc.getString("image"));
+                        User.getCurrentUser().setBackground(doc.getString("background"));
+                        User.getCurrentUser().setDistrict(doc.getString("district"));
+                        User.getCurrentUser().setProvince(doc.getString("province"));
+                        User.getCurrentUser().setPhone(doc.getString("phone"));
+                        User.getCurrentUser().setEmail(doc.getString("email"));
+                        startActivity(new Intent(getApplicationContext(), HomeActivity.class));
+                        finish();
+                    }
+                }
+            });
+        }
     }
     @Override
     public void onRequestPermissionsResult(final int requestCode, @NonNull final String[] permissions, @NonNull final int[] grantResults) {

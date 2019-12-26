@@ -154,6 +154,7 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                                             user.setProvince(doc.getString("province"));
                                             user.setPhone(doc.getString("phone"));
                                             user.setBackground(doc.getString("background"));
+                                            user.setEmail(doc.getString("email"));
                                         }
                                         User.getCurrentUser().setListUpdate(true);
                                         User.getCurrentUser().setHistoryUpdate(true);
@@ -209,10 +210,9 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                                 data.put("phone", "");
                                 if(account.getPhotoUrl() != null){
                                     data.put("image", account.getPhotoUrl().toString());
+                                    User.getCurrentUser().setImage(account.getPhotoUrl().toString());
                                 } else data.put("image", "");
-                                if(account.getPhotoUrl() != null){
-                                    data.put("background", account.getPhotoUrl().toString());
-                                } else data.put("background", "");
+                                data.put("background", "");
                                 db.collection("user")
                                         .add(data).addOnSuccessListener(new OnSuccessListener<DocumentReference>() {
                                     @Override
@@ -224,6 +224,7 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                                         User.getCurrentUser().setCartUpdate(true);
                                         User.getCurrentUser().setOrderUpdate(true);
                                         User.getCurrentUser().setNotiUpdate(true);
+                                        User.getCurrentUser().setEmail(account.getEmail());
                                         setResult(Activity.RESULT_CANCELED, new Intent());
                                         finish();
                                     }
@@ -238,6 +239,8 @@ public class EmailLoginActivity extends AppCompatActivity implements View.OnClic
                                 user.setType(Integer.parseInt(doc.getString("type")));
                                 user.setId(doc.getId());
                                 user.setName(account.getDisplayName());
+                                user.setEmail(account.getEmail());
+                                user.setBackground(doc.getString("background"));
                                 dialog.dismiss();
                                 User.getCurrentUser().setListUpdate(true);
                                 User.getCurrentUser().setHistoryUpdate(true);

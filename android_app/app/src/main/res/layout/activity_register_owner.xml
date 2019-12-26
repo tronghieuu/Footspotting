@@ -60,6 +60,7 @@
                 android:paddingHorizontal="5dp" />
 
             <EditText
+                android:maxLength="30"
                 android:id="@+id/edtOwnerResNameDangKy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -80,6 +81,7 @@
                 android:paddingHorizontal="5dp" />
 
             <EditText
+                android:maxLength="20"
                 android:id="@+id/edtOwnerResTypeDangKy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -140,6 +142,7 @@
                 android:paddingHorizontal="5dp" />
 
             <EditText
+                android:maxLength="20"
                 android:id="@+id/edtOwnerResAddressDangKy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -160,6 +163,7 @@
                 android:paddingHorizontal="5dp" />
 
             <EditText
+                android:maxLength="11"
                 android:id="@+id/edtOwnerResPhoneDangKy"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

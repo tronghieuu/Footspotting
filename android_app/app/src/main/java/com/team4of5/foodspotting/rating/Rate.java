@@ -134,7 +134,7 @@ public class Rate extends AppCompatActivity {
             public void onClick(View v) {
                 String useId = "";
                 useId = User.getCurrentUser().getId();
-                if (FirebaseAuth.getInstance().getCurrentUser() != null) {
+                if (FirebaseAuth.getInstance().getCurrentUser() != null && User.getCurrentUser().getPhone().length() != 0) {
                     db.collection("restaurants")
                             .document(id_restaurent)
                             .collection("rating")
@@ -186,7 +186,9 @@ public class Rate extends AppCompatActivity {
                                 }
                             });
                 }
-                else  Toast.makeText(getApplicationContext(), "Login to review!!", Toast.LENGTH_SHORT).show();
+                else if(User.getCurrentUser().getPhone().length() == 0) {
+                    Toast.makeText(getApplicationContext(), "Hãy cập nhật số điện thoại trước!", Toast.LENGTH_SHORT).show();
+                } else Toast.makeText(getApplicationContext(), "Login to review!!", Toast.LENGTH_SHORT).show();
             }
         });
         else mBtnOpenPostReview.setVisibility(View.GONE);

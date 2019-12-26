@@ -60,6 +60,7 @@ android:background="@color/color_owner">
             android:paddingHorizontal="5dp" />
 
         <EditText
+            android:maxLength="30"
             android:id="@+id/edtOwnerResName"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -80,6 +81,7 @@ android:background="@color/color_owner">
             android:paddingHorizontal="5dp" />
 
         <EditText
+            android:maxLength="20"
             android:id="@+id/edtOwnerResType"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -140,6 +142,7 @@ android:background="@color/color_owner">
             android:paddingHorizontal="5dp" />
 
         <EditText
+            android:maxLength="20"
             android:id="@+id/edtOwnerResAddress"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"

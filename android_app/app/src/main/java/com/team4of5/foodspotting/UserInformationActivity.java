@@ -1,7 +1,9 @@
 package com.team4of5.foodspotting;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.arch.core.executor.TaskExecutor;
 
 import android.app.Activity;
 import android.app.Dialog;
@@ -26,9 +28,17 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.TaskExecutors;
+import com.google.firebase.FirebaseException;
+import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.PhoneAuthCredential;
+import com.google.firebase.auth.PhoneAuthProvider;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
@@ -38,21 +48,23 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class UserInformationActivity extends AppCompatActivity implements View.OnClickListener {
 
     private Button mBtnBack, mBtnChangeUsername, mBtnChangePhone, mBtnChangeAddress, mBtnUpdatePassword
-            , mBtnChangePassword, mBtnChangePayment, mBtnchangeName, mBtnChangePhoneNum, mBtnChangeAddress_diff;
+            , mBtnChangePassword, mBtnChangePayment, mBtnchangeName, mBtnChangePhoneNum, mBtnChangeAddress_diff, mBtnVerify;
     private TextView mTvUsername, mTvPhone, mTvAddress, mTvEmailInfo;
-    private Dialog changePasswordDialog, changeNameDialog, changePhoneDialog, changeAddressDialog, loadingDialog;
-    private EditText mEdtCurrentPassword, mEdtNewPassword, mEdtConfirmPassword, mEdtChangeStreet, mEdtChangeName, mEdtChangePhone;
+    private Dialog changePasswordDialog, changeNameDialog, changePhoneDialog, changeAddressDialog, loadingDialog, verifyDialog;
+    private EditText mEdtCurrentPassword, mEdtNewPassword, mEdtConfirmPassword, mEdtChangeStreet, mEdtChangeName, mEdtChangePhone, mEdtVerify;
     private String province, district, street, name, phone;
     private ImageView profileImage;
     private static int PICK_IMAGE_REQUEST = 23;
     private Uri filePath;
     private Spinner  mEdtChangeProvince,
+
             mEdtChangeDistrict;
     String arr[]={
             "Hà Nội",
@@ -83,7 +95,8 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
     private static int PICK_IMAGE_REQUEST1 = 11;
     private Uri filePath1;
     private ImageView mBackground;
-
+    private PhoneAuthProvider.OnVerificationStateChangedCallbacks callbacks;
+    private String mVerificationId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -212,6 +225,33 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
             }
         });
 
+        verifyDialog = new Dialog(this);
+        verifyDialog.getWindow().setBackgroundDrawable(new ColorDrawable(android.graphics.Color.TRANSPARENT));
+        verifyDialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
+        verifyDialog.setContentView(R.layout.item_verify);
+        mEdtVerify = verifyDialog.findViewById(R.id.edtVerify);
+        mBtnVerify = verifyDialog.findViewById(R.id.btnVerify);
+        mBtnVerify.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String code = mEdtVerify.getText().toString().trim();
+                if (code.isEmpty() || code.length() < 6) {
+                    mEdtChangeName.setError("Enter valid code");
+                    mEdtVerify.requestFocus();
+                    return;
+                }
+
+                //verifying the code entered manually
+                verifyVerificationCode(code);
+            }
+        });
+        changePhoneDialog.setOnDismissListener(new DialogInterface.OnDismissListener() {
+            @Override
+            public void onDismiss(DialogInterface dialogInterface) {
+                mEdtVerify.setText("");
+            }
+        });
+
         // add listener
         mBtnBack.setOnClickListener(this);
         mBtnChangeUsername.setOnClickListener(this);
@@ -219,6 +259,37 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
         mBtnChangeAddress.setOnClickListener(this);
         mBtnChangePassword.setOnClickListener(this);
         mBtnChangePayment.setOnClickListener(this);
+        callbacks = new PhoneAuthProvider.OnVerificationStateChangedCallbacks() {
+
+            @Override
+            public void onVerificationCompleted(@NonNull PhoneAuthCredential phoneAuthCredential) {
+                //Getting the code sent by SMS
+                String code = phoneAuthCredential.getSmsCode();
+
+                //sometime the code is not detected automatically
+                //in this case the code will be null
+                //so user has to manually enter the code
+                if (code != null) {
+                    mEdtVerify.setText(code);
+                    //verifying the code
+                    verifyVerificationCode(code);
+                }
+            }
+
+            @Override
+            public void onVerificationFailed(@NonNull FirebaseException e) {
+                verifyDialog.dismiss();
+                Toast.makeText(getApplicationContext(), "Gửi mã xác thực thất bại!", Toast.LENGTH_SHORT).show();
+            }
+
+            @Override
+            public void onCodeSent(@NonNull String s, @NonNull PhoneAuthProvider.ForceResendingToken forceResendingToken) {
+                super.onCodeSent(s, forceResendingToken);
+
+                //storing the verification id that is sent to the user
+                mVerificationId = s;
+            }
+        };
 
         // data
         if (User.getCurrentUser().getBackground()!=null)
@@ -230,8 +301,7 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
         mTvUsername.setText(User.getCurrentUser().getName());
         mTvAddress.setText(User.getCurrentUser().getProvince());
         mTvPhone.setText(User.getCurrentUser().getPhone());
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        mTvEmailInfo.setText(auth.getCurrentUser().getEmail());
+        mTvEmailInfo.setText(User.getCurrentUser().getEmail());
     }
     private int getIndex(Spinner spinner, String myString){
         for (int i=0;i<spinner.getCount();i++){
@@ -307,7 +377,6 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
                 changeName();
                 break;
             case R.id.btnUpdatePhone:
-                changePhoneDialog.dismiss();
                 changePhone();
                 break;
             case R.id.imageViewAvatar:
@@ -467,16 +536,25 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
             Toast.makeText(this, "chưa nhập số điện thoại", Toast.LENGTH_SHORT).show();
             return;
         }
-        loadingDialog.show();
-        Map<String, Object> data = new HashMap<>();
-        data.put("phone", phone);
-        FirebaseFirestore.getInstance().collection("user").document(User.getCurrentUser().getId())
-                .update(data).addOnSuccessListener(new OnSuccessListener<Void>() {
+        mEdtChangePhone.setText("");
+        changePhoneDialog.dismiss();
+        FirebaseFirestore.getInstance().collection("user")
+                .whereEqualTo("phone", phone)
+                .get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
-            public void onSuccess(Void aVoid) {
-                User.getCurrentUser().setPhone(phone);
-                mTvPhone.setText(phone);
-                loadingDialog.dismiss();
+            public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                if(queryDocumentSnapshots.isEmpty()) {
+                    verifyDialog.show();
+                    PhoneAuthProvider.getInstance().verifyPhoneNumber(
+                            "+84"+phone,
+                            60,
+                            TimeUnit.SECONDS,
+                            TaskExecutors.MAIN_THREAD,
+                            callbacks
+                    );
+                } else {
+                    Toast.makeText(getApplicationContext(), "Số điện thoại này đã có người sử dụng!", Toast.LENGTH_SHORT).show();
+                }
             }
         });
     }
@@ -508,5 +586,46 @@ public class UserInformationActivity extends AppCompatActivity implements View.O
         protected void onPostExecute(Bitmap result) {
             imageView.setImageBitmap(result);
         }
+    }
+
+    private void verifyVerificationCode(String code) {
+        verifyDialog.dismiss();
+        loadingDialog.show();
+        //creating the credential
+        PhoneAuthCredential credential = PhoneAuthProvider.getCredential(mVerificationId, code);
+
+        //signing the user
+        signInWithPhoneAuthCredential(credential);
+    }
+
+    private void signInWithPhoneAuthCredential(PhoneAuthCredential credential) {
+        FirebaseAuth.getInstance().signInWithCredential(credential)
+                .addOnCompleteListener(UserInformationActivity.this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            //verification successful we will start the profile activity
+                            FirebaseFirestore.getInstance().collection("user")
+                                    .document(User.getCurrentUser().getId())
+                                    .update("phone", phone).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    mTvPhone.setText(phone);
+                                    User.getCurrentUser().setPhone(phone);
+                                    loadingDialog.dismiss();
+                                    Toast.makeText(getApplicationContext(), FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber(), Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
+                        } else {
+
+                            //verification unsuccessful.. display an error message
+                            loadingDialog.dismiss();
+                            String message = "Somthing is wrong, we will fix it soon...";
+
+                            Toast.makeText(getApplicationContext(), message, Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
     }
 }

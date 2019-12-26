@@ -8,6 +8,7 @@
     android:background="@color/color_white">
 
     <EditText
+        android:maxLength="30"
         android:id="@+id/edtChangeUsername"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
